@@ -1,9 +1,10 @@
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Annotated
+from annotated_types import MaxLen
 
 
 class DomainBase(BaseModel):
-    name: str
+    name: Annotated[str, MaxLen(100)]
 
 
 class Domain(DomainBase):

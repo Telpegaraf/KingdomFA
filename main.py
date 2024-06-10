@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
-from apps.gods import models, router
+from apps.gods import models, views
 from database import engine
 
 app = FastAPI()
-app.include_router(router.gods_router)
+app.include_router(views.gods_router)
 
 models.Base.metadata.create_all(bind=engine)
 
