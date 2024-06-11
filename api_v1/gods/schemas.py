@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Annotated
 from annotated_types import MaxLen
 
@@ -7,11 +7,16 @@ class DomainBase(BaseModel):
     name: Annotated[str, MaxLen(100)]
 
 
+class DomainUpdate(DomainBase):
+    name: str | None = None
+
+
 class Domain(DomainBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
 
-    class Config:
-        from_attributes = True
+
 
 
 class GodBase(BaseModel):

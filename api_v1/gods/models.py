@@ -1,13 +1,10 @@
 from sqlalchemy import Column, String, Integer, Table, ForeignKey
-from sqlalchemy.orm import relationship
-from database import Base
+from sqlalchemy.orm import relationship, mapped_column, Mapped
+from core.models import Base
 
 
 class Domain(Base):
-    __tablename__ = 'domains'
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, index=True)
+    name: Mapped[str] = mapped_column(index=True)
 
     def __repr__(self):
         return self.name

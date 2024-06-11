@@ -1,12 +1,29 @@
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Depends
+from functools import lru_cache
 
-from apps.gods import models, views
-from database import engine
+from api_v1.gods import models, views
+from core.models import Base
+from database import db_helper
 
 app = FastAPI()
 app.include_router(views.gods_router)
 
-models.Base.metadata.create_all(bind=engine)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with db_helper.engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    yield
+
+# @app.on_event("startup")
+# async def on_startup():
+#     async with engine.begin() as conn:
+#         await conn.run_sync(models.Base.metadata.create_all)
+
+
+#models.Base.metadata.create_all(bind=engine)
 
 
 # @app.get("/domains/", response_model=List[schemas.Domain])
