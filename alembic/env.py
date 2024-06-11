@@ -9,7 +9,6 @@ from alembic import context
 
 from core.models import Base
 from core.config import settings
-from api_v1.gods.models import Domain
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
