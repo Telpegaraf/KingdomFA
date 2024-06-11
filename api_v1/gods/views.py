@@ -31,7 +31,7 @@ async def domain_list(session: AsyncSession = Depends(db_helper.scoped_session_d
 
 @gods_router.patch("/domain_update/{domain_id}/")
 async def domain_update(
-        domain_update: schemas.DomainBase,
+        domain_update: schemas.DomainUpdate,
         domain: models.Domain = Depends(dependencies.get_domain_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
     return await crud.domain_update(
