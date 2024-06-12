@@ -1,10 +1,8 @@
-from sqlalchemy import String, Integer, Text, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import TYPE_CHECKING
+from sqlalchemy import String, Integer, Text
+from sqlalchemy.orm import Mapped, mapped_column
 from core.models import Base
 from api_v1.general.mixins import RaceRelationMixin
 from api_v1.user.mixins import UserRelationMixin
-
 
 
 class Title(Base):

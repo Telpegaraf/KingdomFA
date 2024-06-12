@@ -1,13 +1,53 @@
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy import String, Table, Column, ForeignKey
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 from core.models import Base
 
 
+god_domain_association = Table(
+    'god_domain',
+    Base.metadata,
+    Column('god_id', ForeignKey('gods.id'), primary_key=True),
+    Column('domain_id', ForeignKey('domains.id'), primary_key=True)
+)
+
+
 class Domain(Base):
-    name: Mapped[str] = mapped_column(index=True)
+    name: Mapped[str] = mapped_column(String(50), index=True)
+    gods: Mapped[list["God"]] = relationship(
+        secondary=god_domain_association,
+        back_populates="domains"
+    )
+
+    def __str__(self):
+        return f"{self.__class__.__name__}(id={self.id}, name={self.name!r})"
 
     def __repr__(self):
         return self.name
 
+
+class God(Base):
+    name: Mapped[str] = mapped_column(String(100), index=True)
+    alias: Mapped[str] = mapped_column(String(100))
+    edict: Mapped[str] = mapped_column(String(300))
+    anathema: Mapped[str] = mapped_column(String(300))
+    areas_of_interest: Mapped[str] = mapped_column(String(300))
+    temples: Mapped[str] = mapped_column(String(300))
+    worship: Mapped[str] = mapped_column(String(300))
+    sacred_animal: Mapped[str] = mapped_column(String(300))
+    sacred_color: Mapped[str] = mapped_column(String(300))
+    chosen_weapon: Mapped[str] = mapped_column(String(300))
+    taro: Mapped[str] = mapped_column(String(300))
+    alignment: Mapped[str] = mapped_column(String(300))
+    domains: Mapped[list["Domain"]] = relationship(
+        secondary=god_domain_association,
+        back_populates="gods"
+    )
+
+    def __str__(self):
+        return f"{self.__class__.__name__}(id={self.id}, name={self.name!r})"
+
+    def __repr__(self):
+        return self.name
 
 # god_domains = Table(
 #     'god_domains',
