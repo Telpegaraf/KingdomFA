@@ -1,4 +1,7 @@
-
+from pydantic import BaseModel, ConfigDict
+from typing import Annotated, List
+from annotated_types import MaxLen
+from api_v1.schemas.domain import DomainBase, Domain
 
 
 class GodBase(BaseModel):
@@ -14,7 +17,6 @@ class GodBase(BaseModel):
     chosen_weapon: Annotated[str, MaxLen(300)]
     taro: Annotated[str, MaxLen(300)]
     alignment: Annotated[str, MaxLen(300)]
-    domains: List[DomainBase]
 
 
 class God(DomainBase):

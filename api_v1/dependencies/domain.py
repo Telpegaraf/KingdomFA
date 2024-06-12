@@ -4,6 +4,7 @@ from typing import Annotated
 
 from api_v1.crud.domain import domain_detail
 from api_v1.models.domain import Domain
+from api_v1.models.god import God
 from database import db_helper
 
 

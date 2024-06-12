@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.engine import Result
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from api_v1.schemas.domain import DomainBase, DomainUpdate
 from api_v1.models.domain import Domain

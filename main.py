@@ -1,11 +1,11 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from api_v1.routers import domain
+from api_v1.routers import domain, god
 
 app = FastAPI()
 app.include_router(domain.domain_router)
-app.include_router(domain.domain_router)
+app.include_router(god.god_router)
 
 
 @asynccontextmanager
