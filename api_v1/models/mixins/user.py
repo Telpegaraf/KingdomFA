@@ -3,15 +3,13 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, declared_attr
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from api_v1.user.models import User
+    from api_v1.models.user import User
 
 
 class UserRelationMixin:
     _user_id_nullable: bool = False
     _user_id_unique: bool = False
     _user_back_populate: str | None = None
-
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     @declared_attr
     def user_id(cls) -> Mapped[int]:

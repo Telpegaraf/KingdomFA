@@ -1,8 +1,8 @@
-"""added mixins for user and race
+"""initial commit
 
-Revision ID: 4eca7ec89600
-Revises: d4e80a5c40f5
-Create Date: 2024-06-12 10:58:58.563466
+Revision ID: 09efd09e2208
+Revises: 86c63c82d8e3
+Create Date: 2024-06-12 15:31:29.115314
 
 """
 
@@ -13,8 +13,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "4eca7ec89600"
-down_revision: Union[str, None] = "d4e80a5c40f5"
+revision: str = "09efd09e2208"
+down_revision: Union[str, None] = "86c63c82d8e3"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

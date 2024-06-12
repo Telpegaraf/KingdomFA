@@ -1,13 +1,11 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Depends
-from functools import lru_cache
+from fastapi import FastAPI
 
-from api_v1.gods import models, views
-from core.models import Base
-from database import db_helper
+from api_v1.routers import domain
 
 app = FastAPI()
-app.include_router(views.gods_router)
+app.include_router(domain.domain_router)
+app.include_router(domain.domain_router)
 
 
 @asynccontextmanager
@@ -30,12 +28,12 @@ async def lifespan(app: FastAPI):
 #
 #
 # @app.post("/domains/", response_model=schemas.Domain)
-# def create_domain(domain: schemas.DomainBase, db: Session = Depends(get_db)):
-#     return crud.create_domain(db=db, domain=domain)
+# def create_domain(god: schemas.DomainBase, db: Session = Depends(get_db)):
+#     return crud.create_domain(db=db, god=god)
 #
 #
-# @app.get("/gods/", response_model=List[schemas.God])
+# @app.get("/domain/", response_model=List[schemas.God])
 # def read_gods(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-#     gods = db.query(models.God).offset(skip).limit(limit).all()
-#     return gods
+#     domain = db.query(models.God).offset(skip).limit(limit).all()
+#     return domain
 

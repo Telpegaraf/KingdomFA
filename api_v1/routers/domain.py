@@ -1,35 +1,38 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, status, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.gods import models, schemas, crud, dependencies
+from api_v1 import dependencies
+from api_v1.crud import domain as crud
+from api_v1.schemas import domain as schemas
+from api_v1.models import domain as models
 from database import db_helper
 
 
-gods_router = APIRouter(prefix="/gods")
+domain_router = APIRouter(prefix="/domain")
 
 
-@gods_router.get("/domain/{domain_id}/")
+@domain_router.get("/{domain_id}/")
 async def domain_detail(
         domain: models.Domain = Depends(dependencies.get_domain_by_id)
 ):
     return domain
 
 
-@gods_router.post("/domain/", response_model=schemas.DomainBase, status_code=status.HTTP_201_CREATED)
-async def create_domain(
+@domain_router.post("/create/", response_model=schemas.DomainBase, status_code=status.HTTP_201_CREATED)
+async def domain_create(
         domain_in: schemas.DomainBase,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
-    result = await crud.domain_create(domain_in=domain_in,session=session)
+    result = await crud.domain_create(domain_in=domain_in, session=session)
     return result
 
 
-@gods_router.get("/domain_list/", response_model=list[schemas.Domain])
+@domain_router.get("/list/", response_model=list[schemas.Domain])
 async def domain_list(session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
     result = await crud.domain_list(session=session)
     return result
 
 
-@gods_router.patch("/domain_update/{domain_id}/")
+@domain_router.patch("/update/{domain_id}/")
 async def domain_update(
         domain_update: schemas.DomainUpdate,
         domain: models.Domain = Depends(dependencies.get_domain_by_id),
@@ -41,7 +44,7 @@ async def domain_update(
     )
 
 
-@gods_router.delete("/domain_delete/{domain_id}/", status_code=status.HTTP_204_NO_CONTENT)
+@domain_router.delete("/delete/{domain_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def domain_delete(
         domain: models.Domain = Depends(dependencies.get_domain_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
