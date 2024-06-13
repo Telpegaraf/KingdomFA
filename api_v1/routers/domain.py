@@ -8,7 +8,7 @@ from api_v1.models import domain as models
 from database import db_helper
 
 
-domain_router = APIRouter(prefix="/domain")
+domain_router = APIRouter(prefix="/domain", tags=["Domains"])
 
 
 @domain_router.post("/create/", response_model=schemas.DomainBase, status_code=status.HTTP_201_CREATED)
