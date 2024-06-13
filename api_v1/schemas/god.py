@@ -17,6 +17,11 @@ class GodBase(BaseModel):
     chosen_weapon: Annotated[str, MaxLen(300)]
     taro: Annotated[str, MaxLen(300)]
     alignment: Annotated[str, MaxLen(300)]
+    domains: list[Domain]
+
+
+class GodDomain(BaseModel):
+    domain: list[Domain]
 
 
 class God(DomainBase):

@@ -1,8 +1,8 @@
-"""initial commit
+"""inittial commit
 
-Revision ID: 86c63c82d8e3
+Revision ID: 78401f2ca60a
 Revises: 
-Create Date: 2024-06-12 15:26:23.237164
+Create Date: 2024-06-13 12:19:36.523411
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "86c63c82d8e3"
+revision: str = "78401f2ca60a"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,7 +27,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_domains_name"), "domains", ["name"], unique=False)
+    op.create_index(op.f("ix_domains_name"), "domains", ["name"], unique=True)
     op.create_table(
         "gods",
         sa.Column("name", sa.String(length=100), nullable=False),
@@ -45,7 +45,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_gods_name"), "gods", ["name"], unique=False)
+    op.create_index(op.f("ix_gods_name"), "gods", ["name"], unique=True)
     op.create_table(
         "races",
         sa.Column("name", sa.String(length=50), nullable=False),
@@ -92,6 +92,7 @@ def upgrade() -> None:
         "god_domain",
         sa.Column("god_id", sa.Integer(), nullable=False),
         sa.Column("domain_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(
             ["domain_id"],
             ["domains.id"],
@@ -100,7 +101,8 @@ def upgrade() -> None:
             ["god_id"],
             ["gods.id"],
         ),
-        sa.PrimaryKeyConstraint("god_id", "domain_id"),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("god_id", "domain_id", name="idx_unique_god_domain"),
     )
     # ### end Alembic commands ###
 

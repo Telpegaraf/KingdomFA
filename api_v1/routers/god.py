@@ -24,3 +24,16 @@ async def god_detail(
         god: models.God = Depends(dependency=get_god_by_id)
 ):
     return god
+
+
+@god_router.patch("/update/{god_id}/")
+async def update(
+        god_update: schemas.GodBase,
+        god: models.God = Depends(get_god_by_id),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.god_update(
+        god_update=god_update,
+        god=god,
+        session=session
+    )
