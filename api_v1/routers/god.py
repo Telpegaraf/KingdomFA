@@ -8,7 +8,7 @@ from api_v1.dependencies.god import get_god_by_id
 from database import db_helper
 
 
-god_router = APIRouter(prefix="/god")
+god_router = APIRouter(prefix="/god", tags=["Gods"])
 
 
 @god_router.post("/create/", status_code=status.HTTP_201_CREATED)
