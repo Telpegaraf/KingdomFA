@@ -26,6 +26,12 @@ async def god_detail(
     return god
 
 
+@god_router.get("/", response_model=list[schemas.God])
+async def god_list(session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
+    result = await crud.god_list(session=session)
+    return result
+
+
 @god_router.patch("/update/{god_id}/")
 async def update(
         god_update: schemas.GodBase,
@@ -37,3 +43,11 @@ async def update(
         god=god,
         session=session
     )
+
+
+@god_router.delete("/delete/{god_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete(
+        god: models.God = Depends(get_god_by_id),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    await crud.god_delete(god=god, session=session)

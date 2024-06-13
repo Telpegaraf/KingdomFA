@@ -11,13 +11,6 @@ from database import db_helper
 domain_router = APIRouter(prefix="/domain")
 
 
-@domain_router.get("/{domain_id}/")
-async def domain_detail(
-        domain: models.Domain = Depends(get_domain_by_id)
-):
-    return domain
-
-
 @domain_router.post("/create/", response_model=schemas.DomainBase, status_code=status.HTTP_201_CREATED)
 async def domain_create(
         domain_in: schemas.DomainBase,
@@ -26,7 +19,14 @@ async def domain_create(
     return result
 
 
-@domain_router.get("/list/", response_model=list[schemas.Domain])
+@domain_router.get("/{domain_id}/")
+async def domain_detail(
+        domain: models.Domain = Depends(get_domain_by_id)
+):
+    return domain
+
+
+@domain_router.get("/", response_model=list[schemas.Domain])
 async def domain_list(session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
     result = await crud.domain_list(session=session)
     return result

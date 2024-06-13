@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict
-from typing import Annotated, List
+from typing import Annotated
 from annotated_types import MaxLen
-from api_v1.schemas.domain import DomainBase, Domain
+from api_v1.schemas.domain import Domain
 
 
 class GodBase(BaseModel):
@@ -20,11 +20,7 @@ class GodBase(BaseModel):
     domains: list[Domain]
 
 
-class GodDomain(BaseModel):
-    domain: list[Domain]
-
-
-class God(DomainBase):
+class God(GodBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int

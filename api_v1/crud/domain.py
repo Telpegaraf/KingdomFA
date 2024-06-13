@@ -9,8 +9,8 @@ from api_v1.models.domain import Domain
 async def domain_list(session: AsyncSession):
     stmt = select(Domain).order_by(Domain.id)
     result: Result = await session.execute(stmt)
-    products = result.scalars().all()
-    return list(products)
+    domains = result.scalars().all()
+    return list(domains)
 
 
 async def domain_detail(session: AsyncSession, domain_id: int) -> Domain | None:

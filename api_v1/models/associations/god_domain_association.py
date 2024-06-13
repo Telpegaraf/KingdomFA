@@ -21,7 +21,7 @@ class GodDomainAssociation(Base):
     domain_id: Mapped[int] = mapped_column(ForeignKey('domains.id'))
 
     god: Mapped["God"] = relationship(
-        back_populates='domain_details'
+        back_populates='domain_details',
     )
     domain: Mapped["Domain"] = relationship(
         back_populates='god_details'

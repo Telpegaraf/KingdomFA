@@ -6,7 +6,6 @@ from api_v1.models.god import God
 from database import db_helper
 
 
-
 async def get_god_by_id(
         god_id: Annotated[int, Path],
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
