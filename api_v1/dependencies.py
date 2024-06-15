@@ -4,7 +4,6 @@ from sqlalchemy.future import select
 from typing import Type, TypeVar
 from database import db_helper
 
-
 T = TypeVar('T')
 
 
@@ -26,7 +25,7 @@ async def get_object_by_id(
 def get_object_by_id_dependency(model: Type[T]):
     async def dependency(
             object_id: int = Path(...),
-            session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+            session: AsyncSession = Depends(db_helper.scoped_session_dependency),
     ) -> T:
         return await get_object_by_id(model=model, object_id=object_id, session=session)
     return dependency

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, status, Depends
+from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api_v1.dependencies import get_object_by_id_dependency
@@ -6,14 +7,18 @@ from api_v1.crud import domain as crud
 from api_v1.schemas import domain as schemas
 from api_v1.models import domain as models
 from database import db_helper
+from auth.utils import get_current_token_payload
 
+http_bearer = HTTPBearer(auto_error=False)
 
-domain_router = APIRouter(prefix="/domain", tags=["Domains"])
+#domain_router = APIRouter(prefix="/domain", tags=["Domains"])
+domain_router = APIRouter(prefix="/domain", tags=["Domains"], dependencies=[Depends(http_bearer)])
 
 
 @domain_router.get("/{object_id}/")
 async def domain_detail(
-        domain: models.Domain = Depends(get_object_by_id_dependency(models.Domain))
+    payload: dict = Depends(get_current_token_payload),
+    domain: models.Domain = Depends(get_object_by_id_dependency(models.Domain))
 ):
     return domain
 

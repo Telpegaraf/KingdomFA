@@ -6,8 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import database
 from api_v1.schemas import user as schema
 from api_v1.crud.user import validate_user
+from api_v1.models import User
 from auth.helpers import create_access_token, create_refresh_token
 from auth.jwt_auth import decode_refresh_token
+from auth import utils
 
 http_bearer = HTTPBearer(auto_error=False)
 
@@ -44,7 +46,7 @@ async def auth_user_issue_jwt(
 )
 async def auth_refresh_jwt(
     refresh_token: str,
-    session: AsyncSession = Depends(database.db_helper.scoped_session_dependency)
+    session: AsyncSession = Depends(database.db_helper.scoped_session_dependency),
 ):
     user = await decode_refresh_token(refresh_token, session)
     if user:
