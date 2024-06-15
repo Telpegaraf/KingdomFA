@@ -17,6 +17,11 @@ class UserRead(BaseModel):
     is_active: bool
 
 
+class UserValidate(BaseModel):
+    username: str
+    password: str
+
+
 class UserUpdatePassword(BaseModel):
     old_password: str
     new_password: str

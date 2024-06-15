@@ -49,4 +49,3 @@ async def domain_delete(
         domain: models.Domain = Depends(get_object_by_id_dependency(models.Domain)),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
     await crud.domain_delete(domain=domain, session=session)
-

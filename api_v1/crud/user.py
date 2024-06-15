@@ -1,8 +1,11 @@
+from fastapi import HTTPException, status, Depends
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
+
+import database
 from api_v1.models.user import User
-from api_v1.schemas.user import UserBase, UserUpdatePassword
+from api_v1.schemas.user import UserBase, UserUpdatePassword, UserValidate
 from auth.utils import hash_password, verify_password
 
 
@@ -45,3 +48,18 @@ async def change_password(
         return user
     else:
         raise ValueError("Old password does not match")
+
+
+async def validate_user(
+        user_in: UserValidate,
+        session: AsyncSession = Depends(database.db_helper.scoped_session_dependency)
+):
+    stmt = select(User).where(User.username == user_in.username)
+    result = await session.execute(stmt)
+    user = result.scalars().first()
+    if not user or not verify_password(user_in.password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+        )
+    return user

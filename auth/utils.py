@@ -52,16 +52,3 @@ def hash_password(password):
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
-
-
-a = "admin"
-
-a1 = hash_password(a)
-
-print(type(a1),a1)
-
-b = "admin"
-b = b.encode('utf-8')
-b = b.decode('utf-8')
-
-print(verify_password(b, a1))
