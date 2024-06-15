@@ -14,7 +14,14 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_ECHO: bool
 
-    model_config = SettingsConfigDict(env_file='.env_db')
+    JWT_ALGORITHM: str
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int
+    JWT_REFRESH_TOKEN_EXPIRE_DAYS: int
+
+    PRIVATE_KEY_PATH: Path = BASE_DIR / "certs" / "jwt-private.pem"
+    PUBLIC_KEY_PATH: Path = BASE_DIR / "certs" / "jwt-public.pem"
+
+    model_config = SettingsConfigDict(env_file='.env')
 
     @property
     def database_url(self):
@@ -23,6 +30,16 @@ class Settings(BaseSettings):
     @property
     def database_echo(self):
         return self.DB_ECHO
+
+    @property
+    def jwt_settings(self):
+        return {
+            "algorithm": self.JWT_ALGORITHM,
+            "access_token_expire_minutes": self.JWT_ACCESS_TOKEN_EXPIRE_MINUTES,
+            "refresh_token_expire_days": self.JWT_REFRESH_TOKEN_EXPIRE_DAYS,
+            "private_key_path": self.PRIVATE_KEY_PATH,
+            "public_key_path": self.PUBLIC_KEY_PATH
+        }
 
 
 settings = Settings()

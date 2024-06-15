@@ -1,6 +1,7 @@
-from typing import TYPE_CHECKING
+from pydantic import EmailStr, Field
+from typing import TYPE_CHECKING, List, Optional
 
-from sqlalchemy import String
+from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from api_v1.models.base_model import Base
 if TYPE_CHECKING:
@@ -9,4 +10,13 @@ if TYPE_CHECKING:
 
 class User(Base):
     username: Mapped[str] = mapped_column(String(100), unique=True)
-    characters: Mapped[list["Character"]] = relationship(back_populates="user")
+    password: Mapped[str] = mapped_column(String(120))
+    email: Mapped[Optional[EmailStr]] = mapped_column(String(100), nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    characters: Mapped[List["Character"]] = relationship(back_populates="user")
+
+    def __str__(self):
+        return f"{self.__class__.__name__}(id={self.id}, name={self.username!r}"
+
+    def __repr__(self):
+        return self.username
