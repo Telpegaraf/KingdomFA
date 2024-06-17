@@ -1,13 +1,11 @@
 from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import Optional
-from api_v1.schemas.character import Character
 
 
 class UserBase(BaseModel):
     username: str
     password: str
     email: Optional[EmailStr] = None
-    #characters: list[Character]
 
 
 class UserRead(BaseModel):

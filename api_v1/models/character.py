@@ -1,5 +1,6 @@
 from sqlalchemy import String, Integer, Text
 from sqlalchemy.orm import Mapped, mapped_column
+
 from api_v1.models.base_model import Base
 from api_v1.models.mixins.race import RaceRelationMixin
 from api_v1.models.mixins.user import UserRelationMixin

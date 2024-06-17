@@ -9,8 +9,6 @@ from api_v1.models.user import User
 import database
 from auth import utils
 from auth.helpers import (
-    TOKEN_TYPE_FIELD,
-    ACCESS_TOKEN_TYPE,
     REFRESH_TOKEN_TYPE
 )
 

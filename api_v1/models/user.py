@@ -1,8 +1,9 @@
-from pydantic import EmailStr, Field
+from pydantic import EmailStr
 from typing import TYPE_CHECKING, List, Optional
 
 from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from api_v1.models.base_model import Base
 if TYPE_CHECKING:
     from api_v1.models.character import Character

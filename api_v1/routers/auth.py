@@ -3,13 +3,11 @@ from fastapi.security import HTTPBearer
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import database
 from api_v1.schemas import user as schema
 from api_v1.crud.user import validate_user
-from api_v1.models import User
 from auth.helpers import create_access_token, create_refresh_token
 from auth.jwt_auth import decode_refresh_token
-from auth import utils
+import database
 
 http_bearer = HTTPBearer(auto_error=False)
 

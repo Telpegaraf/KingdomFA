@@ -1,4 +1,5 @@
 from fastapi import status, Depends, APIRouter
+from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api_v1.crud import god as crud
@@ -8,8 +9,9 @@ from api_v1.dependencies import get_object_by_id_dependency
 from auth.utils import get_current_token_payload
 from database import db_helper
 
+http_bearer = HTTPBearer(auto_error=False)
 
-god_router = APIRouter(prefix="/god", tags=["Gods"])
+god_router = APIRouter(prefix="/god", tags=["Gods"], dependencies=[Depends(http_bearer)])
 
 
 @god_router.get("/{object_id}/")
@@ -22,7 +24,7 @@ async def god_detail(
 
 @god_router.get("/", response_model=list[schemas.God])
 async def god_list(
-        payload: dict = Depends(get_current_token_payload),
+        #payload: dict = Depends(get_current_token_payload),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     result = await crud.god_list(session=session)

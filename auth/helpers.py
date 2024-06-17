@@ -28,11 +28,9 @@ def create_jwt(
 
 def create_access_token(user: schemas.UserValidate) -> str:
     jwt_payload = {
-        # subject
         "sub": user.username,
         "username": user.username,
         "email": user.email,
-        # "logged_in_at"
     }
     return create_jwt(
         token_type=ACCESS_TOKEN_TYPE,
@@ -44,7 +42,6 @@ def create_access_token(user: schemas.UserValidate) -> str:
 def create_refresh_token(user: schemas.UserValidate) -> str:
     jwt_payload = {
         "sub": user.username,
-        # "username": user.username,
     }
     return create_jwt(
         token_type=REFRESH_TOKEN_TYPE,

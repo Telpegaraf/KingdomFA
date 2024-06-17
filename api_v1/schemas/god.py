@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Annotated
 from annotated_types import MaxLen
+
 from api_v1.schemas.domain import Domain
 
 

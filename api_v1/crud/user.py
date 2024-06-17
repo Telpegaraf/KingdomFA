@@ -3,10 +3,14 @@ from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import database
 from api_v1.models.user import User
-from api_v1.schemas.user import UserBase, UserUpdatePassword, UserValidate
+from api_v1.schemas.user import (
+    UserBase,
+    UserUpdatePassword,
+    UserValidate
+)
 from auth.utils import hash_password, verify_password
+import database
 
 
 async def user_detail(session: AsyncSession, user_id: int) -> User | None:
