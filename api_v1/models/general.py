@@ -26,6 +26,10 @@ class DamageType(GeneralBase):
     pass
 
 
+class Title(GeneralBase):
+    pass
+
+
 class Action(GeneralBase):
     pass
 

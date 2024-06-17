@@ -37,3 +37,25 @@ async def object_with_description_create(
     await session.commit()
     await session.refresh(object)
     return object
+
+
+async def object_update(
+        session: AsyncSession,
+        object_update: GeneralBase,
+        object: Type
+):
+    for name, value in object_update.model_dump(exclude_unset=True).items():
+        setattr(object, name, value)
+    await session.commit()
+    return object
+
+
+async def object_update_with_description(
+        session: AsyncSession,
+        object_update: GeneralDescriptionBase,
+        object: Type
+):
+    for name, value in object_update.model_dump(exclude_unset=True).items():
+        setattr(object, name, value)
+    await session.commit()
+    return object

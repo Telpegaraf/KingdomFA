@@ -9,6 +9,12 @@ from api_v1.models import general as models
 from api_v1.crud import general as crud
 from auth.utils import get_current_token_payload
 from database import db_helper
+from api_v1.models.enum import (
+    ModelName,
+    ModelDescription,
+    model_mapping,
+    model_description_mapping,
+)
 
 from enum import Enum
 
@@ -16,35 +22,6 @@ http_bearer = HTTPBearer()
 
 general_router = APIRouter(prefix="/general", tags=["General"])
 #general_router = APIRouter(prefix="/general", tags=["General"], dependencies=[Depends(http_bearer)])
-
-
-class ModelName(str, Enum):
-    damage_type = 'damage_type'
-    action = 'action'
-    prerequisite = 'prerequisite'
-    requirements = 'requirements'
-    trigger = 'trigger'
-
-
-class ModelDescription(str, Enum):
-    skills = 'skills'
-    weapon_mastery = 'weapon_mastery'
-    feat_trait = 'feat_trait'
-
-
-model_mapping = {
-    "damage_type": models.DamageType,
-    "action": models.Action,
-    'prerequisite': models.Prerequisite,
-    'requirements': models.Requirements,
-    'trigger': models.Trigger,
-}
-
-model_description_mapping = {
-    'skills': models.Skills,
-    'weapon_mastery': models.WeaponMastery,
-    'feat_trait': models.FeatTrait
-}
 
 
 @general_router.get("/{model_name}}{object_id}/")
@@ -90,4 +67,34 @@ async def object__with_description_create(
         model=model_mapping[model_name],
         object_in=object_in,
         session=session
+    )
+
+
+@general_router.patch("/{model_name}/{object_id}/update/")
+async def object_update(
+        object_update: schemas.GeneralBase,
+        model_name: ModelName = Path(...),
+        object_id: int = Path(),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    object = await get_object_by_id(model=model_mapping[model_name], object_id=object_id, session=session)
+    return await crud.object_update(
+        session=session,
+        object=object,
+        object_update=object_update
+    )
+
+
+@general_router.patch("/{model_name}/{object_id}/update_with_description/")
+async def object_update(
+        object_update: schemas.GeneralDescriptionBase,
+        model_name: ModelDescription = Path(...),
+        object_id: int = Path(),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    object = await get_object_by_id(model=model_description_mapping[model_name], object_id=object_id, session=session)
+    return await crud.object_update_with_description(
+        session=session,
+        object=object,
+        object_update=object_update
     )
