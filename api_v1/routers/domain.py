@@ -17,14 +17,16 @@ domain_router = APIRouter(prefix="/domain", tags=["Domains"], dependencies=[Depe
 
 @domain_router.get("/{object_id}/")
 async def domain_detail(
-    payload: dict = Depends(get_current_token_payload),
-    domain: models.Domain = Depends(get_object_by_id_dependency(models.Domain))
+        payload: dict = Depends(get_current_token_payload),
+        domain: models.Domain = Depends(get_object_by_id_dependency(models.Domain))
 ):
     return domain
 
 
 @domain_router.get("/", response_model=list[schemas.Domain])
-async def domain_list(session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
+async def domain_list(
+        payload: dict = Depends(get_current_token_payload),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
     result = await crud.domain_list(session=session)
     return result
 
@@ -32,6 +34,7 @@ async def domain_list(session: AsyncSession = Depends(db_helper.scoped_session_d
 @domain_router.post("/create/", response_model=schemas.DomainBase, status_code=status.HTTP_201_CREATED)
 async def domain_create(
         domain_in: schemas.DomainBase,
+        payload: dict = Depends(get_current_token_payload),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
     result = await crud.domain_create(domain_in=domain_in, session=session)
     return result
@@ -40,6 +43,7 @@ async def domain_create(
 @domain_router.patch("/update/{object_id}/")
 async def domain_update(
         domain_update: schemas.DomainUpdate,
+        payload: dict = Depends(get_current_token_payload),
         domain: models.Domain = Depends(get_object_by_id_dependency(models.Domain)),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
     return await crud.domain_update(
@@ -51,6 +55,7 @@ async def domain_update(
 
 @domain_router.delete("/delete/{object_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def domain_delete(
+        payload: dict = Depends(get_current_token_payload),
         domain: models.Domain = Depends(get_object_by_id_dependency(models.Domain)),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
     await crud.domain_delete(domain=domain, session=session)
