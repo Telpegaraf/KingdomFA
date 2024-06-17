@@ -24,6 +24,9 @@ class ModelName(str, Enum):
     prerequisite = 'prerequisite'
     requirements = 'requirements'
     trigger = 'trigger'
+
+
+class ModelDescription(str, Enum):
     skills = 'skills'
     weapon_mastery = 'weapon_mastery'
     feat_trait = 'feat_trait'
@@ -35,17 +38,20 @@ model_mapping = {
     'prerequisite': models.Prerequisite,
     'requirements': models.Requirements,
     'trigger': models.Trigger,
+}
+
+model_description_mapping = {
     'skills': models.Skills,
     'weapon_mastery': models.WeaponMastery,
     'feat_trait': models.FeatTrait
-    }
+}
 
 
 @general_router.get("/{model_name}}{object_id}/")
 async def object_detail(
         model_name: ModelName = Path(...),
         object_id: int = Path(...),
-        session: AsyncSession = Depends(database.db_helper.scoped_session_dependency)
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await get_object_by_id(model=model_mapping[model_name], object_id=object_id, session=session)
 
@@ -53,9 +59,35 @@ async def object_detail(
 @general_router.get("/{model_name}/")
 async def object_list(
         model_name: ModelName = Path(...),
-        session: AsyncSession = Depends(database.db_helper.scoped_session_dependency)
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await crud.object_list(
         model=model_mapping[model_name],
+        session=session
+    )
+
+
+@general_router.post("/{model_name}/create/")
+async def object_create(
+        object_in: schemas.GeneralBase,
+        model_name: ModelName = Path(...),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.object_create(
+        model=model_mapping[model_name],
+        object_in=object_in,
+        session=session
+    )
+
+
+@general_router.post("/{model_name}/create_with_description/")
+async def object__with_description_create(
+        object_in: schemas.GeneralDescriptionBase,
+        model_name: ModelDescription = Path(...),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.object_create(
+        model=model_mapping[model_name],
+        object_in=object_in,
         session=session
     )
