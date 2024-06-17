@@ -24,7 +24,7 @@ async def god_detail(
 
 @god_router.get("/", response_model=list[schemas.God])
 async def god_list(
-        #payload: dict = Depends(get_current_token_payload),
+        payload: dict = Depends(get_current_token_payload),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     result = await crud.god_list(session=session)

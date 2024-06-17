@@ -69,4 +69,9 @@ async def validate_user(
     return user
 
 
-
+async def user_delete(
+        user: User,
+        session: AsyncSession
+):
+    await session.delete(user)
+    await session.commit()
