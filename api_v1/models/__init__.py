@@ -7,8 +7,8 @@ __all__ = (
     "Character",
     "Domain",
     "God",
-    "Title",
-    "GodDomainAssociation"
+    "GodDomainAssociation",
+    "GeneralBase",
 )
 
 from api_v1.models.base_model import Base
@@ -18,5 +18,5 @@ from api_v1.models.race import Race
 from api_v1.models.character import Character
 from api_v1.models.domain import Domain
 from api_v1.models.god import God
-from api_v1.models.title import Title
 from api_v1.models.associations.god_domain_association import GodDomainAssociation
+from api_v1.models.general import GeneralBase
