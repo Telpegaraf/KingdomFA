@@ -6,6 +6,7 @@ import database
 from api_v1.dependencies import get_object_by_id_dependency, get_object_by_id
 from api_v1.schemas import general as schemas
 from api_v1.models import general as models
+from api_v1.crud import general as crud
 from auth.utils import get_current_token_payload
 from database import db_helper
 
@@ -49,3 +50,12 @@ async def object_detail(
     return await get_object_by_id(model=model_mapping[model_name], object_id=object_id, session=session)
 
 
+@general_router.get("/{model_name}/")
+async def object_list(
+        model_name: ModelName = Path(...),
+        session: AsyncSession = Depends(database.db_helper.scoped_session_dependency)
+):
+    return await crud.object_list(
+        model=model_mapping[model_name],
+        session=session
+    )
