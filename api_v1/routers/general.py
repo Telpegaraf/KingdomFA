@@ -12,8 +12,10 @@ from database import db_helper
 from api_v1.models.enum import (
     ModelName,
     ModelDescription,
+    ModelNameDescription,
     model_mapping,
     model_description_mapping,
+    model_name_description_mapping
 )
 
 from enum import Enum
@@ -26,20 +28,22 @@ general_router = APIRouter(prefix="/general", tags=["General"])
 
 @general_router.get("/{model_name}}{object_id}/")
 async def object_detail(
-        model_name: ModelName = Path(...),
+        #model_name: ModelName = Path(...),
+        model_name: ModelNameDescription = Path(...),
         object_id: int = Path(...),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    return await get_object_by_id(model=model_mapping[model_name], object_id=object_id, session=session)
+    return await get_object_by_id(model=model_name_description_mapping[model_name], object_id=object_id, session=session)
 
 
 @general_router.get("/{model_name}/")
 async def object_list(
-        model_name: ModelName = Path(...),
+        #model_name: ModelName = Path(...),
+        model_name: ModelNameDescription = Path(...),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await crud.object_list(
-        model=model_mapping[model_name],
+        model=model_name_description_mapping[model_name],
         session=session
     )
 
@@ -92,9 +96,30 @@ async def object_update(
         object_id: int = Path(),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    object = await get_object_by_id(model=model_description_mapping[model_name], object_id=object_id, session=session)
+    object = await get_object_by_id(
+        model=model_description_mapping[model_name],
+        object_id=object_id,
+        session=session
+    )
     return await crud.object_update_with_description(
         session=session,
         object=object,
         object_update=object_update
+    )
+
+
+@general_router.delete("/{model_name}/{object_id}/delete/", status_code=status.HTTP_204_NO_CONTENT)
+async def object_delete(
+        model_name: ModelNameDescription = Path(...),
+        object_id: int = Path(),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    object = await get_object_by_id(
+        model=model_name_description_mapping[model_name],
+        object_id=object_id,
+        session=session
+    )
+    await crud.object_delete(
+        object=object,
+        session=session
     )

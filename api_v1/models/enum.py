@@ -31,6 +31,18 @@ class ModelDescription(str, Enum):
     feat_trait = 'feat_trait'
 
 
+class ModelNameDescription(str, Enum):
+    damage_type = 'damage_type'
+    action = 'action'
+    prerequisite = 'prerequisite'
+    requirements = 'requirements'
+    trigger = 'trigger'
+    title = 'title'
+    skills = 'skills'
+    weapon_mastery = 'weapon_mastery'
+    feat_trait = 'feat_trait'
+
+
 model_mapping = {
     "damage_type": models.DamageType,
     "action": models.Action,
@@ -45,3 +57,5 @@ model_description_mapping = {
     'weapon_mastery': models.WeaponMastery,
     'feat_trait': models.FeatTrait
 }
+
+model_name_description_mapping = {**model_mapping, **model_description_mapping}

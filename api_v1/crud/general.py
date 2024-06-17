@@ -59,3 +59,11 @@ async def object_update_with_description(
         setattr(object, name, value)
     await session.commit()
     return object
+
+
+async def object_delete(
+        session: AsyncSession,
+        object: Type
+):
+    await session.delete(object)
+    await session.commit()
