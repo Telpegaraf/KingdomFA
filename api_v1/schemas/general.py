@@ -4,11 +4,11 @@ from annotated_types import MaxLen
 
 
 class GeneralBase(BaseModel):
-    name: Annotated[str, MaxLen(100)]
+    name: Annotated[str, MaxLen(500)]
 
 
 class GeneralDescriptionBase(GeneralBase):
-    description: Annotated[str, MaxLen(300)]
+    description: Annotated[str, MaxLen(500)]
 
 
 class General(GeneralBase):

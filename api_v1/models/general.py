@@ -6,7 +6,7 @@ from api_v1.models import Base
 
 class GeneralBase(Base):
     __abstract__ = True
-    name: Mapped[str] = mapped_column(String(100), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(500), unique=True, index=True)
 
     @declared_attr.directive
     def __str__(self):
@@ -19,7 +19,7 @@ class GeneralBase(Base):
 
 class GeneralDescriptionBase(Base):
     __abstract__ = True
-    description: Mapped[str] = mapped_column(String(300))
+    description: Mapped[str] = mapped_column(String(500))
 
 
 class DamageType(GeneralBase):
