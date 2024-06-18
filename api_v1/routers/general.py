@@ -22,7 +22,11 @@ http_bearer = HTTPBearer()
 general_router = APIRouter(prefix="/general", tags=["General"], dependencies=[Depends(http_bearer)])
 
 
-@general_router.get("/{model_name}}{object_id}/")
+@general_router.get(
+    "/{model_name}}{object_id}/",
+    description="Returns information about an object, depending on the specified model and object."
+                " Returns ID, name and description if this field is present in the model"
+)
 async def object_detail(
         payload: dict = Depends(get_current_token_payload),
         model_name: ModelNameDescription = Path(...),
@@ -36,7 +40,11 @@ async def object_detail(
     )
 
 
-@general_router.get("/{model_name}/")
+@general_router.get(
+    "/{model_name}/",
+    description="Returns information about all objects, depending on the specified model and object."
+                " Returns ID, name and description if this field is present in the model"
+)
 async def object_list(
         payload: dict = Depends(get_current_token_payload),
         model_name: ModelNameDescription = Path(...),
@@ -48,7 +56,10 @@ async def object_list(
     )
 
 
-@general_router.post("/{model_name}/create/")
+@general_router.post(
+    "/{model_name}/create/",
+    description="Create new object, depending on the specified model"
+)
 async def object_create(
         object_in: schemas.GeneralBase,
         payload: dict = Depends(get_current_token_payload),
@@ -62,7 +73,10 @@ async def object_create(
     )
 
 
-@general_router.post("/{model_name}/create_with_description/")
+@general_router.post(
+    "/{model_name}/create_with_description/",
+    description="Create new object, depending on the specified model"
+)
 async def object__with_description_create(
         object_in: schemas.GeneralDescriptionBase,
         payload: dict = Depends(get_current_token_payload),
@@ -76,7 +90,10 @@ async def object__with_description_create(
     )
 
 
-@general_router.patch("/{model_name}/{object_id}/update/")
+@general_router.patch(
+    "/{model_name}/{object_id}/update/",
+    description="Update an object, depending on the specified model and ID"
+)
 async def object_update(
         object_update: schemas.GeneralBase,
         payload: dict = Depends(get_current_token_payload),
@@ -96,7 +113,10 @@ async def object_update(
     )
 
 
-@general_router.patch("/{model_name}/{object_id}/update_with_description/")
+@general_router.patch(
+    "/{model_name}/{object_id}/update_with_description/",
+    description="Partial or full update an object, depending on the specified model and ID"
+)
 async def object_update(
         object_update: schemas.GeneralDescriptionBase,
         payload: dict = Depends(get_current_token_payload),
@@ -116,7 +136,11 @@ async def object_update(
     )
 
 
-@general_router.delete("/{model_name}/{object_id}/delete/", status_code=status.HTTP_204_NO_CONTENT)
+@general_router.delete(
+    "/{model_name}/{object_id}/delete/",
+    status_code=status.HTTP_204_NO_CONTENT,
+    description="Delete an object, depending on the specified model and ID"
+)
 async def object_delete(
         model_name: ModelNameDescription = Path(...),
         payload: dict = Depends(get_current_token_payload),
