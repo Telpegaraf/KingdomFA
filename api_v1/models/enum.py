@@ -42,6 +42,12 @@ class ModelDescription(str, Enum):
     spell_school = 'spell_school'
     spell_trait = 'spell_trait'
     spell_component = 'spell_component'
+    armor_trait = 'armor_trait'
+    armor_specialization = 'armor_specialization'
+    weapon_trait = 'weapon_trait'
+    weapon_group = 'weapon_group'
+    weapon_specialization = 'weapon_specialization'
+    worn_trait = 'worn_trait'
 
 
 class ModelNameDescription(str, Enum):
@@ -59,6 +65,12 @@ class ModelNameDescription(str, Enum):
     spell_school = 'spell_school'
     spell_trait = 'spell_trait'
     spell_component = 'spell_component'
+    armor_trait = 'armor_trait'
+    armor_specialization = 'armor_specialization'
+    weapon_trait = 'weapon_trait'
+    weapon_group = 'weapon_group'
+    weapon_specialization = 'weapon_specialization'
+    worn_trait = 'worn_trait'
 
 
 model_mapping = {
@@ -79,6 +91,12 @@ model_description_mapping = {
     'spell_school': models.SpellSchool,
     'spell_trait': models.SpellTrait,
     'spell_component': models.SpellComponent,
+    'armor_trait': models.ArmorTrait,
+    'armor_specialization': models.ArmorSpecialization,
+    'weapon_trait': models.WeaponTrait,
+    'weapon_group': models.WeaponGroup,
+    'weapon_specialization': models.WeaponSpecialization,
+    'worn_trait': models.WornTrait
 }
 
 model_name_description_mapping = {**model_mapping, **model_description_mapping}
