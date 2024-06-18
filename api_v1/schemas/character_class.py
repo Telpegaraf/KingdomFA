@@ -2,6 +2,7 @@ from pydantic import BaseModel, ConfigDict
 from typing import Annotated
 from annotated_types import MaxLen
 from api_v1.models.enum import HealthByLevel, MasteryLevels
+from api_v1.models.general import SpellTradition
 
 
 class CharacterClassBase(BaseModel):
@@ -15,6 +16,8 @@ class CharacterClassBase(BaseModel):
     light_armor_mastery: MasteryLevels
     medium_armor_mastery: MasteryLevels
     heavy_armor_mastery: MasteryLevels
+    #spell_tradition_id: int | None = None
+    spell_tradition_id: Annotated[int, SpellTradition] | None = None
 
 
 class CharacterClass(CharacterClassBase):

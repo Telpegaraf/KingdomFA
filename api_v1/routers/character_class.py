@@ -9,7 +9,7 @@ from database import db_helper
 
 http_bearer = HTTPBearer()
 
-character_class_router = APIRouter(prefix="/character_class", tags=["Character Clss"])
+character_class_router = APIRouter(prefix="/character_class", tags=["Character Class"])
 
 
 @character_class_router.get("/{object_id}/")
@@ -17,6 +17,16 @@ async def character_class_detail(
         character_class: models.CharacterClass = Depends(get_object_by_id_dependency(models.CharacterClass)),
 ):
     return character_class
+
+
+@character_class_router.get("/", response_model=list[schema.CharacterClass])
+async def character_class_list(
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    result = await crud.character_class_list(
+        session=session
+    )
+    return result
 
 
 @character_class_router.post("/create/", status_code=status.HTTP_201_CREATED, response_model=schema.CharacterClassBase)
@@ -29,3 +39,26 @@ async def character_class_create(
         session=session
     )
 
+
+@character_class_router.patch("/update/{object_id}/")
+async def character_class_update(
+        character_update: schema.CharacterClassBase,
+        character_class: models.CharacterClass = Depends(get_object_by_id_dependency(models.CharacterClass)),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.character_class_update(
+        character_class_update=character_update,
+        character_class=character_class,
+        session=session
+    )
+
+
+@character_class_router.delete("/delete/{object_id}/", status_code=status.HTTP_204_NO_CONTENT)
+async def character_class_delete(
+        character_class: models.CharacterClass = Depends(get_object_by_id_dependency(models.CharacterClass)),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    await crud.character_class_delete(
+        character_class=character_class,
+        session=session
+    )
