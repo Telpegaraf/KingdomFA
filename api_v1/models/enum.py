@@ -1,6 +1,7 @@
 from enum import Enum
 from api_v1.models import general as models
 
+
 class MasteryLevels(Enum):
     ABSENT = 'None',
     TRAIN = 'Train',
@@ -23,12 +24,17 @@ class ModelName(str, Enum):
     requirements = 'requirements'
     trigger = 'trigger'
     title = 'title'
+    spell_cast = 'spell_cast'
 
 
 class ModelDescription(str, Enum):
     skills = 'skills'
     weapon_mastery = 'weapon_mastery'
     feat_trait = 'feat_trait'
+    spell_tradition = 'spell_tradition'
+    spell_school = 'spell_school'
+    spell_trait = 'spell_trait'
+    spell_component = 'spell_component'
 
 
 class ModelNameDescription(str, Enum):
@@ -41,6 +47,11 @@ class ModelNameDescription(str, Enum):
     skills = 'skills'
     weapon_mastery = 'weapon_mastery'
     feat_trait = 'feat_trait'
+    spell_cast = 'spell_cast'
+    spell_tradition = 'spell_tradition'
+    spell_school = 'spell_school'
+    spell_trait = 'spell_trait'
+    spell_component = 'spell_component'
 
 
 model_mapping = {
@@ -49,13 +60,18 @@ model_mapping = {
     'prerequisite': models.Prerequisite,
     'requirements': models.Requirements,
     'trigger': models.Trigger,
-    'title': models.Title
+    'title': models.Title,
+    'spell_cast': models.SpellCast
 }
 
 model_description_mapping = {
     'skills': models.Skills,
     'weapon_mastery': models.WeaponMastery,
-    'feat_trait': models.FeatTrait
+    'feat_trait': models.FeatTrait,
+    'spell_tradition': models.SpellTradition,
+    'spell_school': models.SpellSchool,
+    'spell_trait': models.SpellTrait,
+    'spell_component': models.SpellComponent,
 }
 
 model_name_description_mapping = {**model_mapping, **model_description_mapping}
