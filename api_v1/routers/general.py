@@ -2,6 +2,8 @@ from fastapi import APIRouter, status, Depends, Path
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from fastapi.responses import ORJSONResponse
+
 from api_v1.dependencies import get_object_by_id
 from api_v1.schemas import general as schemas
 from api_v1.crud import general as crud
@@ -25,7 +27,7 @@ general_router = APIRouter(prefix="/general", tags=["General"], dependencies=[De
 @general_router.get(
     "/{model_name}}{object_id}/",
     description="Returns information about an object, depending on the specified model and object."
-                " Returns ID, name and description if this field is present in the model"
+                " Returns ID, name and description if this field is present in the model",
 )
 async def object_detail(
         payload: dict = Depends(get_current_token_payload),

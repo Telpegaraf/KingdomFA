@@ -14,7 +14,12 @@ http_bearer = HTTPBearer()
 user_router = APIRouter(prefix="/user", tags=["Users"])
 
 
-@user_router.get("/{object_id}/", response_model=schemas.UserRead, dependencies=[Depends(http_bearer)])
+@user_router.get(
+    "/{object_id}/",
+    response_model=schemas.UserRead,
+    description="Return information about User, depending on ID",
+    dependencies=[Depends(http_bearer)]
+)
 async def user_detail(
         payload: dict = Depends(get_current_token_payload),
         user: models.User = Depends(get_object_by_id_dependency(models.User))
@@ -22,7 +27,12 @@ async def user_detail(
     return user
 
 
-@user_router.get("/", response_model=list[schemas.UserRead], dependencies=[Depends(http_bearer)])
+@user_router.get(
+    "/",
+    response_model=list[schemas.UserRead],
+    description="Return Information about all Users",
+    dependencies=[Depends(http_bearer)]
+)
 async def user_list(
         payload: dict = Depends(get_current_token_payload),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
@@ -31,7 +41,12 @@ async def user_list(
     return result
 
 
-@user_router.post("/create/", response_model=schemas.UserBase, status_code=status.HTTP_201_CREATED)
+@user_router.post(
+    "/create/",
+    response_model=schemas.UserBase,
+    description="Create a new User",
+    status_code=status.HTTP_201_CREATED
+)
 async def user_create(
         user_in: schemas.UserBase,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
@@ -40,7 +55,11 @@ async def user_create(
     return result
 
 
-@user_router.patch("/change_password/{object_id}/", dependencies=[Depends(http_bearer)])
+@user_router.patch(
+    "/change_password/{object_id}/",
+    description="Change password for User, depending on ID, if old password is correct",
+    dependencies=[Depends(http_bearer)]
+)
 async def user_change_password(
         user_in: schemas.UserUpdatePassword,
         payload: dict = Depends(get_current_token_payload),
@@ -56,6 +75,7 @@ async def user_change_password(
 
 @user_router.delete(
     "/user_delete/{object_id}/",
+    description="Delete User, depending on ID",
     dependencies=[Depends(http_bearer)],
     status_code=status.HTTP_204_NO_CONTENT
 )
