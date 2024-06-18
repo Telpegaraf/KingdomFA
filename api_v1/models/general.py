@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from api_v1.models import Base
 if TYPE_CHECKING:
-    from api_v1.models.class_character import CharacterClass
+    from api_v1.models.character_class import CharacterClass
 
 
 class GeneralBase(Base):

@@ -2,19 +2,26 @@ from enum import Enum
 from api_v1.models import general as models
 
 
-class MasteryLevels(Enum):
-    ABSENT = 'None',
-    TRAIN = 'Train',
-    EXPERT = 'Expert',
-    MASTER = 'Master',
+class MasteryLevels(str, Enum):
+    ABSENT = 'None'
+    TRAIN = 'Train'
+    EXPERT = 'Expert'
+    MASTER = 'Master'
     LEGEND = 'Legend'
 
 
-class ArmorCategory(Enum):
-    UNARMED = 'Unarmed',
-    LIGHT = 'Light',
-    MEDIUM = 'Medium',
+class ArmorCategory(str, Enum):
+    UNARMED = 'Unarmed'
+    LIGHT = 'Light'
+    MEDIUM = 'Medium'
     HEAVY = 'Heavy'
+
+
+class HealthByLevel(int, Enum):
+    SIX = 6
+    EIGHT = 8
+    TEN = 10
+    TWELVE = 12
 
 
 class ModelName(str, Enum):
