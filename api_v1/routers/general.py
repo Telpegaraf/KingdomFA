@@ -19,7 +19,6 @@ from api_v1.models.enum import (
 
 http_bearer = HTTPBearer()
 
-#general_router = APIRouter(prefix="/general", tags=["General"])
 general_router = APIRouter(prefix="/general", tags=["General"], dependencies=[Depends(http_bearer)])
 
 

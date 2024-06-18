@@ -13,7 +13,7 @@ http_bearer = HTTPBearer()
 character_class_router = APIRouter(
     prefix="/character_class",
     tags=["Character Class"],
-    dependencies=Depends(http_bearer)
+    dependencies=[Depends(http_bearer)]
 )
 
 
