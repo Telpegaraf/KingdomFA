@@ -1,7 +1,10 @@
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column, declared_attr
+from sqlalchemy.orm import Mapped, mapped_column, declared_attr, relationship
+from typing import TYPE_CHECKING
 
 from api_v1.models import Base
+if TYPE_CHECKING:
+    from api_v1.models.character_class import CharacterClass
 
 
 class GeneralBase(Base):
@@ -19,6 +22,7 @@ class GeneralBase(Base):
 
 class GeneralDescriptionBase(Base):
     __abstract__ = True
+    name: Mapped[str] = mapped_column(String(500), unique=True, index=True)
     description: Mapped[str] = mapped_column(String(500))
 
 
@@ -46,6 +50,10 @@ class Trigger(GeneralBase):
     pass
 
 
+class SpellCast(GeneralBase):
+    pass
+
+
 class Skills(GeneralDescriptionBase):
     pass
 
@@ -55,4 +63,20 @@ class WeaponMastery(GeneralDescriptionBase):
 
 
 class FeatTrait(GeneralDescriptionBase):
+    pass
+
+
+class SpellTradition(GeneralDescriptionBase):
+    character_classes: Mapped[list["CharacterClass"]] = relationship(back_populates="spell_tradition")
+
+
+class SpellSchool(GeneralDescriptionBase):
+    pass
+
+
+class SpellTrait(GeneralDescriptionBase):
+    pass
+
+
+class SpellComponent(GeneralDescriptionBase):
     pass

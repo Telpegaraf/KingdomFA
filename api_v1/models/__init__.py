@@ -9,6 +9,7 @@ __all__ = (
     "God",
     "GodDomainAssociation",
     "GeneralBase",
+    "CharacterClass"
 )
 
 from api_v1.models.base_model import Base
@@ -20,3 +21,4 @@ from api_v1.models.domain import Domain
 from api_v1.models.god import God
 from api_v1.models.associations.god_domain_association import GodDomainAssociation
 from api_v1.models.general import GeneralBase
+from api_v1.models.character_class import CharacterClass
