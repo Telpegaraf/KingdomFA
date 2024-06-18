@@ -8,10 +8,12 @@ __all__ = (
     "Domain",
     "God",
     "GodDomainAssociation",
+    "WornItemTraitAssociation",
     "GeneralBase",
     "CharacterClass",
     "Currency",
-    "Item"
+    "Item",
+    "Worn"
 )
 
 from api_v1.models.base_model import Base
@@ -22,6 +24,7 @@ from api_v1.models.character import Character
 from api_v1.models.domain import Domain
 from api_v1.models.god import God
 from api_v1.models.associations.god_domain_association import GodDomainAssociation
+from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
 from api_v1.models.general import GeneralBase
 from api_v1.models.character_class import CharacterClass
-from api_v1.models.equipment import Currency, Item
+from api_v1.models.equipment import Currency, Item, Worn

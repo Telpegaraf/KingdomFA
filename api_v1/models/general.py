@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 from api_v1.models import Base
 if TYPE_CHECKING:
     from api_v1.models.character_class import CharacterClass
+    from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
+    from api_v1.models.equipment import Worn
 
 
 class GeneralBase(Base):
@@ -80,3 +82,36 @@ class SpellTrait(GeneralDescriptionBase):
 
 class SpellComponent(GeneralDescriptionBase):
     pass
+
+
+class ArmorTrait(GeneralDescriptionBase):
+    pass
+
+
+class ArmorSpecialization(GeneralDescriptionBase):
+    pass
+
+
+class WeaponTrait(GeneralDescriptionBase):
+    pass
+
+
+class WeaponGroup(GeneralDescriptionBase):
+    pass
+
+
+class WeaponSpecialization(GeneralDescriptionBase):
+    pass
+
+
+class WornTrait(GeneralDescriptionBase):
+    __tablename__ = 'worn_traits'
+
+    worns: Mapped[list["Worn"]] = relationship(
+        secondary='worn_item_trait',
+        back_populates="worn_traits"
+    )
+    worn_details: Mapped[list["WornItemTraitAssociation"]] = relationship(
+        "GodDomainAssociation",
+        back_populates="worn_trait",
+    )
