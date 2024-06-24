@@ -26,13 +26,3 @@ class GodDomainAssociation(Base):
     domain: Mapped["Domain"] = relationship(
         back_populates='god_details'
     )
-
-
-# god_domain_association = Table(
-#     'god_domain',
-#     Base.metadata,
-#     Column('id', Integer, primary_key=True),
-#     Column('god_id', ForeignKey('gods.id'), nullable=False),
-#     Column('domain_id', ForeignKey('domains.id'), nullable=False),
-#     UniqueConstraint('god_id', 'domain_id', name='idx_unique_god_domain'),
-# )

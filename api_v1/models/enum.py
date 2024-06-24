@@ -77,7 +77,7 @@ model_mapping = {
     "damage_type": models.DamageType,
     "action": models.Action,
     'prerequisite': models.Prerequisite,
-    'requirements': models.Requirements,
+    'requirements': models.Requirement,
     'trigger': models.Trigger,
     'title': models.Title,
     'spell_cast': models.SpellCast

@@ -13,7 +13,7 @@ __all__ = (
     "CharacterClass",
     "Currency",
     "Item",
-    "Worn"
+    "Worn",
 )
 
 from api_v1.models.base_model import Base
@@ -27,4 +27,5 @@ from api_v1.models.associations.god_domain_association import GodDomainAssociati
 from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
 from api_v1.models.general import GeneralBase
 from api_v1.models.character_class import CharacterClass
+from api_v1.models.feat_class import Feat
 from api_v1.models.equipment import Currency, Item, Worn

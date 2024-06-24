@@ -4,8 +4,10 @@ from typing import TYPE_CHECKING
 
 from api_v1.models import Base
 if TYPE_CHECKING:
+    from api_v1.models.feat_class import Feat
     from api_v1.models.character_class import CharacterClass
     from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
+    from api_v1.models.associations.feat_traits_association import FeatTraitAssociation
     from api_v1.models.equipment import Worn
 
 
@@ -37,19 +39,19 @@ class Title(GeneralBase):
 
 
 class Action(GeneralBase):
-    pass
+    feats: Mapped[list["Feat"]] = relationship("FeatClass", back_populates="action")
 
 
 class Prerequisite(GeneralBase):
-    pass
+    feats: Mapped[list["Feat"]] = relationship("FeatClass", back_populates="action")
 
 
-class Requirements(GeneralBase):
-    pass
+class Requirement(GeneralBase):
+    feats: Mapped[list["Feat"]] = relationship("FeatClass", back_populates="action")
 
 
 class Trigger(GeneralBase):
-    pass
+    feats: Mapped[list["Feat"]] = relationship("FeatClass", back_populates="action")
 
 
 class SpellCast(GeneralBase):
@@ -65,7 +67,16 @@ class WeaponMastery(GeneralDescriptionBase):
 
 
 class FeatTrait(GeneralDescriptionBase):
-    pass
+    __tablename__ = "feat_traits"
+
+    feat_traits: Mapped[list["Feat"]] = relationship(
+        secondary='feat_trait',
+        back_populates="feat_traits"
+    )
+    feat_trait_details: Mapped[list["FeatTraitAssociation"]] = relationship(
+        back_populates="feat_trait",
+        passive_deletes=True
+    )
 
 
 class SpellTradition(GeneralDescriptionBase):
