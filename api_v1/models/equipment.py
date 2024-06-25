@@ -1,7 +1,7 @@
 from decimal import Decimal
 from pydantic import Field
-from sqlalchemy import String, Integer, ForeignKey, Numeric, Boolean
-from sqlalchemy.orm import Mapped, mapped_column, relationship, declared_attr
+from sqlalchemy import String, Integer, ForeignKey, Numeric, Boolean, SmallInteger
+from sqlalchemy.orm import Mapped, mapped_column, relationship, declared_attr, validates
 from typing import TYPE_CHECKING
 
 from api_v1.models.base_model import Base
@@ -63,7 +63,7 @@ class Worn(Item):
     _item_back_populate = 'worns'
     slot_id: Mapped[int] = mapped_column(ForeignKey('slots.id'))
     slot: Mapped["Slot"] = relationship(back_populates='worn_items')
-    level: Mapped[int] = mapped_column(Integer)
+    level: Mapped[int] = mapped_column(SmallInteger, default=1)
     activate: Mapped[str] = mapped_column(String)
     effect: Mapped[str] = mapped_column(String)
     worn_traits: Mapped[list["WornTrait"]] = relationship(

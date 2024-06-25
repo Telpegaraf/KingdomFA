@@ -1,4 +1,4 @@
-from sqlalchemy import String, Integer, Text
+from sqlalchemy import String, Integer, Text, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from api_v1.models.base_model import Base
@@ -13,7 +13,7 @@ class Character(RaceRelationMixin, UserRelationMixin, Base):
     last_name: Mapped[str] = mapped_column(String(100))
     alias: Mapped[str] = mapped_column(String(100))
     age: Mapped[int]
-    level: Mapped[int] = mapped_column(Integer, default=0)
+    level: Mapped[int] = mapped_column(Integer, CheckConstraint('level >= 1 AND level <= 20'), default=1)
     description: Mapped[str] = mapped_column(Text)
 
 
