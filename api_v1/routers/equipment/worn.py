@@ -37,10 +37,41 @@ async def get_worn_list(
 
 @worn_router.post(
     "/create/",
-    description="Create a new worn object"
+    description="Create a new worn object",
+    #response_model=schemas.Worn
 )
 async def worn_create(
         worn_in: schemas.WornCreate,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await crud.worn_create(session=session, worn_in=worn_in)
+
+
+@worn_router.patch(
+    "/{object_id}/update/",
+    description="Update worn object, depending on ID"
+)
+async def worn_update(
+        worn_update: schemas.WornUpdate,
+        worn: models.Worn = Depends(get_object_by_id_dependency(models.Worn)),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.worn_update(
+        worn_update=worn_update,
+        worn=worn,
+        session=session
+    )
+
+
+@worn_router.delete(
+    "/{object_id}/delete/",
+    description="Delete worn object, depending on ID"
+)
+async def worn_delete(
+        worn: models.Worn = Depends(get_object_by_id_dependency(models.Worn)),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.worn_delete(
+        session=session,
+        worn=worn
+    )
