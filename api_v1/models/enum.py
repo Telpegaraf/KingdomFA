@@ -1,5 +1,6 @@
 from enum import Enum
 from api_v1.models import general as models
+from api_v1.models import equipment
 
 
 class MasteryLevels(str, Enum):
@@ -100,3 +101,15 @@ model_description_mapping = {
 }
 
 model_name_description_mapping = {**model_mapping, **model_description_mapping}
+
+
+class EquipmentEnum(str, Enum):
+    worn = 'worn'
+    ARMOR = 'armor'
+    WEAPON = 'weapon'
+
+
+equipment_model_mapping = {
+    'worn': equipment.Worn
+}
+

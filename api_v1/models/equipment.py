@@ -17,7 +17,7 @@ class Currency(Base):
     price: Mapped[int] = mapped_column(Integer)
     description: Mapped[str] = mapped_column(String)
     weight: Mapped[Decimal] = mapped_column(Numeric(5, 2), default=Decimal('0.01'))
-    items: Mapped[list["Item"]] = relationship(back_populates="currency")
+    worns: Mapped[list["Worn"]] = relationship(back_populates="currency")
 
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id}, name={self.name!r})"
@@ -28,6 +28,9 @@ class Currency(Base):
 
 class Item(Base):
     __abstract__ = True
+
+    _item_back_populate: str | None = None
+
     name: Mapped[str] = mapped_column(String(200), unique=True)
     description: Mapped[int] = mapped_column(String)
     price: Mapped[int] = mapped_column(Integer)
@@ -39,7 +42,7 @@ class Item(Base):
 
     @declared_attr
     def currency(cls) -> Mapped["Currency"]:
-        return relationship(back_populates='items')
+        return relationship(back_populates=cls._item_back_populate)
 
     @declared_attr.directive
     def __str__(self):
@@ -57,6 +60,7 @@ class Slot(Base):
 
 
 class Worn(Item):
+    _item_back_populate = 'worns'
     slot_id: Mapped[int] = mapped_column(ForeignKey('slots.id'))
     slot: Mapped["Slot"] = relationship(back_populates='worn_items')
     level: Mapped[int] = mapped_column(Integer)

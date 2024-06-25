@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from api_v1.models import Base
 if TYPE_CHECKING:
-    from api_v1.models.feat_class import Feat
+    from api_v1.models.feat import Feat
     from api_v1.models.character_class import CharacterClass
     from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
     from api_v1.models.associations.feat_traits_association import FeatTraitAssociation
@@ -39,19 +39,19 @@ class Title(GeneralBase):
 
 
 class Action(GeneralBase):
-    feats: Mapped[list["Feat"]] = relationship("FeatClass", back_populates="action")
+    feats: Mapped[list["Feat"]] = relationship(back_populates="action")
 
 
 class Prerequisite(GeneralBase):
-    feats: Mapped[list["Feat"]] = relationship("FeatClass", back_populates="action")
+    feats: Mapped[list["Feat"]] = relationship(back_populates="prerequisite")
 
 
 class Requirement(GeneralBase):
-    feats: Mapped[list["Feat"]] = relationship("FeatClass", back_populates="action")
+    feats: Mapped[list["Feat"]] = relationship(back_populates="requirement")
 
 
 class Trigger(GeneralBase):
-    feats: Mapped[list["Feat"]] = relationship("FeatClass", back_populates="action")
+    feats: Mapped[list["Feat"]] = relationship(back_populates="trigger")
 
 
 class SpellCast(GeneralBase):
@@ -69,7 +69,7 @@ class WeaponMastery(GeneralDescriptionBase):
 class FeatTrait(GeneralDescriptionBase):
     __tablename__ = "feat_traits"
 
-    feat_traits: Mapped[list["Feat"]] = relationship(
+    feats: Mapped[list["Feat"]] = relationship(
         secondary='feat_trait',
         back_populates="feat_traits"
     )
@@ -123,6 +123,5 @@ class WornTrait(GeneralDescriptionBase):
         back_populates="worn_traits"
     )
     worn_details: Mapped[list["WornItemTraitAssociation"]] = relationship(
-        "GodDomainAssociation",
         back_populates="worn_trait",
     )

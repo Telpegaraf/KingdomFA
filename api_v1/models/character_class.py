@@ -6,7 +6,7 @@ from api_v1.models.base_model import Base
 from api_v1.models.enum import MasteryLevels, HealthByLevel
 from api_v1.models.mixins.spell_tradition import SpellTraditionRelationMixin
 if TYPE_CHECKING:
-    from api_v1.models.feat_class import Feat
+    from api_v1.models.feat import Feat
 
 
 class CharacterClass(SpellTraditionRelationMixin, Base):

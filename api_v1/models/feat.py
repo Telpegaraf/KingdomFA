@@ -25,7 +25,7 @@ class Feat(Base):
         back_populates="feats",
     )
 
-    feats: Mapped[list["FeatTrait"]] = relationship(
+    feat_traits: Mapped[list["FeatTrait"]] = relationship(
         secondary="feat_trait",
         back_populates="feats"
     )
@@ -35,13 +35,13 @@ class Feat(Base):
     )
 
     action_id: Mapped[int] = mapped_column(ForeignKey("actions.id"))
-    action: Mapped["Action"] = relationship("Action", back_populates="action")
+    action: Mapped["Action"] = relationship(back_populates="feats")
     trigger_id: Mapped[int] = mapped_column(ForeignKey("triggers.id"))
-    trigger: Mapped["Trigger"] = relationship("Trigger", back_populates="trigger")
+    trigger: Mapped["Trigger"] = relationship(back_populates="feats")
     prerequisite_id: Mapped[int] = mapped_column(ForeignKey("prerequisites.id"))
-    prerequisite: Mapped["Prerequisite"] = relationship("Prerequisite", back_populates="prerequisite")
+    prerequisite: Mapped["Prerequisite"] = relationship(back_populates="feats")
     requirement_id: Mapped[int] = mapped_column(ForeignKey("requirements.id"))
-    requirement: Mapped["Requirement"] = relationship("Requirement", back_populates='requirement')
+    requirement: Mapped["Requirement"] = relationship(back_populates='feats')
 
     name: Mapped[str] = mapped_column(String(200), unique=True)
     description: Mapped[str] = mapped_column(String(500))

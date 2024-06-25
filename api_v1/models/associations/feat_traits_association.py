@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from api_v1.models.base_model import Base
 if TYPE_CHECKING:
     from api_v1.models.general import FeatTrait
-    from api_v1.models.feat_class import Feat
+    from api_v1.models.feat import Feat
 
 
 class FeatTraitAssociation(Base):
