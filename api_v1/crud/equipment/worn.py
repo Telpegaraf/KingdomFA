@@ -67,8 +67,36 @@ async def worn_update(
         worn: Worn,
         session: AsyncSession,
 ) -> Worn:
-    #for name, value in worn_update.model_dump(exclude_unset=True).items():
-    #    setattr(worn, name, value)
+    slot_result = await session.execute(
+        select(Slot).where(Slot.id == worn_update.slot_id)
+    )
+    slot = slot_result.scalar_one_or_none()
+    if slot is None:
+        raise HTTPException(status_code=404, detail="Slot not found")
+
+    currency_result = await session.execute(
+        select(Currency).where(Currency.id == worn_update.currency_id)
+    )
+    currency = currency_result.scalar_one_or_none()
+    if currency is None:
+        raise HTTPException(status_code=404, detail="currency not found")
+
+    # worn_traits_result = await session.execute(
+    #     select(WornTrait).where(WornTrait.id.in_(worn_update.worn_traits))
+    # )
+    # existing_worn_traits = worn_traits_result.scalars().all()
+
+    worn.name = worn_update.name
+    worn.description = worn_update.description
+    worn.price = worn_update.price
+    worn.weight = worn_update.weight
+    worn.level = worn_update.level
+    worn.activate = worn_update.activate
+    worn.effect = worn_update.effect
+    worn.slot = slot
+    worn.currency = currency
+    #worn.worn_traits = existing_worn_traits
+
     await session.commit()
     await session.refresh(worn)
     return worn
