@@ -155,12 +155,15 @@ class WeaponTrait(GeneralDescriptionBase):
 
 
 class WeaponGroup(GeneralDescriptionBase):
-    pass
+    __tablename__ = 'weapon_groups'
+
+    weapons: Mapped[list["Weapon"]] = relationship(back_populates='weapon_group')
 
 
 class WeaponSpecialization(GeneralDescriptionBase):
-    pass
+    __tablename__ = 'weapon_specializations'
 
+    weapons: Mapped[list["Weapon"]] = relationship(back_populates='weapon_specialization')
 
 class WornTrait(GeneralDescriptionBase):
     __tablename__ = 'worn_traits'

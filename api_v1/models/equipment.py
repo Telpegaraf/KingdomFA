@@ -8,7 +8,15 @@ from typing import TYPE_CHECKING
 from api_v1.models.base_model import Base
 
 if TYPE_CHECKING:
-    from api_v1.models.general import WornTrait, ArmorTrait, ArmorSpecialization, DamageType, WeaponTrait
+    from api_v1.models.general import(
+        WornTrait,
+        ArmorTrait,
+        ArmorSpecialization,
+        DamageType,
+        WeaponTrait,
+        WeaponGroup,
+        WeaponSpecialization,
+    )
     from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
     from api_v1.models.associations.armor_trait_association import ArmorTraitAssociation
     from api_v1.models.associations.weapon_trait_association import WeaponTraitAssociation
@@ -160,6 +168,10 @@ class Weapon(Item):
         foreign_keys=[second_damage_type_id],
         back_populates='second_type_weapons'
     )
+    weapon_group_id: Mapped[int] = mapped_column(ForeignKey('weapon_groups.id'), nullable=True)
+    weapon_group: Mapped["WeaponGroup"] = relationship(back_populates='weapons')
+    weapon_specialization_id: Mapped[int] = mapped_column(ForeignKey('weapon_specializations.id'), nullable=True)
+    weapon_specialization: Mapped["WeaponSpecialization"] = relationship(back_populates='weapons')
 
     dice: Mapped[Dice] = mapped_column(Enum(Dice), default=Dice.FOUR)
     dice_count: Mapped[int] = mapped_column(SmallInteger, default=1)
