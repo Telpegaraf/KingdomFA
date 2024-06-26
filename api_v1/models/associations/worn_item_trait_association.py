@@ -17,8 +17,8 @@ class WornItemTraitAssociation(Base):
         ),
     )
 
-    worn_id: Mapped[int] = mapped_column(ForeignKey('worns.id'))
-    worn_trait_id: Mapped[int] = mapped_column(ForeignKey('worn_traits.id'))
+    worn_id: Mapped[int] = mapped_column(ForeignKey('worns.id', ondelete="CASCADE"))
+    worn_trait_id: Mapped[int] = mapped_column(ForeignKey('worn_traits.id', ondelete="CASCADE"))
 
     worn: Mapped["Worn"] = relationship(
         back_populates='worn_trait_details',

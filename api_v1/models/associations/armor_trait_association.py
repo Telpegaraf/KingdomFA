@@ -18,8 +18,8 @@ class ArmorTraitAssociation(Base):
         ),
     )
 
-    armor_trait_id: Mapped[int] = mapped_column(ForeignKey('armor_traits.id'))
-    armor_id: Mapped[int] = mapped_column(ForeignKey('armors.id'))
+    armor_trait_id: Mapped[int] = mapped_column(ForeignKey('armor_traits.id', ondelete="CASCADE"))
+    armor_id: Mapped[int] = mapped_column(ForeignKey('armors.id', ondelete="CASCADE"))
 
     armor_trait: Mapped["ArmorTrait"] = relationship(
         back_populates='armor_details'

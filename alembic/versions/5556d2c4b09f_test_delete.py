@@ -1,8 +1,8 @@
-"""initial
+"""test delete
 
-Revision ID: 7abab89272d5
+Revision ID: 5556d2c4b09f
 Revises: 
-Create Date: 2024-06-25 15:38:43.688357
+Create Date: 2024-06-26 17:28:20.224001
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "7abab89272d5"
+revision: str = "5556d2c4b09f"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -29,26 +29,36 @@ def upgrade() -> None:
     )
     op.create_index(op.f("ix_actions_name"), "actions", ["name"], unique=True)
     op.create_table(
-        "armorspecializations",
+        "armor_groups",
+        sa.Column("name", sa.String(length=200), nullable=False),
+        sa.Column("description", sa.String(length=500), nullable=False),
+        sa.Column("hardness", sa.SmallInteger(), nullable=False),
+        sa.Column("health", sa.SmallInteger(), nullable=False),
+        sa.Column("broken_threshold", sa.SmallInteger(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_table(
+        "armor_specializations",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_armorspecializations_name"),
-        "armorspecializations",
+        op.f("ix_armor_specializations_name"),
+        "armor_specializations",
         ["name"],
         unique=True,
     )
     op.create_table(
-        "armortraits",
+        "armor_traits",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_armortraits_name"), "armortraits", ["name"], unique=True)
+    op.create_index(op.f("ix_armor_traits_name"), "armor_traits", ["name"], unique=True)
     op.create_table(
         "currencies",
         sa.Column("name", sa.String(length=200), nullable=False),
@@ -253,6 +263,37 @@ def upgrade() -> None:
     )
     op.create_index(op.f("ix_worn_traits_name"), "worn_traits", ["name"], unique=True)
     op.create_table(
+        "armors",
+        sa.Column("armor_group_id", sa.Integer(), nullable=False),
+        sa.Column(
+            "category",
+            sa.Enum("UNARMED", "LIGHT", "MEDIUM", "HEAVY", name="armorcategory"),
+            nullable=False,
+        ),
+        sa.Column("ac_bonus", sa.SmallInteger(), nullable=False),
+        sa.Column("dexterity_modifier_cap", sa.SmallInteger(), nullable=True),
+        sa.Column("check_penalty", sa.Boolean(), nullable=False),
+        sa.Column("speed_penalty", sa.Boolean(), nullable=False),
+        sa.Column("strength", sa.SmallInteger(), nullable=True),
+        sa.Column("level", sa.SmallInteger(), nullable=False),
+        sa.Column("name", sa.String(length=200), nullable=False),
+        sa.Column("description", sa.String(), nullable=False),
+        sa.Column("price", sa.Integer(), nullable=False),
+        sa.Column("weight", sa.Numeric(precision=5, scale=2), nullable=False),
+        sa.Column("currency_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["armor_group_id"],
+            ["armor_groups.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["currency_id"],
+            ["currencies.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("name"),
+    )
+    op.create_table(
         "character_classes",
         sa.Column("name", sa.String(length=120), nullable=False),
         sa.Column(
@@ -365,7 +406,7 @@ def upgrade() -> None:
     op.create_table(
         "worns",
         sa.Column("slot_id", sa.Integer(), nullable=False),
-        sa.Column("level", sa.Integer(), nullable=False),
+        sa.Column("level", sa.SmallInteger(), nullable=False),
         sa.Column("activate", sa.String(), nullable=False),
         sa.Column("effect", sa.String(), nullable=False),
         sa.Column("name", sa.String(length=200), nullable=False),
@@ -384,6 +425,44 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
+    )
+    op.create_table(
+        "armor_specialization_association",
+        sa.Column("armor_id", sa.Integer(), nullable=False),
+        sa.Column("armor_specialization_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["armor_id"],
+            ["armors.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["armor_specialization_id"],
+            ["armor_specializations.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint(
+            "armor_id",
+            "armor_specialization_id",
+            name="idx_unique_armor_specialization_association",
+        ),
+    )
+    op.create_table(
+        "armor_trait_association",
+        sa.Column("armor_trait_id", sa.Integer(), nullable=False),
+        sa.Column("armor_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["armor_id"],
+            ["armors.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["armor_trait_id"],
+            ["armor_traits.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint(
+            "armor_trait_id", "armor_id", name="idx_unique_armor_trait_association"
+        ),
     )
     op.create_table(
         "feats",
@@ -461,10 +540,13 @@ def downgrade() -> None:
     op.drop_table("feat_trait")
     op.drop_table("worn_item_trait")
     op.drop_table("feats")
+    op.drop_table("armor_trait_association")
+    op.drop_table("armor_specialization_association")
     op.drop_table("worns")
     op.drop_table("god_domain")
     op.drop_table("characters")
     op.drop_table("character_classes")
+    op.drop_table("armors")
     op.drop_index(op.f("ix_worn_traits_name"), table_name="worn_traits")
     op.drop_table("worn_traits")
     op.drop_index(op.f("ix_weapontraits_name"), table_name="weapontraits")
@@ -509,12 +591,13 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_damagetypes_name"), table_name="damagetypes")
     op.drop_table("damagetypes")
     op.drop_table("currencies")
-    op.drop_index(op.f("ix_armortraits_name"), table_name="armortraits")
-    op.drop_table("armortraits")
+    op.drop_index(op.f("ix_armor_traits_name"), table_name="armor_traits")
+    op.drop_table("armor_traits")
     op.drop_index(
-        op.f("ix_armorspecializations_name"), table_name="armorspecializations"
+        op.f("ix_armor_specializations_name"), table_name="armor_specializations"
     )
-    op.drop_table("armorspecializations")
+    op.drop_table("armor_specializations")
+    op.drop_table("armor_groups")
     op.drop_index(op.f("ix_actions_name"), table_name="actions")
     op.drop_table("actions")
     # ### end Alembic commands ###

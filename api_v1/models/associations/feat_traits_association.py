@@ -17,8 +17,8 @@ class FeatTraitAssociation(Base):
         ),
     )
 
-    feat_id: Mapped[int] = mapped_column(ForeignKey('feats.id'))
-    trait_id: Mapped[int] = mapped_column(ForeignKey('feat_traits.id'))
+    feat_id: Mapped[int] = mapped_column(ForeignKey('feats.id', ondelete="CASCADE"))
+    trait_id: Mapped[int] = mapped_column(ForeignKey('feat_traits.id', ondelete="CASCADE"))
 
     feat: Mapped["Feat"] = relationship(
         back_populates='feat_details',

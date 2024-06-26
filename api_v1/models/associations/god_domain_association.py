@@ -17,8 +17,8 @@ class GodDomainAssociation(Base):
         ),
     )
 
-    god_id: Mapped[int] = mapped_column(ForeignKey('gods.id'))
-    domain_id: Mapped[int] = mapped_column(ForeignKey('domains.id'))
+    god_id: Mapped[int] = mapped_column(ForeignKey('gods.id', ondelete="CASCADE"))
+    domain_id: Mapped[int] = mapped_column(ForeignKey('domains.id', ondelete="CASCADE"))
 
     god: Mapped["God"] = relationship(
         back_populates='domain_details',

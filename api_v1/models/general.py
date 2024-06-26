@@ -152,5 +152,4 @@ class WornTrait(GeneralDescriptionBase):
     )
     worn_details: Mapped[list["WornItemTraitAssociation"]] = relationship(
         back_populates="worn_trait",
-        passive_deletes=True
     )

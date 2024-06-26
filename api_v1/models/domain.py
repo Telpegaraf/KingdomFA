@@ -19,7 +19,6 @@ class Domain(Base):
     god_details: Mapped[list["GodDomainAssociation"]] = relationship(
         "GodDomainAssociation",
         back_populates="domain",
-        passive_deletes=True
     )
 
     def __str__(self):
