@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api_v1.schemas.equipment.worn import (
     WornBase,
     WornCreate,
-    WornUpdate
+    WornUpdate,
 )
 from api_v1.models.equipment import Worn, Slot, Currency
 from api_v1.models.general import WornTrait
@@ -81,21 +81,10 @@ async def worn_update(
     if currency is None:
         raise HTTPException(status_code=404, detail="currency not found")
 
-    # worn_traits_result = await session.execute(
-    #     select(WornTrait).where(WornTrait.id.in_(worn_update.worn_traits))
-    # )
-    # existing_worn_traits = worn_traits_result.scalars().all()
-
-    worn.name = worn_update.name
-    worn.description = worn_update.description
-    worn.price = worn_update.price
-    worn.weight = worn_update.weight
-    worn.level = worn_update.level
-    worn.activate = worn_update.activate
-    worn.effect = worn_update.effect
-    worn.slot = slot
-    worn.currency = currency
-    #worn.worn_traits = existing_worn_traits
+    for key, value in worn_update.model_dump(exclude_unset=True).items():
+        if hasattr(worn, key) and key not in ["slot_id", "currency_id", "worn_traits"]:
+            print(key)
+            setattr(worn, key, value)
 
     await session.commit()
     await session.refresh(worn)

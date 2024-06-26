@@ -11,13 +11,6 @@ class MasteryLevels(str, Enum):
     LEGEND = 'Legend'
 
 
-class ArmorCategory(str, Enum):
-    UNARMED = 'Unarmed'
-    LIGHT = 'Light'
-    MEDIUM = 'Medium'
-    HEAVY = 'Heavy'
-
-
 class HealthByLevel(int, Enum):
     SIX = 6
     EIGHT = 8

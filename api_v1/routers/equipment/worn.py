@@ -48,7 +48,7 @@ async def worn_create(
 
 
 @worn_router.patch(
-    "/{object_id}/update/",
+    "/update/{object_id}/",
     description="Update worn object, depending on ID"
 )
 async def worn_update(
