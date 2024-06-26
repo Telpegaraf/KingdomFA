@@ -8,9 +8,10 @@ from typing import TYPE_CHECKING
 from api_v1.models.base_model import Base
 
 if TYPE_CHECKING:
-    from api_v1.models.general import WornTrait, ArmorTrait, ArmorSpecialization
+    from api_v1.models.general import WornTrait, ArmorTrait, ArmorSpecialization, DamageType, WeaponTrait
     from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
     from api_v1.models.associations.armor_trait_association import ArmorTraitAssociation
+    from api_v1.models.associations.weapon_trait_association import WeaponTraitAssociation
     from api_v1.models.associations.armor_specialization_association import ArmorSpecializationAssociation
 
 
@@ -19,6 +20,15 @@ class ArmorCategory(str, enum.Enum):
     LIGHT = 'Light'
     MEDIUM = 'Medium'
     HEAVY = 'Heavy'
+
+
+class Dice(int, enum.Enum):
+    FOUR = 4
+    SIX = 6
+    EIGHT = 8
+    TEN = 10
+    TWELVE = 12
+    TWENTY = 20
 
 
 class Currency(Base):
@@ -71,6 +81,7 @@ class Worn(Item):
     _item_back_populate = 'worns'
     slot_id: Mapped[int] = mapped_column(ForeignKey('slots.id'))
     slot: Mapped["Slot"] = relationship(back_populates='worn_items')
+
     level: Mapped[int] = mapped_column(SmallInteger, default=1)
     activate: Mapped[str] = mapped_column(String)
     effect: Mapped[str] = mapped_column(String)
@@ -129,4 +140,42 @@ class Armor(Item):
     )
     armor_specialization_details: Mapped[list["ArmorSpecializationAssociation"]] = relationship(
         back_populates='armor',
+    )
+
+
+class Weapon(Item):
+    damage_type_id: Mapped[int] = mapped_column(ForeignKey("damage_types.id", ondelete="CASCADE"))
+    damage_type: Mapped["DamageType"] = relationship(
+        "DamageType",
+        foreign_keys=[damage_type_id],
+        back_populates='first_type_weapons'
+    )
+    second_damage_type_id: Mapped[int] = mapped_column(ForeignKey(
+        "damage_types.id",
+        ondelete="CASCADE"),
+        nullable=True
+    )
+    second_damage_type: Mapped["DamageType"] = relationship(
+        "DamageType",
+        foreign_keys=[second_damage_type_id],
+        back_populates='second_type_weapons'
+    )
+
+    dice: Mapped[Dice] = mapped_column(Enum(Dice), default=Dice.FOUR)
+    dice_count: Mapped[int] = mapped_column(SmallInteger, default=1)
+    bonus_damage: Mapped[int] = mapped_column(SmallInteger, nullable=True)
+    second_dice: Mapped[Dice] = mapped_column(Enum(Dice), nullable=True)
+    second_dice_count: Mapped[int] = mapped_column(SmallInteger, nullable=True)
+    second_bonus_damage: Mapped[int] = mapped_column(SmallInteger, nullable=True)
+    range: Mapped[int] = mapped_column(SmallInteger, nullable=True)
+    reload: Mapped[int] = mapped_column(SmallInteger, nullable=True)
+    two_hands: Mapped[bool] = mapped_column(Boolean, default=True)
+    level: Mapped[int] = mapped_column(SmallInteger, default=1)
+
+    weapon_traits: Mapped[list["WeaponTrait"]] = relationship(
+        secondary="weapon_trait_association",
+        back_populates='weapons'
+    )
+    weapon_trait_details: Mapped[list["WeaponTraitAssociation"]] = relationship(
+        back_populates='weapon'
     )

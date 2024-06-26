@@ -1,8 +1,8 @@
-"""test delete
+"""initial
 
-Revision ID: 5556d2c4b09f
+Revision ID: 02c07598d3c0
 Revises: 
-Create Date: 2024-06-26 17:28:20.224001
+Create Date: 2024-06-26 18:37:06.024809
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "5556d2c4b09f"
+revision: str = "02c07598d3c0"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -70,12 +70,12 @@ def upgrade() -> None:
         sa.UniqueConstraint("name"),
     )
     op.create_table(
-        "damagetypes",
+        "damage_types",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_damagetypes_name"), "damagetypes", ["name"], unique=True)
+    op.create_index(op.f("ix_damage_types_name"), "damage_types", ["name"], unique=True)
     op.create_table(
         "domains",
         sa.Column("name", sa.String(length=50), nullable=False),
@@ -392,16 +392,51 @@ def upgrade() -> None:
         sa.Column("god_id", sa.Integer(), nullable=False),
         sa.Column("domain_id", sa.Integer(), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["domain_id"],
-            ["domains.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["god_id"],
-            ["gods.id"],
-        ),
+        sa.ForeignKeyConstraint(["domain_id"], ["domains.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["god_id"], ["gods.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("god_id", "domain_id", name="idx_unique_god_domain"),
+    )
+    op.create_table(
+        "weapons",
+        sa.Column("damage_type_id", sa.Integer(), nullable=False),
+        sa.Column("second_damage_type_id", sa.Integer(), nullable=True),
+        sa.Column(
+            "dice",
+            sa.Enum("FOUR", "SIX", "EIGHT", "TEN", "TWELVE", "TWENTY", name="dice"),
+            nullable=False,
+        ),
+        sa.Column("dice_count", sa.SmallInteger(), nullable=False),
+        sa.Column("bonus_damage", sa.SmallInteger(), nullable=True),
+        sa.Column(
+            "second_dice",
+            sa.Enum("FOUR", "SIX", "EIGHT", "TEN", "TWELVE", "TWENTY", name="dice"),
+            nullable=True,
+        ),
+        sa.Column("second_dice_count", sa.SmallInteger(), nullable=True),
+        sa.Column("second_bonus_damage", sa.SmallInteger(), nullable=True),
+        sa.Column("range", sa.SmallInteger(), nullable=True),
+        sa.Column("reload", sa.SmallInteger(), nullable=True),
+        sa.Column("two_hands", sa.Boolean(), nullable=False),
+        sa.Column("level", sa.SmallInteger(), nullable=False),
+        sa.Column("name", sa.String(length=200), nullable=False),
+        sa.Column("description", sa.String(), nullable=False),
+        sa.Column("price", sa.Integer(), nullable=False),
+        sa.Column("weight", sa.Numeric(precision=5, scale=2), nullable=False),
+        sa.Column("currency_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["currency_id"],
+            ["currencies.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["damage_type_id"], ["damage_types.id"], ondelete="CASCADE"
+        ),
+        sa.ForeignKeyConstraint(
+            ["second_damage_type_id"], ["damage_types.id"], ondelete="CASCADE"
+        ),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("name"),
     )
     op.create_table(
         "worns",
@@ -451,13 +486,9 @@ def upgrade() -> None:
         sa.Column("armor_trait_id", sa.Integer(), nullable=False),
         sa.Column("armor_id", sa.Integer(), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(["armor_id"], ["armors.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(
-            ["armor_id"],
-            ["armors.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["armor_trait_id"],
-            ["armor_traits.id"],
+            ["armor_trait_id"], ["armor_traits.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint(
@@ -503,13 +534,9 @@ def upgrade() -> None:
         sa.Column("worn_id", sa.Integer(), nullable=False),
         sa.Column("worn_trait_id", sa.Integer(), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(["worn_id"], ["worns.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(
-            ["worn_id"],
-            ["worns.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["worn_trait_id"],
-            ["worn_traits.id"],
+            ["worn_trait_id"], ["worn_traits.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint(
@@ -521,14 +548,8 @@ def upgrade() -> None:
         sa.Column("feat_id", sa.Integer(), nullable=False),
         sa.Column("trait_id", sa.Integer(), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["feat_id"],
-            ["feats.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["trait_id"],
-            ["feat_traits.id"],
-        ),
+        sa.ForeignKeyConstraint(["feat_id"], ["feats.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["trait_id"], ["feat_traits.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("feat_id", "trait_id", name="idx_unique_feat_trait"),
     )
@@ -543,6 +564,7 @@ def downgrade() -> None:
     op.drop_table("armor_trait_association")
     op.drop_table("armor_specialization_association")
     op.drop_table("worns")
+    op.drop_table("weapons")
     op.drop_table("god_domain")
     op.drop_table("characters")
     op.drop_table("character_classes")
@@ -588,8 +610,8 @@ def downgrade() -> None:
     op.drop_table("feat_traits")
     op.drop_index(op.f("ix_domains_name"), table_name="domains")
     op.drop_table("domains")
-    op.drop_index(op.f("ix_damagetypes_name"), table_name="damagetypes")
-    op.drop_table("damagetypes")
+    op.drop_index(op.f("ix_damage_types_name"), table_name="damage_types")
+    op.drop_table("damage_types")
     op.drop_table("currencies")
     op.drop_index(op.f("ix_armor_traits_name"), table_name="armor_traits")
     op.drop_table("armor_traits")

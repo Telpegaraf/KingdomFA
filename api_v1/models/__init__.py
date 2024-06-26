@@ -12,13 +12,15 @@ __all__ = (
     "FeatTraitAssociation",
     "ArmorSpecializationAssociation",
     "ArmorTraitAssociation",
+    "WeaponTraitAssociation",
     "GeneralBase",
     "CharacterClass",
     "Currency",
     "Item",
     "Worn",
     "Armor",
-    "ArmorCategory"
+    "ArmorCategory",
+    "Weapon"
 )
 
 from api_v1.models.base_model import Base
@@ -33,7 +35,8 @@ from api_v1.models.associations.worn_item_trait_association import WornItemTrait
 from api_v1.models.associations.feat_traits_association import FeatTraitAssociation
 from api_v1.models.associations.armor_specialization_association import ArmorSpecializationAssociation
 from api_v1.models.associations.armor_trait_association import ArmorTraitAssociation
+from api_v1.models.associations.weapon_trait_association import WeaponTraitAssociation
 from api_v1.models.general import GeneralBase
 from api_v1.models.character_class import CharacterClass
 from api_v1.models.feat import Feat
-from api_v1.models.equipment import Currency, Item, Worn, ArmorCategory, Armor
+from api_v1.models.equipment import Currency, Item, Worn, ArmorCategory, Armor, Weapon

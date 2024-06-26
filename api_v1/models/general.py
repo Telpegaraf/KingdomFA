@@ -9,8 +9,9 @@ if TYPE_CHECKING:
     from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
     from api_v1.models.associations.feat_traits_association import FeatTraitAssociation
     from api_v1.models.associations.armor_trait_association import ArmorTraitAssociation
+    from api_v1.models.associations.weapon_trait_association import WeaponTraitAssociation
     from api_v1.models.associations.armor_specialization_association import ArmorSpecializationAssociation
-    from api_v1.models.equipment import Worn, Armor
+    from api_v1.models.equipment import Worn, Armor, Weapon
 
 
 class GeneralBase(Base):
@@ -45,7 +46,18 @@ class GeneralDescriptionBase(Base):
 
 
 class DamageType(GeneralBase):
-    pass
+    __tablename__ = 'damage_types'
+
+    first_type_weapons: Mapped["Weapon"] = relationship(
+        "Weapon",
+        foreign_keys="Weapon.damage_type_id",
+        back_populates='damage_type'
+    )
+    second_type_weapons: Mapped["Weapon"] = relationship(
+        "Weapon",
+        foreign_keys="Weapon.second_damage_type_id",
+        back_populates='second_damage_type'
+    )
 
 
 class Title(GeneralBase):
@@ -132,7 +144,14 @@ class ArmorSpecialization(GeneralDescriptionBase):
 
 
 class WeaponTrait(GeneralDescriptionBase):
-    pass
+    __tablename__ = 'weapon_traits'
+
+    weapons: Mapped[list["Weapon"]] = relationship(
+        back_populates='weapon_traits'
+    )
+    weapon_detail: Mapped[list["WeaponTraitAssociation"]] = relationship(
+        back_populates='weapon_trait'
+    )
 
 
 class WeaponGroup(GeneralDescriptionBase):
