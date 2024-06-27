@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from api_v1.models.associations.weapon_trait_association import WeaponTraitAssociation
     from api_v1.models.associations.armor_specialization_association import ArmorSpecializationAssociation
     from api_v1.models.equipment import Worn, Armor, Weapon
+    from api_v1.models.spell import Spell
 
 
 class GeneralBase(Base):
@@ -80,10 +81,6 @@ class Trigger(GeneralBase):
     feats: Mapped[list["Feat"]] = relationship(back_populates="trigger")
 
 
-class SpellCast(GeneralBase):
-    pass
-
-
 class Skills(GeneralDescriptionBase):
     pass
 
@@ -105,25 +102,30 @@ class FeatTrait(GeneralDescriptionBase):
     )
 
 
+class SpellCast(GeneralBase):
+    __tablename__ = 'spell_casts'
+
+    spells: Mapped[list["Spell"]] = relationship(back_populates="spell_cast")
+
+
 class SpellTradition(GeneralDescriptionBase):
     character_classes: Mapped[list["CharacterClass"]] = relationship(back_populates="spell_tradition")
+    spells: Mapped[list["Spell"]] = relationship(back_populates="spells")
 
 
 class SpellSchool(GeneralDescriptionBase):
-    pass
+    spells: Mapped[list["Spell"]] = relationship(back_populates='spell_school')
 
 
 class SpellTrait(GeneralDescriptionBase):
-    pass
+    spells: Mapped[list["Spell"]] = relationship(back_populates='spell_trait')
 
 
 class SpellComponent(GeneralDescriptionBase):
-    pass
+    spells: Mapped[list["Spell"]] = relationship(back_populates='spell_component')
 
 
 class ArmorTrait(GeneralDescriptionBase):
-    __tablename__ = 'armor_traits'
-
     armors: Mapped[list["Armor"]] = relationship(
         secondary='armor_trait_association',
         back_populates='armor_traits'
@@ -132,8 +134,6 @@ class ArmorTrait(GeneralDescriptionBase):
 
 
 class ArmorSpecialization(GeneralDescriptionBase):
-    __tablename__ = 'armor_specializations'
-
     armors: Mapped[list["Armor"]] = relationship(
         secondary='armor_specialization_association',
         back_populates='armor_specialization'
@@ -144,8 +144,6 @@ class ArmorSpecialization(GeneralDescriptionBase):
 
 
 class WeaponTrait(GeneralDescriptionBase):
-    __tablename__ = 'weapon_traits'
-
     weapons: Mapped[list["Weapon"]] = relationship(
         back_populates='weapon_traits'
     )
@@ -155,19 +153,14 @@ class WeaponTrait(GeneralDescriptionBase):
 
 
 class WeaponGroup(GeneralDescriptionBase):
-    __tablename__ = 'weapon_groups'
-
     weapons: Mapped[list["Weapon"]] = relationship(back_populates='weapon_group')
 
 
 class WeaponSpecialization(GeneralDescriptionBase):
-    __tablename__ = 'weapon_specializations'
-
     weapons: Mapped[list["Weapon"]] = relationship(back_populates='weapon_specialization')
 
-class WornTrait(GeneralDescriptionBase):
-    __tablename__ = 'worn_traits'
 
+class WornTrait(GeneralDescriptionBase):
     worns: Mapped[list["Worn"]] = relationship(
         secondary='worn_item_trait',
         back_populates="worn_traits"

@@ -15,11 +15,3 @@ class Character(RaceRelationMixin, UserRelationMixin, Base):
     age: Mapped[int]
     level: Mapped[int] = mapped_column(Integer, CheckConstraint('level >= 1 AND level <= 20'), default=1)
     description: Mapped[str] = mapped_column(Text)
-
-
-
-    #class_character:
-    #god: Mapped[int] = mapped_column(
-    #    ForeignKey("domain.id")
-    #)
-    #god:

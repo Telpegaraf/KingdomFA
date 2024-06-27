@@ -1,6 +1,5 @@
 from decimal import Decimal
 import enum
-from pydantic import Field
 from sqlalchemy import String, Integer, ForeignKey, Numeric, Boolean, SmallInteger, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship, declared_attr, validates
 from typing import TYPE_CHECKING
@@ -41,6 +40,7 @@ class Dice(int, enum.Enum):
 
 class Currency(Base):
     __tablename__ = 'currencies'
+
     name: Mapped[str] = mapped_column(String(200), unique=True)
     price: Mapped[int] = mapped_column(Integer)
     description: Mapped[str] = mapped_column(String)
@@ -90,7 +90,7 @@ class Worn(Item):
     slot_id: Mapped[int] = mapped_column(ForeignKey('slots.id'))
     slot: Mapped["Slot"] = relationship(back_populates='worn_items')
 
-    level: Mapped[int] = mapped_column(SmallInteger, default=1)
+    level: Mapped[int] = mapped_column(SmallInteger, default=0)
     activate: Mapped[str] = mapped_column(String)
     effect: Mapped[str] = mapped_column(String)
     worn_traits: Mapped[list["WornTrait"]] = relationship(
@@ -105,8 +105,6 @@ class Worn(Item):
 
 
 class ArmorGroup(Base):
-    __tablename__ = "armor_groups"
-
     name: Mapped[str] = mapped_column(String(200))
     description: Mapped[str] = mapped_column(String(500))
     hardness:Mapped[int] = mapped_column(SmallInteger, default=1)
@@ -132,7 +130,7 @@ class Armor(Item):
     check_penalty: Mapped[bool] = mapped_column(Boolean)
     speed_penalty: Mapped[bool] = mapped_column(Boolean)
     strength: Mapped[int] = mapped_column(SmallInteger, nullable=True)
-    level: Mapped[int] = mapped_column(SmallInteger, default=1)
+    level: Mapped[int] = mapped_column(SmallInteger, default=0)
 
     armor_traits: Mapped[list["ArmorTrait"]] = relationship(
         secondary='armor_trait_association',
@@ -182,7 +180,7 @@ class Weapon(Item):
     range: Mapped[int] = mapped_column(SmallInteger, nullable=True)
     reload: Mapped[int] = mapped_column(SmallInteger, nullable=True)
     two_hands: Mapped[bool] = mapped_column(Boolean, default=True)
-    level: Mapped[int] = mapped_column(SmallInteger, default=1)
+    level: Mapped[int] = mapped_column(SmallInteger, default=0)
 
     weapon_traits: Mapped[list["WeaponTrait"]] = relationship(
         secondary="weapon_trait_association",

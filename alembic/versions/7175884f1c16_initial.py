@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: 02c07598d3c0
+Revision ID: 7175884f1c16
 Revises: 
-Create Date: 2024-06-26 18:37:06.024809
+Create Date: 2024-06-27 12:35:25.628074
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "02c07598d3c0"
+revision: str = "7175884f1c16"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -133,13 +133,13 @@ def upgrade() -> None:
     )
     op.create_index(op.f("ix_requirements_name"), "requirements", ["name"], unique=True)
     op.create_table(
-        "skillss",
+        "skills",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_skillss_name"), "skillss", ["name"], unique=True)
+    op.create_index(op.f("ix_skills_name"), "skills", ["name"], unique=True)
     op.create_table(
         "slots",
         sa.Column("slot", sa.String(length=100), nullable=False),
@@ -149,48 +149,50 @@ def upgrade() -> None:
         sa.UniqueConstraint("slot"),
     )
     op.create_table(
-        "spellcasts",
+        "spell_casts",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_spellcasts_name"), "spellcasts", ["name"], unique=True)
+    op.create_index(op.f("ix_spell_casts_name"), "spell_casts", ["name"], unique=True)
     op.create_table(
-        "spellcomponents",
+        "spell_components",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_spellcomponents_name"), "spellcomponents", ["name"], unique=True
+        op.f("ix_spell_components_name"), "spell_components", ["name"], unique=True
     )
     op.create_table(
-        "spellschools",
-        sa.Column("name", sa.String(length=500), nullable=False),
-        sa.Column("description", sa.String(length=500), nullable=False),
-        sa.Column("id", sa.Integer(), nullable=False),
-        sa.PrimaryKeyConstraint("id"),
-    )
-    op.create_index(op.f("ix_spellschools_name"), "spellschools", ["name"], unique=True)
-    op.create_table(
-        "spelltraditions",
+        "spell_schools",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_spelltraditions_name"), "spelltraditions", ["name"], unique=True
+        op.f("ix_spell_schools_name"), "spell_schools", ["name"], unique=True
     )
     op.create_table(
-        "spelltraits",
+        "spell_traditions",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_spelltraits_name"), "spelltraits", ["name"], unique=True)
+    op.create_index(
+        op.f("ix_spell_traditions_name"), "spell_traditions", ["name"], unique=True
+    )
+    op.create_table(
+        "spell_traits",
+        sa.Column("name", sa.String(length=500), nullable=False),
+        sa.Column("description", sa.String(length=500), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_index(op.f("ix_spell_traits_name"), "spell_traits", ["name"], unique=True)
     op.create_table(
         "titles",
         sa.Column("name", sa.String(length=500), nullable=False),
@@ -216,44 +218,48 @@ def upgrade() -> None:
         sa.UniqueConstraint("username"),
     )
     op.create_table(
-        "weapongroups",
-        sa.Column("name", sa.String(length=500), nullable=False),
-        sa.Column("description", sa.String(length=500), nullable=False),
-        sa.Column("id", sa.Integer(), nullable=False),
-        sa.PrimaryKeyConstraint("id"),
-    )
-    op.create_index(op.f("ix_weapongroups_name"), "weapongroups", ["name"], unique=True)
-    op.create_table(
-        "weaponmasterys",
+        "weapon_groups",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_weaponmasterys_name"), "weaponmasterys", ["name"], unique=True
+        op.f("ix_weapon_groups_name"), "weapon_groups", ["name"], unique=True
     )
     op.create_table(
-        "weaponspecializations",
+        "weapon_masteries",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_weaponspecializations_name"),
-        "weaponspecializations",
+        op.f("ix_weapon_masteries_name"), "weapon_masteries", ["name"], unique=True
+    )
+    op.create_table(
+        "weapon_specializations",
+        sa.Column("name", sa.String(length=500), nullable=False),
+        sa.Column("description", sa.String(length=500), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_index(
+        op.f("ix_weapon_specializations_name"),
+        "weapon_specializations",
         ["name"],
         unique=True,
     )
     op.create_table(
-        "weapontraits",
+        "weapon_traits",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_weapontraits_name"), "weapontraits", ["name"], unique=True)
+    op.create_index(
+        op.f("ix_weapon_traits_name"), "weapon_traits", ["name"], unique=True
+    )
     op.create_table(
         "worn_traits",
         sa.Column("name", sa.String(length=500), nullable=False),
@@ -360,8 +366,7 @@ def upgrade() -> None:
         sa.Column("spell_tradition_id", sa.Integer(), nullable=True),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["spell_tradition_id"],
-            ["spelltraditions.id"],
+            ["spell_tradition_id"], ["spell_traditions.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
@@ -401,6 +406,8 @@ def upgrade() -> None:
         "weapons",
         sa.Column("damage_type_id", sa.Integer(), nullable=False),
         sa.Column("second_damage_type_id", sa.Integer(), nullable=True),
+        sa.Column("weapon_group_id", sa.Integer(), nullable=True),
+        sa.Column("weapon_specialization_id", sa.Integer(), nullable=True),
         sa.Column(
             "dice",
             sa.Enum("FOUR", "SIX", "EIGHT", "TEN", "TWELVE", "TWENTY", name="dice"),
@@ -434,6 +441,14 @@ def upgrade() -> None:
         ),
         sa.ForeignKeyConstraint(
             ["second_damage_type_id"], ["damage_types.id"], ondelete="CASCADE"
+        ),
+        sa.ForeignKeyConstraint(
+            ["weapon_group_id"],
+            ["weapon_groups.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["weapon_specialization_id"],
+            ["weapon_specializations.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
@@ -530,6 +545,20 @@ def upgrade() -> None:
         sa.UniqueConstraint("name"),
     )
     op.create_table(
+        "weapon_trait_association",
+        sa.Column("weapon_id", sa.Integer(), nullable=False),
+        sa.Column("weapon_trait_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(["weapon_id"], ["weapons.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(
+            ["weapon_trait_id"], ["weapon_traits.id"], ondelete="CASCADE"
+        ),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint(
+            "weapon_id", "weapon_trait_id", name="idx_unique_weapon_trait_association"
+        ),
+    )
+    op.create_table(
         "worn_item_trait",
         sa.Column("worn_id", sa.Integer(), nullable=False),
         sa.Column("worn_trait_id", sa.Integer(), nullable=False),
@@ -560,6 +589,7 @@ def downgrade() -> None:
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_table("feat_trait")
     op.drop_table("worn_item_trait")
+    op.drop_table("weapon_trait_association")
     op.drop_table("feats")
     op.drop_table("armor_trait_association")
     op.drop_table("armor_specialization_association")
@@ -571,34 +601,34 @@ def downgrade() -> None:
     op.drop_table("armors")
     op.drop_index(op.f("ix_worn_traits_name"), table_name="worn_traits")
     op.drop_table("worn_traits")
-    op.drop_index(op.f("ix_weapontraits_name"), table_name="weapontraits")
-    op.drop_table("weapontraits")
+    op.drop_index(op.f("ix_weapon_traits_name"), table_name="weapon_traits")
+    op.drop_table("weapon_traits")
     op.drop_index(
-        op.f("ix_weaponspecializations_name"), table_name="weaponspecializations"
+        op.f("ix_weapon_specializations_name"), table_name="weapon_specializations"
     )
-    op.drop_table("weaponspecializations")
-    op.drop_index(op.f("ix_weaponmasterys_name"), table_name="weaponmasterys")
-    op.drop_table("weaponmasterys")
-    op.drop_index(op.f("ix_weapongroups_name"), table_name="weapongroups")
-    op.drop_table("weapongroups")
+    op.drop_table("weapon_specializations")
+    op.drop_index(op.f("ix_weapon_masteries_name"), table_name="weapon_masteries")
+    op.drop_table("weapon_masteries")
+    op.drop_index(op.f("ix_weapon_groups_name"), table_name="weapon_groups")
+    op.drop_table("weapon_groups")
     op.drop_table("users")
     op.drop_index(op.f("ix_triggers_name"), table_name="triggers")
     op.drop_table("triggers")
     op.drop_index(op.f("ix_titles_name"), table_name="titles")
     op.drop_table("titles")
-    op.drop_index(op.f("ix_spelltraits_name"), table_name="spelltraits")
-    op.drop_table("spelltraits")
-    op.drop_index(op.f("ix_spelltraditions_name"), table_name="spelltraditions")
-    op.drop_table("spelltraditions")
-    op.drop_index(op.f("ix_spellschools_name"), table_name="spellschools")
-    op.drop_table("spellschools")
-    op.drop_index(op.f("ix_spellcomponents_name"), table_name="spellcomponents")
-    op.drop_table("spellcomponents")
-    op.drop_index(op.f("ix_spellcasts_name"), table_name="spellcasts")
-    op.drop_table("spellcasts")
+    op.drop_index(op.f("ix_spell_traits_name"), table_name="spell_traits")
+    op.drop_table("spell_traits")
+    op.drop_index(op.f("ix_spell_traditions_name"), table_name="spell_traditions")
+    op.drop_table("spell_traditions")
+    op.drop_index(op.f("ix_spell_schools_name"), table_name="spell_schools")
+    op.drop_table("spell_schools")
+    op.drop_index(op.f("ix_spell_components_name"), table_name="spell_components")
+    op.drop_table("spell_components")
+    op.drop_index(op.f("ix_spell_casts_name"), table_name="spell_casts")
+    op.drop_table("spell_casts")
     op.drop_table("slots")
-    op.drop_index(op.f("ix_skillss_name"), table_name="skillss")
-    op.drop_table("skillss")
+    op.drop_index(op.f("ix_skills_name"), table_name="skills")
+    op.drop_table("skills")
     op.drop_index(op.f("ix_requirements_name"), table_name="requirements")
     op.drop_table("requirements")
     op.drop_table("races")

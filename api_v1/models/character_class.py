@@ -4,14 +4,12 @@ from typing import TYPE_CHECKING
 
 from api_v1.models.base_model import Base
 from api_v1.models.enum import MasteryLevels, HealthByLevel
-from api_v1.models.mixins.spell_tradition import SpellTraditionRelationMixin
+from api_v1.models.mixins.spell import SpellTraditionMixin
 if TYPE_CHECKING:
     from api_v1.models.feat import Feat
 
 
-class CharacterClass(SpellTraditionRelationMixin, Base):
-    __tablename__ = "character_classes"
-
+class CharacterClass(SpellTraditionMixin, Base):
     _spell_tradition_back_populate = "character_classes"
     _spell_tradition_id_nullable = True
 
