@@ -10,7 +10,7 @@ if TYPE_CHECKING:
         FeatTrait
     )
     from api_v1.models.associations.feat_traits_association import FeatTraitAssociation
-    from api_v1.models.character_class import Background
+    from api_v1.models.character_class import Background, Feature
 
 from api_v1.models.base_model import Base
 from api_v1.models.mixins.character_class import CharacterClassMixin
@@ -20,7 +20,9 @@ class Feat(CharacterClassMixin, Base):
     _character_class_back_populate = "feats"
     _character_class_id_nullable = True
 
-    background: Mapped[list["Background"]] = relationship(back_populates="feat")
+    backgrounds: Mapped[list["Background"]] = relationship(back_populates="feat")
+    features: Mapped[list["Feature"]] = relationship(back_populates="feat")
+
 
     feat_traits: Mapped[list["FeatTrait"]] = relationship(
         secondary="feat_trait",
