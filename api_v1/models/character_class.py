@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 from api_v1.models.base_model import Base
 from api_v1.models.enum import MasteryLevels, HealthByLevel
 from api_v1.models.mixins.spell import SpellTraditionMixin
+from api_v1.models.mixins.feat import FeatMixin
+
 if TYPE_CHECKING:
     from api_v1.models.feat import Feat
 
@@ -31,3 +33,11 @@ class CharacterClass(SpellTraditionMixin, Base):
 
     def __repr__(self):
         return self.name
+
+
+class Background(FeatMixin, Base):
+    _feat_id_nullable = True
+    _feat_back_populate = "backgrounds"
+
+    name: Mapped[str] = mapped_column(String(100), unique=True)
+    description: Mapped[str] = mapped_column(String(200))

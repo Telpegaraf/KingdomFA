@@ -2,7 +2,6 @@ from sqlalchemy import String, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from api_v1.models.character_class import CharacterClass
     from api_v1.models.general import (
         Action,
         Trigger,
@@ -11,19 +10,17 @@ if TYPE_CHECKING:
         FeatTrait
     )
     from api_v1.models.associations.feat_traits_association import FeatTraitAssociation
+    from api_v1.models.character_class import Background
 
 from api_v1.models.base_model import Base
+from api_v1.models.mixins.character_class import CharacterClassMixin
 
 
-class Feat(Base):
-    character_class_id: Mapped[int] = mapped_column(
-        ForeignKey("character_classes.id"),
-        nullable=True
-    )
-    character_class: Mapped["CharacterClass"] = relationship(
-        "CharacterClass",
-        back_populates="feats",
-    )
+class Feat(CharacterClassMixin, Base):
+    _character_class_back_populate = "feats"
+    _character_class_id_nullable = True
+
+    background: Mapped[list["Background"]] = relationship(back_populates="feat")
 
     feat_traits: Mapped[list["FeatTrait"]] = relationship(
         secondary="feat_trait",
