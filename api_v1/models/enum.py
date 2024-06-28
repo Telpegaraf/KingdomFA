@@ -78,7 +78,7 @@ model_mapping = {
 }
 
 model_description_mapping = {
-    'skills': models.Skills,
+    'skills': models.Skill,
     'weapon_mastery': models.WeaponMastery,
     'feat_trait': models.FeatTrait,
     'spell_tradition': models.SpellTradition,

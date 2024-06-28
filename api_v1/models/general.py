@@ -81,7 +81,7 @@ class Trigger(GeneralBase):
     feats: Mapped[list["Feat"]] = relationship(back_populates="trigger")
 
 
-class Skills(GeneralDescriptionBase):
+class Skill(GeneralDescriptionBase):
     pass
 
 

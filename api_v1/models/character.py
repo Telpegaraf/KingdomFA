@@ -7,6 +7,7 @@ from api_v1.models.mixins.user import UserRelationMixin
 from api_v1.models.mixins.character_class import CharacterClassMixin
 from api_v1.models.mixins.god import GodMixin, DomainMixin
 from api_v1.models.mixins.character import CharacterMixin
+from api_v1.models.mixins.skill import SkillMixin
 from api_v1.models.enum import MasteryLevels
 
 
@@ -114,3 +115,12 @@ class SecondaryStat(CharacterMixin, Base):
 
     def __repr__(self):
         return self.character.__str__()
+
+
+class CharacterSkillMastery(CharacterMixin, SkillMixin, Base):
+    __tablename__ = 'character_skill_masteries'
+
+    _character_back_populate = 'character_skill_masteries'
+    _skill_back_populate = 'character_skill_masteries'
+
+    mastery_level: Mapped[Enum] = mapped_column(Enum(MasteryLevels), default=MasteryLevels.ABSENT)
