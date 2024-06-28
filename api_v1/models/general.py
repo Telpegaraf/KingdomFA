@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from api_v1.models import Base
 if TYPE_CHECKING:
     from api_v1.models.feat import Feat
+    from api_v1.models.character import CharacterSkillMastery
     from api_v1.models.character_class import CharacterClass
     from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
     from api_v1.models.associations.feat_traits_association import FeatTraitAssociation
@@ -82,7 +83,7 @@ class Trigger(GeneralBase):
 
 
 class Skill(GeneralDescriptionBase):
-    pass
+    character_skill_masteries: Mapped[list["CharacterSkillMastery"]] = relationship(back_populates="character")
 
 
 class WeaponMastery(GeneralDescriptionBase):

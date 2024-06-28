@@ -1,7 +1,7 @@
 from decimal import Decimal
 import enum
 from sqlalchemy import String, Integer, ForeignKey, Numeric, Boolean, SmallInteger, Enum
-from sqlalchemy.orm import Mapped, mapped_column, relationship, declared_attr, validates
+from sqlalchemy.orm import Mapped, mapped_column, relationship, declared_attr
 from typing import TYPE_CHECKING
 
 from api_v1.models.base_model import Base
@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from api_v1.models.associations.armor_trait_association import ArmorTraitAssociation
     from api_v1.models.associations.weapon_trait_association import WeaponTraitAssociation
     from api_v1.models.associations.armor_specialization_association import ArmorSpecializationAssociation
+    from api_v1.models.character import CharacterCurrency, CharacterWeaponMastery
 
 
 class ArmorCategory(str, enum.Enum):
@@ -46,6 +47,7 @@ class Currency(Base):
     description: Mapped[str] = mapped_column(String)
     weight: Mapped[Decimal] = mapped_column(Numeric(5, 2), default=Decimal('0.01'))
     worns: Mapped[list["Worn"]] = relationship(back_populates="currency")
+    character_currencies: Mapped[list["CharacterCurrency"]] = relationship(back_populates='currency')
 
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id}, name={self.name!r})"
@@ -189,3 +191,4 @@ class Weapon(Item):
     weapon_trait_details: Mapped[list["WeaponTraitAssociation"]] = relationship(
         back_populates='weapon'
     )
+    character_weapon_masteries: Mapped[list["CharacterWeaponMastery"]] = relationship(back_populates='weapon')

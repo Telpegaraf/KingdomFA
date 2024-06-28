@@ -1,4 +1,4 @@
-from sqlalchemy import String, Text, SmallInteger, Enum
+from sqlalchemy import String, Text, SmallInteger, Enum, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from api_v1.models.base_model import Base
@@ -8,6 +8,7 @@ from api_v1.models.mixins.character_class import CharacterClassMixin
 from api_v1.models.mixins.god import GodMixin, DomainMixin
 from api_v1.models.mixins.character import CharacterMixin
 from api_v1.models.mixins.skill import SkillMixin
+from api_v1.models.mixins.equipment import WeaponMixin, CurrencyMixin
 from api_v1.models.enum import MasteryLevels
 
 
@@ -36,6 +37,9 @@ class Character(
     character_stats: Mapped[list["CharacterStat"]] = relationship(back_populates="character")
     character_points: Mapped[list["CharacterPoint"]] = relationship(back_populates='character')
     secondary_stats: Mapped[list["SecondaryStat"]] = relationship(back_populates="character")
+    character_skill_masteries: Mapped[list["CharacterSkillMastery"]] = relationship(back_populates="character")
+    character_weapon_masteries: Mapped[list["CharacterWeaponMastery"]] = relationship(back_populates='character')
+    character_currencies: Mapped[list["CharacterCurrency"]] = relationship(back_populates='character')
 
     def __str__(self):
         name = self.first_name
@@ -119,8 +123,68 @@ class SecondaryStat(CharacterMixin, Base):
 
 class CharacterSkillMastery(CharacterMixin, SkillMixin, Base):
     __tablename__ = 'character_skill_masteries'
+    __table_args__ = (
+        UniqueConstraint(
+            'character_id',
+            'skill_id',
+            name='idx_unique_character_skill_masteries'
+        ),
+    )
 
     _character_back_populate = 'character_skill_masteries'
     _skill_back_populate = 'character_skill_masteries'
 
     mastery_level: Mapped[Enum] = mapped_column(Enum(MasteryLevels), default=MasteryLevels.ABSENT)
+
+    def __str__(self):
+        return f"{self.__class__.__name__}(id={self.id}," \
+               f" name={self.character.__str__()!r}'s {self.skill} mastery level)"
+
+    def __repr__(self):
+        return self.character.__str__()
+
+
+class CharacterWeaponMastery(CharacterMixin, WeaponMixin, Base):
+    __tablename__ = 'character_weapon_masteries'
+    __table_args__ = (
+        UniqueConstraint(
+            'character_id',
+            'weapon_id',
+            name='idx_unique_character_weapon_masteries'
+        ),
+    )
+
+    _character_back_populate = 'character_skill_masteries'
+    _weapon_back_populate = 'character_skill_masteries'
+
+    mastery_level: Mapped[Enum] = mapped_column(Enum(MasteryLevels), default=MasteryLevels.ABSENT)
+
+    def __str__(self):
+        return f"{self.__class__.__name__}(id={self.id}," \
+               f" name={self.character.__str__()!r}'s {self.weapon} mastery level)"
+
+    def __repr__(self):
+        return self.character.__str__()
+
+
+class CharacterCurrency(CharacterMixin, CurrencyMixin, Base):
+    __tablename__ = 'character_currencies'
+    __table_args__ = (
+        UniqueConstraint(
+            'character_id',
+            'currency_id',
+            name='idx_unique_character_currencies'
+        ),
+    )
+
+    _character_back_populate = 'character_currencies'
+    _currency_back_populate = 'character_currencies'
+
+    quantity: Mapped[int] = mapped_column(SmallInteger, default=0)
+
+    def __str__(self):
+        return f"{self.__class__.__name__}(id={self.id}," \
+               f" name={self.character.__str__()!r}'s {self.currency})"
+
+    def __repr__(self):
+        return self.character.__str__()
