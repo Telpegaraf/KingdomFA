@@ -1,9 +1,11 @@
-from sqlalchemy import UniqueConstraint, SmallInteger
-from sqlalchemy.orm import Mapped, mapped_column
-
+from sqlalchemy import UniqueConstraint, SmallInteger, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 from api_v1.models.base_model import Base
 from api_v1.models.mixins.equipment import WeaponMixin, CurrencyMixin, ItemMixin, ArmorMixin, WornMixin
 from api_v1.models.mixins.character import CharacterMixin
+if TYPE_CHECKING:
+    from api_v1.models.associations.worn_equipped_association import WornEquippedAssociation
 
 
 class CharacterCurrency(CharacterMixin, CurrencyMixin, Base):
@@ -53,7 +55,7 @@ class CharacterItem(CharacterMixin, ItemMixin, Base):
 
 
 class CharacterWeapon(CharacterMixin, WeaponMixin, Base):
-    __tablename__ = 'character_weapon'
+    __tablename__ = 'character_weapons'
     __table_args__ = (
         UniqueConstraint(
             'character_id',
@@ -67,6 +69,9 @@ class CharacterWeapon(CharacterMixin, WeaponMixin, Base):
 
     quantity: Mapped[int] = mapped_column(SmallInteger, default=0)
 
+    first_equipped_weapon: Mapped["EquippedItems"] = relationship(back_populates='first_weapon')
+    second_equipped_weapon: Mapped["EquippedItems"] = relationship(back_populates='second_weapon')
+
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id}," \
                f" name={self.character.__str__()!r}'s {self.weapon})"
@@ -76,7 +81,7 @@ class CharacterWeapon(CharacterMixin, WeaponMixin, Base):
 
 
 class CharacterArmor(CharacterMixin, ArmorMixin, Base):
-    __tablename__ = 'character_armor'
+    __tablename__ = 'character_armors'
     __table_args__ = (
         UniqueConstraint(
             'character_id',
@@ -89,6 +94,7 @@ class CharacterArmor(CharacterMixin, ArmorMixin, Base):
     _currency_back_populate = 'character_armors'
 
     quantity: Mapped[int] = mapped_column(SmallInteger, default=0)
+    equipped_armor: Mapped["EquippedItems"] = relationship(back_populates='armor')
 
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id}," \
@@ -99,7 +105,7 @@ class CharacterArmor(CharacterMixin, ArmorMixin, Base):
 
 
 class CharacterWorn(CharacterMixin, WornMixin, Base):
-    __tablename__ = 'character_worn'
+    __tablename__ = 'character_worns'
     __table_args__ = (
         UniqueConstraint(
             'character_id',
@@ -113,9 +119,51 @@ class CharacterWorn(CharacterMixin, WornMixin, Base):
 
     quantity: Mapped[int] = mapped_column(SmallInteger, default=0)
 
+    equipped_worns: Mapped[list["EquippedItems"]] = relationship(
+        secondary='worn_equipped_association',
+        back_populates='character_worns'
+    )
+    equipped_worn_details: Mapped[list["WornEquippedAssociation"]] = relationship(
+        back_populates='equipped_worn'
+    )
+
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id}," \
                f" name={self.character.__str__()!r}'s {self.worn})"
 
     def __repr__(self):
         return self.character.__str__()
+
+
+class EquippedItems(CharacterMixin, Base):
+    _character_back_populate = 'equipped_items'
+
+    first_weapon_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "character_weapons.id", ondelete="CASCADE"
+        ),
+        nullable=True
+    )
+    first_weapon: Mapped["CharacterWeapon"] = relationship(back_populates='first_equipped_weapon')
+    second_weapon_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "character_weapons.id", ondelete="CASCADE"
+        ),
+        nullable=True
+    )
+    second_weapon: Mapped["CharacterWeapon"] = relationship(back_populates='second_equipped_weapon')
+    armor_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "character_armors.id", ondelete="CASCADE"
+        ),
+        nullable=True
+    )
+    armor: Mapped["CharacterArmor"] = relationship(back_populates='equipped_armor')
+
+    inventory_worns: Mapped[list["EquippedItems"]] = relationship(
+        secondary='worn_equipped_association',
+        back_populates='equipped_items'
+    )
+    inventory_worn_details: Mapped[list["WornEquippedAssociation"]] = relationship(
+        back_populates='equipped_worn'
+    )
