@@ -13,5 +13,5 @@ from api_v1.models.associations.weapon_trait_association import WeaponTraitAssoc
 from api_v1.models.general import GeneralBase
 from api_v1.models.character_class import CharacterClass, Background, Feature
 from api_v1.models.feat import Feat
-from api_v1.models.equipment import Currency, Item, Worn, ArmorCategory, Armor, Weapon
+from api_v1.models.equipment import Currency, Equipment, Worn, ArmorCategory, Armor, Weapon
 from api_v1.models.spell import Spell

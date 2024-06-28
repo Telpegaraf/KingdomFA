@@ -20,7 +20,14 @@ if TYPE_CHECKING:
     from api_v1.models.associations.armor_trait_association import ArmorTraitAssociation
     from api_v1.models.associations.weapon_trait_association import WeaponTraitAssociation
     from api_v1.models.associations.armor_specialization_association import ArmorSpecializationAssociation
-    from api_v1.models.character import CharacterCurrency, CharacterWeaponMastery
+    from api_v1.models.character import CharacterWeaponMastery
+    from api_v1.models.inventory import (
+        CharacterItem,
+        CharacterCurrency,
+        CharacterWeapon,
+        CharacterArmor,
+        CharacterWorn
+    )
 
 
 class ArmorCategory(str, enum.Enum):
@@ -56,7 +63,7 @@ class Currency(Base):
         return self.name
 
 
-class Item(Base):
+class Equipment(Base):
     __abstract__ = True
 
     _item_back_populate: str | None = None
@@ -81,14 +88,21 @@ class Item(Base):
         return self.name
 
 
+class Item(Equipment):
+    _item_back_populate = 'items'
+
+    character_items: Mapped[list["CharacterItem"]] = relationship(back_populates='item')
+
+
 class Slot(Base):
     slot: Mapped[str] = mapped_column(String(100), unique=True)
     limit: Mapped[bool] = mapped_column(Boolean)
     worn_items: Mapped[list["Worn"]] = relationship(back_populates='slot')
 
 
-class Worn(Item):
+class Worn(Equipment):
     _item_back_populate = 'worns'
+
     slot_id: Mapped[int] = mapped_column(ForeignKey('slots.id'))
     slot: Mapped["Slot"] = relationship(back_populates='worn_items')
 
@@ -104,6 +118,8 @@ class Worn(Item):
         "WornItemTraitAssociation",
         back_populates="worn",
     )
+
+    character_worns: Mapped[list["CharacterWorn"]] = relationship(back_populates='worn')
 
 
 class ArmorGroup(Base):
@@ -122,7 +138,7 @@ class ArmorGroup(Base):
         return self.name
 
 
-class Armor(Item):
+class Armor(Equipment):
     armor_group_id: Mapped[int] = mapped_column(ForeignKey("armor_groups.id"))
     armor_group: Mapped["ArmorGroup"] = relationship(back_populates='armors')
 
@@ -150,8 +166,10 @@ class Armor(Item):
         back_populates='armor',
     )
 
+    character_armors: Mapped[list["CharacterArmor"]] = relationship(back_populates='armor')
 
-class Weapon(Item):
+
+class Weapon(Equipment):
     damage_type_id: Mapped[int] = mapped_column(ForeignKey("damage_types.id", ondelete="CASCADE"))
     damage_type: Mapped["DamageType"] = relationship(
         "DamageType",
@@ -192,3 +210,5 @@ class Weapon(Item):
         back_populates='weapon'
     )
     character_weapon_masteries: Mapped[list["CharacterWeaponMastery"]] = relationship(back_populates='weapon')
+
+    character_weapons: Mapped[list["CharacterWeapon"]] = relationship(back_populates='weapon')

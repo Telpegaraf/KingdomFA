@@ -1,8 +1,8 @@
-"""initial
+"""updated character models
 
-Revision ID: 79e7b4b616b9
+Revision ID: fd0e27e48002
 Revises: 
-Create Date: 2024-06-28 13:22:26.054538
+Create Date: 2024-06-28 15:40:39.546854
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "79e7b4b616b9"
+revision: str = "fd0e27e48002"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -449,6 +449,21 @@ def upgrade() -> None:
         sa.UniqueConstraint("god_id", "domain_id", name="idx_unique_god_domain"),
     )
     op.create_table(
+        "items",
+        sa.Column("name", sa.String(length=200), nullable=False),
+        sa.Column("description", sa.String(), nullable=False),
+        sa.Column("price", sa.Integer(), nullable=False),
+        sa.Column("weight", sa.Numeric(precision=5, scale=2), nullable=False),
+        sa.Column("currency_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["currency_id"],
+            ["currencies.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("name"),
+    )
+    op.create_table(
         "spells",
         sa.Column("name", sa.String(length=200), nullable=False),
         sa.Column("description", sa.String(length=1000), nullable=False),
@@ -706,6 +721,32 @@ def upgrade() -> None:
         sa.UniqueConstraint("name"),
     )
     op.create_table(
+        "character_currencies",
+        sa.Column("quantity", sa.SmallInteger(), nullable=False),
+        sa.Column("character_id", sa.Integer(), nullable=False),
+        sa.Column("currency_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(["character_id"], ["characters.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["currency_id"], ["currencies.id"], ondelete="CASCADE"),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint(
+            "character_id", "currency_id", name="idx_unique_character_currencies"
+        ),
+    )
+    op.create_table(
+        "character_items",
+        sa.Column("quantity", sa.SmallInteger(), nullable=False),
+        sa.Column("character_id", sa.Integer(), nullable=False),
+        sa.Column("item_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(["character_id"], ["characters.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["item_id"], ["items.id"], ondelete="CASCADE"),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint(
+            "character_id", "item_id", name="idx_unique_character_items"
+        ),
+    )
+    op.create_table(
         "character_points",
         sa.Column("strength", sa.SmallInteger(), nullable=False),
         sa.Column("dexterity", sa.SmallInteger(), nullable=False),
@@ -740,6 +781,9 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["character_id"], ["characters.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["skill_id"], ["skills.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint(
+            "character_id", "skill_id", name="idx_unique_character_skill_masteries"
+        ),
     )
     op.create_table(
         "character_stats",
@@ -861,6 +905,31 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
+        "character_weapon_masteries",
+        sa.Column(
+            "mastery_level",
+            postgresql.ENUM(
+                "ABSENT",
+                "TRAIN",
+                "EXPERT",
+                "MASTER",
+                "LEGEND",
+                name="masterylevels",
+                create_type=False,
+            ),
+            nullable=False,
+        ),
+        sa.Column("character_id", sa.Integer(), nullable=False),
+        sa.Column("weapon_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(["character_id"], ["characters.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["weapon_id"], ["weapons.id"], ondelete="CASCADE"),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint(
+            "character_id", "weapon_id", name="idx_unique_character_weapon_masteries"
+        ),
+    )
+    op.create_table(
         "feat_trait",
         sa.Column("feat_id", sa.Integer(), nullable=False),
         sa.Column("trait_id", sa.Integer(), nullable=False),
@@ -912,9 +981,12 @@ def downgrade() -> None:
     op.drop_table("secondary_stats")
     op.drop_table("features")
     op.drop_table("feat_trait")
+    op.drop_table("character_weapon_masteries")
     op.drop_table("character_stats")
     op.drop_table("character_skill_masteries")
     op.drop_table("character_points")
+    op.drop_table("character_items")
+    op.drop_table("character_currencies")
     op.drop_table("backgrounds")
     op.drop_table("worn_item_trait")
     op.drop_table("weapon_trait_association")
@@ -925,6 +997,7 @@ def downgrade() -> None:
     op.drop_table("worns")
     op.drop_table("weapons")
     op.drop_table("spells")
+    op.drop_table("items")
     op.drop_table("god_domain")
     op.drop_table("character_classes")
     op.drop_table("armors")

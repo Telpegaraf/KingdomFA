@@ -1,5 +1,6 @@
 from sqlalchemy import String, Text, SmallInteger, Enum, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 
 from api_v1.models.base_model import Base
 from api_v1.models.mixins.race import RaceRelationMixin
@@ -8,8 +9,16 @@ from api_v1.models.mixins.character_class import CharacterClassMixin
 from api_v1.models.mixins.god import GodMixin, DomainMixin
 from api_v1.models.mixins.character import CharacterMixin
 from api_v1.models.mixins.skill import SkillMixin
-from api_v1.models.mixins.equipment import WeaponMixin, CurrencyMixin
+from api_v1.models.mixins.equipment import WeaponMixin
 from api_v1.models.enum import MasteryLevels
+if TYPE_CHECKING:
+    from api_v1.models.inventory import (
+    CharacterItem,
+    CharacterCurrency,
+    CharacterWorn,
+    CharacterArmor,
+    CharacterWeapon
+    )
 
 
 class Character(
@@ -20,12 +29,15 @@ class Character(
     DomainMixin,
     Base
 ):
+    #mixins
     _user_back_populate = "characters"
     _race_back_populate = "characters"
     _character_class_back_populate = "characters"
     _god_back_populate = "characters"
     _domain_back_populate = "characters"
     _domain_id_nullable = True
+
+    #fields
     first_name: Mapped[str] = mapped_column(String(100))
     last_name: Mapped[str] = mapped_column(String(100), nullable=True)
     alias: Mapped[str] = mapped_column(String(100), nullable=True)
@@ -34,12 +46,17 @@ class Character(
     level: Mapped[int] = mapped_column(SmallInteger, default=1)
     description: Mapped[str] = mapped_column(Text, nullable=True)
 
+    #relations
     character_stats: Mapped[list["CharacterStat"]] = relationship(back_populates="character")
     character_points: Mapped[list["CharacterPoint"]] = relationship(back_populates='character')
     secondary_stats: Mapped[list["SecondaryStat"]] = relationship(back_populates="character")
     character_skill_masteries: Mapped[list["CharacterSkillMastery"]] = relationship(back_populates="character")
     character_weapon_masteries: Mapped[list["CharacterWeaponMastery"]] = relationship(back_populates='character')
     character_currencies: Mapped[list["CharacterCurrency"]] = relationship(back_populates='character')
+    character_items: Mapped[list["CharacterItem"]] = relationship(back_populates='character')
+    character_armors: Mapped[list["CharacterArmor"]] = relationship(back_populates='character')
+    character_weapons: Mapped[list["CharacterWeapon"]] = relationship(back_populates='character')
+    character_worns: Mapped[list["CharacterWorn"]] = relationship(back_populates='character')
 
     def __str__(self):
         name = self.first_name
@@ -162,29 +179,6 @@ class CharacterWeaponMastery(CharacterMixin, WeaponMixin, Base):
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id}," \
                f" name={self.character.__str__()!r}'s {self.weapon} mastery level)"
-
-    def __repr__(self):
-        return self.character.__str__()
-
-
-class CharacterCurrency(CharacterMixin, CurrencyMixin, Base):
-    __tablename__ = 'character_currencies'
-    __table_args__ = (
-        UniqueConstraint(
-            'character_id',
-            'currency_id',
-            name='idx_unique_character_currencies'
-        ),
-    )
-
-    _character_back_populate = 'character_currencies'
-    _currency_back_populate = 'character_currencies'
-
-    quantity: Mapped[int] = mapped_column(SmallInteger, default=0)
-
-    def __str__(self):
-        return f"{self.__class__.__name__}(id={self.id}," \
-               f" name={self.character.__str__()!r}'s {self.currency})"
 
     def __repr__(self):
         return self.character.__str__()
