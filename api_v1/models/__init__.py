@@ -1,7 +1,7 @@
 from api_v1.models.base_model import Base
 from api_v1.models.user import User
 from api_v1.models.race import Race
-from api_v1.models.character import Character
+from api_v1.models.character import Character, CharacterStat
 from api_v1.models.domain import Domain
 from api_v1.models.god import God
 from api_v1.models.associations.god_domain_association import GodDomainAssociation
