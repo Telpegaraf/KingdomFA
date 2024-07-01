@@ -1,3 +1,4 @@
+import inflection
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, declared_attr
 
 
@@ -6,6 +7,6 @@ class Base(DeclarativeBase):
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
-        return f"{cls.__name__.lower()}s"
+        return inflection.tableize(cls.__name__)
 
     id: Mapped[int] = mapped_column(primary_key=True)

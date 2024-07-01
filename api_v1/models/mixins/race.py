@@ -15,7 +15,7 @@ class RaceRelationMixin:
     @declared_attr
     def race_id(cls) -> Mapped[int]:
         return mapped_column(
-            ForeignKey("races.id"),
+            ForeignKey("races.id", ondelete="CASCADE"),
             unique=cls._race_id_unique,
             nullable=cls._race_id_nullable
         )
