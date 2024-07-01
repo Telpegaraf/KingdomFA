@@ -17,3 +17,5 @@ from api_v1.models.feat import Feat
 from api_v1.models.equipment import Currency, Equipment, Worn, ArmorCategory, Armor, Weapon
 from api_v1.models.spell import Spell
 from api_v1.models.inventory import CharacterWorn, CharacterWeapon, CharacterArmor, CharacterCurrency, CharacterItem
+from api_v1.models.user_test import TestUser
+from api_v1.models.access_token import AccessToken
