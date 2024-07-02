@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class God(Base):
-    characters: Mapped[list["Character"]] = relationship(back_populates="domain")
+    characters: Mapped[list["Character"]] = relationship(back_populates="god")
 
     name: Mapped[str] = mapped_column(String(100), index=True, unique=True)
     alias: Mapped[str] = mapped_column(String(100))

@@ -54,6 +54,9 @@ class Currency(Base):
     description: Mapped[str] = mapped_column(String)
     weight: Mapped[Decimal] = mapped_column(Numeric(5, 2), default=Decimal('0.01'))
     worns: Mapped[list["Worn"]] = relationship(back_populates="currency")
+    items: Mapped[list["Item"]] = relationship(back_populates="currency")
+    weapons: Mapped[list["Weapon"]] = relationship(back_populates="currency")
+    armors: Mapped[list["Armor"]] = relationship(back_populates="currency")
     character_currencies: Mapped[list["CharacterCurrency"]] = relationship(back_populates='currency')
 
     def __str__(self):

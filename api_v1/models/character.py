@@ -17,7 +17,8 @@ if TYPE_CHECKING:
     CharacterCurrency,
     CharacterWorn,
     CharacterArmor,
-    CharacterWeapon
+    CharacterWeapon,
+    EquippedItems
     )
 
 
@@ -57,6 +58,7 @@ class Character(
     character_armors: Mapped[list["CharacterArmor"]] = relationship(back_populates='character')
     character_weapons: Mapped[list["CharacterWeapon"]] = relationship(back_populates='character')
     character_worns: Mapped[list["CharacterWorn"]] = relationship(back_populates='character')
+    equipped_items: Mapped[list["EquippedItems"]] = relationship(back_populates='character')
 
     def __str__(self):
         name = self.first_name
@@ -171,8 +173,8 @@ class CharacterWeaponMastery(CharacterMixin, WeaponMixin, Base):
         ),
     )
 
-    _character_back_populate = 'character_skill_masteries'
-    _weapon_back_populate = 'character_skill_masteries'
+    _character_back_populate = 'character_weapon_masteries'
+    _weapon_back_populate = 'character_weapon_masteries'
 
     mastery_level: Mapped[Enum] = mapped_column(Enum(MasteryLevels), default=MasteryLevels.ABSENT)
 

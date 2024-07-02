@@ -10,6 +10,7 @@ from api_v1.models.mixins.character_class import CharacterClassMixin
 
 if TYPE_CHECKING:
     from api_v1.models.feat import Feat
+    from api_v1.models.character import Character
 
 
 class CharacterClass(SpellTraditionMixin, Base):
@@ -29,6 +30,7 @@ class CharacterClass(SpellTraditionMixin, Base):
 
     feats: Mapped[list["Feat"]] = relationship(back_populates="character_class")
     features: Mapped[list["Feature"]] = relationship(back_populates="character_class")
+    characters: Mapped[list["Character"]] = relationship(back_populates='character_class')
 
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id}, name={self.name!r})"
