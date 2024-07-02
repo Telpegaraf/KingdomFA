@@ -17,4 +17,4 @@ def get_database_strategy(
 ) -> DatabaseStrategy:
     return DatabaseStrategy(
         database=access_tokens_db,
-        lifetime_seconds=settings.jwt_settings.get("access_token_expire_minutes"))
+        lifetime_seconds=settings.jwt_database_settings.get("token_lifetime_seconds"))

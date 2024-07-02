@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     PRIVATE_KEY_PATH: Path = BASE_DIR / "certs" / "jwt-private.pem"
     PUBLIC_KEY_PATH: Path = BASE_DIR / "certs" / "jwt-public.pem"
 
+    LIFETIME_SECONDS: int
+    RESET_PASSWORD_SECRET: str
+    VERIFICATION_PASSWORD_SECRET: str
+
     model_config = SettingsConfigDict(env_file='.env')
 
     @property
@@ -39,6 +43,14 @@ class Settings(BaseSettings):
             "refresh_token_expire_days": self.JWT_REFRESH_TOKEN_EXPIRE_DAYS,
             "private_key_path": self.PRIVATE_KEY_PATH,
             "public_key_path": self.PUBLIC_KEY_PATH
+        }
+
+    @property
+    def jwt_database_settings(self):
+        return {
+            "token_lifetime_seconds": self.LIFETIME_SECONDS,
+            "reset_password_secret": self.RESET_PASSWORD_SECRET,
+            "verification_password_secret": self.VERIFICATION_PASSWORD_SECRET
         }
 
 
