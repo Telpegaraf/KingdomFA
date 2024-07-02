@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api_v1.crud import god as crud
 from api_v1.schemas import god as schemas
 from api_v1.models import god as models
-from api_v1.dependencies import get_object_by_id_dependency
+from api_v1.dependencies.dependencies import get_object_by_id_dependency
 from auth.utils import get_current_token_payload
 from database import db_helper
 
