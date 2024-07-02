@@ -2,7 +2,7 @@ from fastapi import Depends
 from fastapi_users.authentication.strategy.db import DatabaseStrategy
 from typing import TYPE_CHECKING, Annotated
 
-from api_v1.dependencies.access_token import get_access_tokens_db
+from api_v1.dependencies.authentication.access_token import get_access_tokens_db
 from core.config import settings
 if TYPE_CHECKING:
     from api_v1.models.access_token import AccessToken
