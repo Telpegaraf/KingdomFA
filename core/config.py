@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     RESET_PASSWORD_SECRET: str
     VERIFICATION_PASSWORD_SECRET: str
 
+    SUPER_USER_EMAIL: str
+    SUPER_USER_PASSWORD: str
+
     model_config = SettingsConfigDict(env_file='.env')
 
     @property
@@ -51,6 +54,13 @@ class Settings(BaseSettings):
             "token_lifetime_seconds": self.LIFETIME_SECONDS,
             "reset_password_secret": self.RESET_PASSWORD_SECRET,
             "verification_password_secret": self.VERIFICATION_PASSWORD_SECRET
+        }
+
+    @property
+    def super_user(self):
+        return {
+            "super_user_email": self.SUPER_USER_EMAIL,
+            "super_user_password": self.SUPER_USER_PASSWORD
         }
 
 

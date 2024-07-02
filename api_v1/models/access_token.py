@@ -13,7 +13,8 @@ if TYPE_CHECKING:
 
 
 class AccessToken(Base, SQLAlchemyBaseAccessTokenTable[UserIdType]):
-    user_id:Mapped[UserIdType] = mapped_column(
+    id: Mapped[int] = mapped_column(nullable=True)
+    user_id: Mapped[UserIdType] = mapped_column(
         Integer,
         (ForeignKey("test_users.id", ondelete="CASCADE")),
         nullable=False

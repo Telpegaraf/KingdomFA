@@ -1,3 +1,9 @@
+__all__ = (
+    "Base",
+    "TestUser",
+    "AccessToken",
+)
+
 from api_v1.models.base_model import Base
 from api_v1.models.user import User
 from api_v1.models.race import Race
