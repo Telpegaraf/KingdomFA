@@ -17,24 +17,35 @@ class UserManager(IntegerIDMixin, BaseUserManager[TestUser, UserIdType]):
     verification_token_secret = settings.jwt_database_settings.get("verification_password_secret")
 
     async def on_after_register(
-            self,
-            user: TestUser,
-            request: Optional["Request"] = None
-    ) -> None:
-        log.warning(msg="User %r has registered.", *user.id)
-
-    async def on_after_forgot_password(
-            self,
-            user: TestUser,
-            token: str,
-            request: Optional["Request"] = None
-    ) -> None:
-        log.warning(msg="User %r has forgot their password, Reset token: %r", *user.id, *token)
+        self,
+        user: TestUser,
+        request: Optional["Request"] = None,
+    ):
+        log.warning(
+            "User %r has registered.",
+            user.id,
+        )
 
     async def on_after_request_verify(
-            self,
-            user: TestUser,
-            token: str,
-            request: Optional["Request"] = None
-    ) -> None:
-        log.warning(msg="Verification requested for user %r. Verification token: %r", *user.id, *token)
+        self,
+        user: TestUser,
+        token: str,
+        request: Optional["Request"] = None,
+    ):
+        log.warning(
+            "Verification requested for user %r. Verification token: %r",
+            user.id,
+            token,
+        )
+
+    async def on_after_forgot_password(
+        self,
+        user: TestUser,
+        token: str,
+        request: Optional["Request"] = None,
+    ):
+        log.warning(
+            "User %r has forgot their password. Reset token: %r",
+            user.id,
+            token,
+        )
