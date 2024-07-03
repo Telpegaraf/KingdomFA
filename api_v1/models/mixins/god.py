@@ -4,7 +4,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import declared_attr, Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from api_v1.models.god import God
+    from api_v1.models.religion import God
     from api_v1.models.domain import Domain
 
 

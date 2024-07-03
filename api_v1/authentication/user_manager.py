@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING
 from fastapi_users import BaseUserManager, IntegerIDMixin
 
 from core.config import settings
-from api_v1.models.user_test import TestUser
+from api_v1.models.fastapi_users import TestUser
 from api_v1.models.base_model import Base
 from api_v1.types.user_id import UserIdType
 if TYPE_CHECKING:

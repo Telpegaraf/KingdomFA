@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from api_v1.models.base_model import Base
 if TYPE_CHECKING:
     from api_v1.models.domain import Domain
-    from api_v1.models.god import God
+    from api_v1.models.religion import God
 
 
 class GodDomainAssociation(Base):

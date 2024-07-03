@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from api_v1.models.domain import Domain
-from api_v1.models.god import God
+from api_v1.models.religion import God
 from api_v1.schemas.god import GodBase
 
 

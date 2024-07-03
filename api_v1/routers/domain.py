@@ -4,7 +4,7 @@ from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api_v1.crud import domain as crud
-from api_v1.dependencies.dependencies import get_object_by_id_dependency
+from api_v1.dependencies.get_object import get_object_by_id_dependency
 from api_v1.models import domain as models
 from api_v1.schemas import domain as schemas
 from auth.utils import get_current_token_payload
