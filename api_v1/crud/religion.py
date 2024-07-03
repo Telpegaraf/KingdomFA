@@ -3,10 +3,47 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from api_v1.models.domain import Domain
-from api_v1.models.religion import God
-from api_v1.schemas.god import GodBase
+from api_v1.schemas.religion import (
+    DomainBase,
+    DomainUpdate,
+    GodBase
+)
+from api_v1.models.religion import Domain, God
 
+
+async def domain_list(session: AsyncSession):
+    stmt = select(Domain).order_by(Domain.id)
+    result: Result = await session.execute(stmt)
+    domains = result.scalars().all()
+    return list(domains)
+
+
+async def domain_detail(session: AsyncSession, domain_id: int) -> Domain | None:
+    return await session.get(Domain, domain_id)
+
+
+async def domain_create(session: AsyncSession, domain_in: DomainBase) -> Domain:
+    domain = Domain(**domain_in.model_dump())
+    session.add(domain)
+    await session.commit()
+    await session.refresh(domain)
+    return domain
+
+
+async def domain_update(
+        domain_update: DomainUpdate,
+        domain: Domain,
+        session: AsyncSession,
+) -> Domain:
+    for name, value in domain_update.model_dump(exclude_unset=True).items():
+        setattr(domain, name, value)
+    await session.commit()
+    return domain
+
+
+async def domain_delete(domain: Domain, session: AsyncSession) -> None:
+    await session.delete(domain)
+    await session.commit()
 
 async def god_create(god_in: GodBase, session: AsyncSession) -> God:
     domain_names = [domain.name for domain in god_in.domains]
