@@ -11,7 +11,7 @@ from database import db_helper
 
 http_bearer = HTTPBearer(auto_error=False)
 
-religion_router = APIRouter(prefix="/domain", tags=["Domains"], dependencies=[Depends(http_bearer)])
+religion_router = APIRouter(prefix="/domain", tags=["Religion"], dependencies=[Depends(http_bearer)])
 
 
 @religion_router.get(
