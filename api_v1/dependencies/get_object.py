@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from typing import Type, TypeVar
 
-from api_v1.models.enum import ModelNameDescription, model_name_description_mapping
 from database import db_helper
 
 T = TypeVar('T')

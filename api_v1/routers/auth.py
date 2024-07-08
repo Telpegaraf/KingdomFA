@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api_v1.schemas import user as schema
+from api_v1.schemas.user_test import UserRead
 from api_v1.crud.user import validate_user
 from auth.helpers import create_access_token, create_refresh_token
 from auth.jwt_auth import decode_refresh_token

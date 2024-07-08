@@ -69,8 +69,14 @@ class CharacterWeapon(CharacterMixin, WeaponMixin, Base):
 
     quantity: Mapped[int] = mapped_column(SmallInteger, default=0)
 
-    first_equipped_weapon: Mapped["EquippedItems"] = relationship(back_populates='first_weapon')
-    second_equipped_weapon: Mapped["EquippedItems"] = relationship(back_populates='second_weapon')
+    first_equipped_weapon: Mapped["EquippedItems"] = relationship(
+        foreign_keys="EquippedItems.first_weapon_id",
+        back_populates='first_weapon'
+    )
+    second_equipped_weapon: Mapped["EquippedItems"] = relationship(
+        foreign_keys="EquippedItems.second_weapon_id",
+        back_populates='second_weapon'
+    )
 
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id}," \
@@ -124,7 +130,7 @@ class CharacterWorn(CharacterMixin, WornMixin, Base):
         back_populates='character_worns'
     )
     equipped_worn_details: Mapped[list["WornEquippedAssociation"]] = relationship(
-        back_populates='equipped_worn'
+        back_populates='character_worn'
     )
 
     def __str__(self):
@@ -144,14 +150,20 @@ class EquippedItems(CharacterMixin, Base):
         ),
         nullable=True
     )
-    first_weapon: Mapped["CharacterWeapon"] = relationship(back_populates='first_equipped_weapon')
+    first_weapon: Mapped["CharacterWeapon"] = relationship(
+        foreign_keys=[first_weapon_id],
+        back_populates='first_equipped_weapon'
+    )
     second_weapon_id: Mapped[int] = mapped_column(
         ForeignKey(
             "character_weapons.id", ondelete="CASCADE"
         ),
         nullable=True
     )
-    second_weapon: Mapped["CharacterWeapon"] = relationship(back_populates='second_equipped_weapon')
+    second_weapon: Mapped["CharacterWeapon"] = relationship(
+        foreign_keys=[second_weapon_id],
+        back_populates='second_equipped_weapon'
+    )
     armor_id: Mapped[int] = mapped_column(
         ForeignKey(
             "character_armors.id", ondelete="CASCADE"
@@ -160,9 +172,9 @@ class EquippedItems(CharacterMixin, Base):
     )
     armor: Mapped["CharacterArmor"] = relationship(back_populates='equipped_armor')
 
-    inventory_worns: Mapped[list["EquippedItems"]] = relationship(
+    character_worns: Mapped[list["CharacterWorn"]] = relationship(
         secondary='worn_equipped_association',
-        back_populates='equipped_items'
+        back_populates='equipped_worns'
     )
     inventory_worn_details: Mapped[list["WornEquippedAssociation"]] = relationship(
         back_populates='equipped_worn'

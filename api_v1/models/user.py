@@ -14,6 +14,7 @@ class User(Base):
     password: Mapped[str] = mapped_column(String(120))
     email: Mapped[Optional[EmailStr]] = mapped_column(String(100), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_superuser: Mapped[bool] = mapped_column(Boolean, default=False)
     characters: Mapped[List["Character"]] = relationship(back_populates="user")
 
     def __str__(self):

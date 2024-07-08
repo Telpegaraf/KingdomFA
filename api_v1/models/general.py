@@ -83,7 +83,7 @@ class Trigger(GeneralBase):
 
 
 class Skill(GeneralDescriptionBase):
-    character_skill_masteries: Mapped[list["CharacterSkillMastery"]] = relationship(back_populates="character")
+    character_skill_masteries: Mapped[list["CharacterSkillMastery"]] = relationship(back_populates="skill")
 
 
 class WeaponMastery(GeneralDescriptionBase):
@@ -111,7 +111,7 @@ class SpellCast(GeneralBase):
 
 class SpellTradition(GeneralDescriptionBase):
     character_classes: Mapped[list["CharacterClass"]] = relationship(back_populates="spell_tradition")
-    spells: Mapped[list["Spell"]] = relationship(back_populates="spells")
+    spells: Mapped[list["Spell"]] = relationship(back_populates="spell_tradition")
 
 
 class SpellSchool(GeneralDescriptionBase):
@@ -131,24 +131,25 @@ class ArmorTrait(GeneralDescriptionBase):
         secondary='armor_trait_association',
         back_populates='armor_traits'
     )
-    armor_trait_details: Mapped[list["ArmorTraitAssociation"]] = relationship(back_populates='armor_trait')
+    armor_details: Mapped[list["ArmorTraitAssociation"]] = relationship(back_populates='armor_trait')
 
 
 class ArmorSpecialization(GeneralDescriptionBase):
     armors: Mapped[list["Armor"]] = relationship(
         secondary='armor_specialization_association',
-        back_populates='armor_specialization'
+        back_populates='armor_specializations'
     )
-    armor_specialization_details: Mapped[list["ArmorSpecializationAssociation"]] = relationship(
+    armor_details: Mapped[list["ArmorSpecializationAssociation"]] = relationship(
         back_populates='armor_specialization'
     )
 
 
 class WeaponTrait(GeneralDescriptionBase):
     weapons: Mapped[list["Weapon"]] = relationship(
+        secondary="weapon_trait_association",
         back_populates='weapon_traits'
     )
-    weapon_detail: Mapped[list["WeaponTraitAssociation"]] = relationship(
+    weapon_details: Mapped[list["WeaponTraitAssociation"]] = relationship(
         back_populates='weapon_trait'
     )
 
