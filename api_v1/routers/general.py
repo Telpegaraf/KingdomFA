@@ -2,8 +2,6 @@ from fastapi import APIRouter, status, Depends, Path
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fastapi.responses import ORJSONResponse
-
 from api_v1.dependencies.get_object import get_object_by_id
 from api_v1.schemas import general as schemas
 from api_v1.crud import general as crud

@@ -37,7 +37,7 @@ class Settings(BaseSettings):
 
     @property
     def database_echo(self):
-        return self.DB_ECHO
+        return self.POSTGRES_ECHO
 
     @property
     def jwt_settings(self):
