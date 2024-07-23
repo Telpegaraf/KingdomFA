@@ -89,7 +89,7 @@ class ArmorUpdate(BaseModel):
     speed_penalty: bool
     strength: int
     level: int = Field(..., ge=1, le=20)
-    currency: int
+    currency_id: int
     armor_group_id: int
     armor_traits: list[int]
     armor_specializations: list[int]

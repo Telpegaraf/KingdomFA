@@ -160,20 +160,14 @@ async def armor_update(
     )
     existing_armor_specializations = armor_specializations_result.scalars().all()
 
-    armor.name = armor_update.name
-    armor.description = armor_update.description
-    armor.price = armor_update.price
-    armor.weight = armor_update.weight
-    armor.level = armor_update.level
-    armor.strength = armor_update.strength
-    armor.check_penalty = armor_update.check_penalty
-    armor.speed_penalty = armor_update.speed_penalty
-    armor.ac_bonus = armor_update.ac_bonus
-    armor.dexterity_modifier_cap = armor_update.dexterity_modifier_cap
-    armor.category = armor_update.category
+    for key, value in armor_update.model_dump(exclude_unset=True).items():
+        if hasattr(armor, key) and key not in [
+            "armor_traits", "armor_specializations", "currency_id", "armor_group_id"
+        ]:
+            setattr(armor, key, value)
+
     armor.armor_group = armor_group
     armor.currency = currency
-
     armor.armor_traits.clear()
     armor.armor_specializations.clear()
     for value in existing_armor_traits:
