@@ -30,7 +30,12 @@ async def armor_group_list(session: AsyncSession):
 
 
 async def armor_list(session: AsyncSession):
-    stmt = select(Armor).order_by(Armor.id)
+    stmt = select(Armor).options(
+        selectinload(Armor.armor_group),
+        selectinload(Armor.armor_traits),
+        selectinload(Armor.armor_specializations),
+        selectinload(Armor.currency)
+    ).order_by(Armor.id)
     result: Result = await session.execute(stmt)
     armors = result.scalars().all()
     return list(armors)

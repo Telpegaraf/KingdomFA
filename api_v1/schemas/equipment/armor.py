@@ -38,7 +38,7 @@ class ArmorBase(BaseModel):
     category: ArmorCategory
 
 
-class ArmorDetail(BaseModel):
+class ArmorRead(BaseModel):
     name: Annotated[str, MaxLen(200)]
     description: str
     price: int
@@ -50,6 +50,7 @@ class ArmorDetail(BaseModel):
     strength: int
     level: int = Field(..., ge=1, le=20)
     currency: Currency
+    armor_group: ArmorGroup
     armor_traits: list[GeneralDescription]
     armor_specializations: list[GeneralDescription]
     category: ArmorCategory

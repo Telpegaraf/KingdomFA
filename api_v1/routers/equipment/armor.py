@@ -17,7 +17,7 @@ armor_router = APIRouter(prefix="/armor", tags=["Armor"])
 @armor_router.get(
     "/{armor_id}/",
     description="Return the armor object, depending on ID",
-    response_model=schemas.ArmorDetail
+    response_model=schemas.ArmorRead
 )
 async def ger_armor_detail(
         armor_id: int = Path(),
@@ -29,6 +29,7 @@ async def ger_armor_detail(
 @armor_router.get(
     "/",
     description="Return all armor object",
+    response_model=list[schemas.Armor]
 )
 async def get_armor_list(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
