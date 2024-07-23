@@ -1,22 +1,8 @@
-import decimal
-from decimal import Decimal
 from pydantic import BaseModel, Field, ConfigDict, PositiveFloat
 from typing import Annotated
 from annotated_types import MaxLen
 from api_v1.schemas.general import GeneralDescription
-
-
-class Currency(BaseModel):
-    name: Annotated[str, MaxLen(200)]
-    price: int
-    description: str
-    weight: PositiveFloat
-
-
-class CurrencyBase(Currency):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: int
+from api_v1.schemas.equipment.currency import Currency
 
 
 class SlotBase(BaseModel):

@@ -1,12 +1,11 @@
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import db_helper
 from api_v1.models import equipment as models
 from api_v1.crud.equipment import worn as crud
-from api_v1.dependencies.get_object import get_object_by_id, get_object_by_id_dependency
-from api_v1.models.enum import equipment_model_mapping, EquipmentEnum
+from api_v1.dependencies.get_object import get_object_by_id_dependency
 from api_v1.schemas.equipment import worn as schemas
 
 http_bearer = HTTPBearer()
