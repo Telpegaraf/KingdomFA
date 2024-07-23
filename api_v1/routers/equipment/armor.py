@@ -36,6 +36,18 @@ async def get_armor_group_list(
     return await crud.armor_group_list(session=session)
 
 
+@armor_router.post(
+    "/armor_group/create/",
+    description="Create new Armor Group object",
+    response_model=schemas.ArmorGroup
+)
+async def armor_group_create(
+        armor_group_in: schemas.ArmorGroupBase,
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.armor_group_create(session=session, armor_group_in=armor_group_in)
+
+
 @armor_router.get(
     "/{armor_id}/",
     description="Return the armor object, depending on ID",

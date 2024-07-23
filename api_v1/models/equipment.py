@@ -126,7 +126,7 @@ class Worn(Equipment):
 
 
 class ArmorGroup(Base):
-    name: Mapped[str] = mapped_column(String(200))
+    name: Mapped[str] = mapped_column(String(200), unique=True)
     description: Mapped[str] = mapped_column(String(500))
     hardness:Mapped[int] = mapped_column(SmallInteger, default=1)
     health: Mapped[int] = mapped_column(SmallInteger)

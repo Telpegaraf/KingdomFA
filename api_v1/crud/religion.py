@@ -45,6 +45,7 @@ async def domain_delete(domain: Domain, session: AsyncSession) -> None:
     await session.delete(domain)
     await session.commit()
 
+
 async def god_create(god_in: GodBase, session: AsyncSession) -> God:
     domain_names = [domain.name for domain in god_in.domains]
     existing_domains = await session.execute(

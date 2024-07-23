@@ -29,6 +29,18 @@ async def armor_group_list(session: AsyncSession):
     return list(armor_groups)
 
 
+async def armor_group_create(
+        session: AsyncSession,
+        armor_group_in: ArmorGroupBase
+):
+    armor_group = ArmorGroup(**armor_group_in.model_dump())
+    print(armor_group)
+    session.add(armor_group)
+    await session.commit()
+    await session.refresh(armor_group)
+    return armor_group
+
+
 async def armor_list(session: AsyncSession):
     stmt = select(Armor).options(
         selectinload(Armor.armor_group),
