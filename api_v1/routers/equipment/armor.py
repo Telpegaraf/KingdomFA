@@ -113,22 +113,22 @@ async def armor_create(
     return await crud.armor_create(session=session, armor_in=armor_in)
 
 
-# @armor_router.patch(
-#     "/update/{object_id}/",
-#     description="Update armor object, depending on ID"
-# )
-# async def armor_update(
-#         armor_update: schemas.WornUpdate,
-#         armor: models.Armor = Depends(get_object_by_id_dependency(models.Armor)),
-#         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
-# ):
-#     return await crud.armor_update(
-#         armor_update=armor_update,
-#         armor=armor,
-#         session=session
-#     )
-#
-#
+@armor_router.patch(
+    "/update/{armor_id}/",
+    description="Update armor object, depending on ID"
+)
+async def armor_update(
+        armor_update: schemas.ArmorUpdate,
+        armor: models.Armor = Depends(get_armor),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.armor_update(
+        armor_update=armor_update,
+        armor=armor,
+        session=session
+    )
+
+
 @armor_router.delete(
     "/{armor_id}/delete/",
     description="Delete Armor object, depending on ID"

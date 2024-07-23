@@ -160,21 +160,28 @@ async def armor_update(
     )
     existing_armor_specializations = armor_specializations_result.scalars().all()
 
-    armor.name = armor_update.name,
-    armor.description = armor_update.description,
-    armor.price = armor_update.price,
-    armor.weight = armor_update.weight,
-    armor.level = armor_update.level,
-    armor.armor_traits = existing_armor_traits,
-    armor.strength = armor_update.strength,
-    armor.check_penalty = armor_update.check_penalty,
-    armor.speed_penalty = armor_update.speed_penalty,
-    armor.ac_bonus = armor_update.ac_bonus,
-    armor.dexterity_modifier_cap = armor_update.dexterity_modifier_cap,
-    armor.category = armor_update.category,
-    armor.armor_specializations = existing_armor_specializations,
-    armor.armor_group = armor_group,
+    print(existing_armor_specializations, existing_armor_traits)
+
+    armor.name = armor_update.name
+    armor.description = armor_update.description
+    armor.price = armor_update.price
+    armor.weight = armor_update.weight
+    armor.level = armor_update.level
+    armor.strength = armor_update.strength
+    armor.check_penalty = armor_update.check_penalty
+    armor.speed_penalty = armor_update.speed_penalty
+    armor.ac_bonus = armor_update.ac_bonus
+    armor.dexterity_modifier_cap = armor_update.dexterity_modifier_cap
+    armor.category = armor_update.category
+    armor.armor_group = armor_group
     armor.currency = currency
+
+    armor.armor_traits.clear()
+    armor.armor_specializations.clear()
+    for value in existing_armor_traits:
+        armor.armor_traits.append(value)
+    for value in existing_armor_specializations:
+        armor.armor_specializations.append(value)
     await session.commit()
     await session.refresh(armor)
     return armor
