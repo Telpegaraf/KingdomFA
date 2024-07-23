@@ -115,7 +115,8 @@ async def armor_create(
 
 @armor_router.patch(
     "/update/{armor_id}/",
-    description="Update armor object, depending on ID"
+    description="Update armor object, depending on ID",
+    response_model=schemas.ArmorRead
 )
 async def armor_update(
         armor_update: schemas.ArmorUpdate,
