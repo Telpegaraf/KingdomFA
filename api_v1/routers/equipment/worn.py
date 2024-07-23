@@ -6,6 +6,7 @@ from database import db_helper
 from api_v1.models import equipment as models
 from api_v1.crud.equipment import worn as crud
 from api_v1.dependencies.get_object import get_object_by_id_dependency
+from api_v1.dependencies.equipment.worn import get_worn
 from api_v1.schemas.equipment import worn as schemas
 
 http_bearer = HTTPBearer()
@@ -15,11 +16,12 @@ worn_router = APIRouter(prefix="/worn_items", tags=["Worn Items"])
 
 
 @worn_router.get(
-    "/{object_id}/",
+    "/{worn_id}/",
     description="Return the worn object, depending on ID",
+    response_model=schemas.WornRead
 )
 async def get_worn_item(
-        worn: models.Worn = Depends(get_object_by_id_dependency(models.Worn))
+        worn: models.Worn = Depends(get_worn)
 ):
     return worn
 
@@ -27,6 +29,7 @@ async def get_worn_item(
 @worn_router.get(
     "/",
     description="Return all worn object",
+    response_model=list[schemas.Worn]
 )
 async def get_worn_list(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
@@ -37,7 +40,7 @@ async def get_worn_list(
 @worn_router.post(
     "/create/",
     description="Create a new worn object",
-    #response_model=schemas.Worn
+    response_model=schemas.Worn
 )
 async def worn_create(
         worn_in: schemas.WornCreate,
@@ -47,12 +50,13 @@ async def worn_create(
 
 
 @worn_router.patch(
-    "/update/{object_id}/",
-    description="Update worn object, depending on ID"
+    "/update/{worn_id}/",
+    description="Update worn object, depending on ID",
+    response_model=schemas.WornRead
 )
 async def worn_update(
         worn_update: schemas.WornUpdate,
-        worn: models.Worn = Depends(get_object_by_id_dependency(models.Worn)),
+        worn: models.Worn = Depends(get_worn),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await crud.worn_update(
@@ -63,11 +67,11 @@ async def worn_update(
 
 
 @worn_router.delete(
-    "/{object_id}/delete/",
+    "/{worn_id}/delete/",
     description="Delete worn object, depending on ID"
 )
 async def worn_delete(
-        worn: models.Worn = Depends(get_object_by_id_dependency(models.Worn)),
+        worn: models.Worn = Depends(get_worn),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await crud.worn_delete(

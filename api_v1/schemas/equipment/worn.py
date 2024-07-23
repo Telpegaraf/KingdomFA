@@ -29,6 +29,19 @@ class WornBase(BaseModel):
     currency: Currency
 
 
+class WornRead(BaseModel):
+    name: Annotated[str, MaxLen(200)]
+    description: str
+    price: int
+    weight: PositiveFloat
+    slot: Slot
+    level: int = Field(..., ge=1, le=20)
+    activate: str
+    effect: str
+    worn_traits: list[GeneralDescription]
+    currency: Currency
+
+
 class WornCreate(BaseModel):
     name: Annotated[str, MaxLen(200)]
     description: str
@@ -51,8 +64,8 @@ class WornUpdate(BaseModel):
     level: int = Field(..., ge=1, le=20)
     activate: str
     effect: str
+    worn_traits: list[int]
     currency_id: int
-    #TODO Update worn_traits
 
 
 class Worn(WornBase):

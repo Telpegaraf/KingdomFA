@@ -160,8 +160,6 @@ async def armor_update(
     )
     existing_armor_specializations = armor_specializations_result.scalars().all()
 
-    print(existing_armor_specializations, existing_armor_traits)
-
     armor.name = armor_update.name
     armor.description = armor_update.description
     armor.price = armor_update.price

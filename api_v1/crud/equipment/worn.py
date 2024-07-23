@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from api_v1.schemas.equipment.worn import (
     WornCreate,
@@ -12,14 +13,26 @@ from api_v1.models.general import WornTrait
 
 
 async def worn_item_list(session: AsyncSession):
-    stmt = select(Worn).order_by(Worn.id)
+    stmt = select(Worn).options(
+        selectinload(Worn.currency),
+        selectinload(Worn.slot),
+        selectinload(Worn.worn_traits)
+    ).order_by(Worn.id)
     result: Result = await session.execute(stmt)
     worns = result.scalars().all()
     return list(worns)
 
 
 async def worn_detail(session: AsyncSession, worn_id: int) -> Worn | None:
-    return await session.get(Worn, worn_id)
+    return await session.scalar(
+        select(Worn)
+        .where(Worn.id == worn_id)
+        .options(
+            selectinload(Worn.currency),
+            selectinload(Worn.slot),
+            selectinload(Worn.worn_traits),
+        )
+    )
 
 
 async def worn_create(session: AsyncSession, worn_in: WornCreate) -> Worn:
@@ -57,7 +70,7 @@ async def worn_create(session: AsyncSession, worn_in: WornCreate) -> Worn:
     session.add(worn)
     await session.commit()
     await session.refresh(worn)
-    return worn
+    return await worn_detail(session, worn.id)
 
 
 async def worn_update(
@@ -78,11 +91,18 @@ async def worn_update(
     currency = currency_result.scalar_one_or_none()
     if currency is None:
         raise HTTPException(status_code=404, detail="currency not found")
+    worn_traits_result = await session.execute(
+        select(WornTrait).where(WornTrait.id.in_(worn_update.worn_traits))
+    )
+    existing_worn_traits = worn_traits_result.scalars().all()
 
     for key, value in worn_update.model_dump(exclude_unset=True).items():
         if hasattr(worn, key) and key not in ["slot_id", "currency_id", "worn_traits"]:
-            print(key)
             setattr(worn, key, value)
+
+    worn.worn_traits.clear()
+    for value in existing_worn_traits:
+        worn.worn_traits.append(value)
 
     await session.commit()
     await session.refresh(worn)
