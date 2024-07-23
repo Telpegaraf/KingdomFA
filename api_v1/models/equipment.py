@@ -119,7 +119,7 @@ class Worn(Equipment):
 
     worn_trait_details: Mapped[list["WornItemTraitAssociation"]] = relationship(
         "WornItemTraitAssociation",
-        back_populates="worn",
+        back_populates="worn", cascade="all, delete-orphan"
     )
 
     character_worns: Mapped[list["CharacterWorn"]] = relationship(back_populates='worn')
@@ -158,7 +158,7 @@ class Armor(Equipment):
         back_populates='armors'
     )
     armor_trait_details: Mapped[list["ArmorTraitAssociation"]] = relationship(
-        back_populates='armor',
+        back_populates='armor', cascade="all, delete-orphan"
     )
 
     armor_specializations: Mapped[list["ArmorSpecialization"]] = relationship(
@@ -166,7 +166,7 @@ class Armor(Equipment):
         back_populates='armors'
     )
     armor_specialization_details: Mapped[list["ArmorSpecializationAssociation"]] = relationship(
-        back_populates='armor',
+        back_populates='armor', cascade="all, delete-orphan"
     )
 
     character_armors: Mapped[list["CharacterArmor"]] = relationship(back_populates='armor')
