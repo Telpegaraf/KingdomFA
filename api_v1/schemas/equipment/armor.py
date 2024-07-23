@@ -38,6 +38,23 @@ class ArmorBase(BaseModel):
     category: ArmorCategory
 
 
+class ArmorDetail(BaseModel):
+    name: Annotated[str, MaxLen(200)]
+    description: str
+    price: int
+    weight: PositiveFloat
+    ac_bonus: int
+    dexterity_modifier_cap: int
+    check_penalty: bool
+    speed_penalty: bool
+    strength: int
+    level: int = Field(..., ge=1, le=20)
+    currency: Currency
+    armor_traits: list[GeneralDescription]
+    armor_specializations: list[GeneralDescription]
+    category: ArmorCategory
+
+
 class ArmorCreate(BaseModel):
     name: Annotated[str, MaxLen(200)]
     description: str

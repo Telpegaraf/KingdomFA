@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,13 +15,15 @@ armor_router = APIRouter(prefix="/armor", tags=["Armor"])
 
 
 @armor_router.get(
-    "/{object_id}/",
+    "/{armor_id}/",
     description="Return the armor object, depending on ID",
+    response_model=schemas.ArmorDetail
 )
-async def get_armor_item(
-        worn: models.Worn = Depends(get_object_by_id_dependency(models.Worn))
+async def ger_armor_detail(
+        armor_id: int = Path(),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    return worn
+    return await crud.armor_detail(session=session, armor_id=armor_id)
 
 
 @armor_router.get(
@@ -31,7 +33,7 @@ async def get_armor_item(
 async def get_armor_list(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    return await crud.armor_item_list(session=session)
+    return await crud.armor_list(session=session)
 
 
 @armor_router.post(

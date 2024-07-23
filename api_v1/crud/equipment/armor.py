@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from sqlalchemy.orm import selectinload
 
 from api_v1.schemas.equipment.armor import (
     ArmorGroupBase,
@@ -22,7 +22,14 @@ from api_v1.models.general import (
 )
 
 
-async def armor_item_list(session: AsyncSession):
+async def armor_group_list(session: AsyncSession):
+    stmt = select(ArmorGroup).order_by(ArmorGroup.id)
+    result: Result = await session.execute(stmt)
+    armor_groups = result.scalars().all()
+    return list(armor_groups)
+
+
+async def armor_list(session: AsyncSession):
     stmt = select(Armor).order_by(Armor.id)
     result: Result = await session.execute(stmt)
     armors = result.scalars().all()
@@ -30,7 +37,14 @@ async def armor_item_list(session: AsyncSession):
 
 
 async def armor_detail(session: AsyncSession, armor_id: int) -> Armor | None:
-    return await session.get(Armor, armor_id)
+    return await session.scalar(
+        select(Armor)
+        .where(Armor.id == armor_id)
+        .options(selectinload(Armor.armor_group),
+                 selectinload(Armor.armor_traits),
+                 selectinload(Armor.armor_specializations),
+                 selectinload(Armor.currency))
+    )
 
 
 async def armor_create(session: AsyncSession, armor_in: ArmorCreate) -> Armor:
