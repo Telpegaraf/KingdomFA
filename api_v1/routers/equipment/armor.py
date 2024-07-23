@@ -48,6 +48,23 @@ async def armor_group_create(
     return await crud.armor_group_create(session=session, armor_group_in=armor_group_in)
 
 
+@armor_router.patch(
+    "/armor_group/update/{object_id}/",
+    description="Change Armor Group object",
+    response_model=schemas.ArmorGroupBase
+)
+async def armor_group_update(
+        armor_group_update: schemas.ArmorGroupBase,
+        armor_group: models.ArmorGroup = Depends(get_object_by_id_dependency(models.ArmorGroup)),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.armor_group_update(
+        session=session,
+        armor_group_update=armor_group_update,
+        armor_group=armor_group
+    )
+
+
 @armor_router.get(
     "/{armor_id}/",
     description="Return the armor object, depending on ID",
