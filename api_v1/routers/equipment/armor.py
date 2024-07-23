@@ -15,6 +15,28 @@ armor_router = APIRouter(prefix="/armor", tags=["Armor"])
 
 
 @armor_router.get(
+    "/armor_group/{object_id}",
+    description="Return the armor group object, depending on id",
+    response_model=schemas.ArmorGroupBase
+)
+async def get_armor_group_detail(
+        armor_group: models.ArmorGroup = Depends(get_object_by_id_dependency(models.ArmorGroup)),
+):
+    return armor_group
+
+
+@armor_router.get(
+    "/armor_group/",
+    description="Return all Armor Group objects",
+    response_model=list[schemas.ArmorGroup]
+)
+async def get_armor_group_list(
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.armor_group_list(session=session)
+
+
+@armor_router.get(
     "/{armor_id}/",
     description="Return the armor object, depending on ID",
     response_model=schemas.ArmorRead
@@ -40,7 +62,7 @@ async def get_armor_list(
 @armor_router.post(
     "/create/",
     description="Create a new armor object",
-    #response_model=schemas.Worn
+    response_model=schemas.Armor
 )
 async def armor_create(
         armor_in: schemas.ArmorCreate,

@@ -97,4 +97,4 @@ async def armor_create(session: AsyncSession, armor_in: ArmorCreate) -> Armor:
     session.add(armor)
     await session.commit()
     await session.refresh(armor)
-    return armor
+    return await armor_detail(session=session, armor_id=armor.id)

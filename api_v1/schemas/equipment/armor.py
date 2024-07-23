@@ -6,6 +6,8 @@ from api_v1.schemas.general import General, GeneralDescription
 from api_v1.models.equipment import ArmorCategory
 
 
+# _____________________________
+# schemas for model(ArmorGroup)
 class ArmorGroupBase(BaseModel):
     name: Annotated[str, MaxLen(200)]
     description: Annotated[str, MaxLen(500)]
@@ -20,6 +22,8 @@ class ArmorGroup(ArmorGroupBase):
     id: int
 
 
+# _________________________
+# schemas for model (Armor)
 class ArmorBase(BaseModel):
     name: Annotated[str, MaxLen(200)]
     description: str
