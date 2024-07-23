@@ -16,6 +16,64 @@ worn_router = APIRouter(prefix="/worn_items", tags=["Worn Items"])
 
 
 @worn_router.get(
+    "/slot/{object_id}/",
+    description="Return the slot object, depending on ID",
+    response_model=schemas.SlotBase
+)
+async def slot_detail(
+        slot: models.Slot = Depends(get_object_by_id_dependency(models.Slot)),
+):
+    return slot
+
+
+@worn_router.get(
+    "/slot/",
+    description="Return all Slot objects",
+    response_model=list[schemas.Slot]
+)
+async def slot_list(
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.slot_list(session=session)
+
+
+@worn_router.post(
+    "/slot/create/",
+    description="Create a new Slot object",
+    response_model=schemas.Slot
+)
+async def slot_create(
+        slot_in: schemas.SlotBase,
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.slot_create(session=session, slot_in=slot_in)
+
+
+@worn_router.patch(
+    "/slot/update/{object_id}/",
+    description="Update the Slot object, depending on ID",
+    response_model=schemas.SlotBase
+)
+async def slot_update(
+        slot_update: schemas.SlotBase,
+        slot: models.Slot = Depends(get_object_by_id_dependency(models.Slot)),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    return await crud.slot_update(session=session, slot_update=slot_update, slot=slot)
+
+
+@worn_router.delete(
+    "/slot/delete/{object_id}/",
+    description="Delete the Slot objecs, depending on ID"
+)
+async def delete(
+        slot: models.Slot = Depends(get_object_by_id_dependency(models.Slot)),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.slot_delete(session=session, slot=slot)
+
+
+@worn_router.get(
     "/{worn_id}/",
     description="Return the worn object, depending on ID",
     response_model=schemas.WornRead

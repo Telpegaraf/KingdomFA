@@ -7,9 +7,47 @@ from sqlalchemy.orm import selectinload
 from api_v1.schemas.equipment.worn import (
     WornCreate,
     WornUpdate,
+    SlotBase
 )
 from api_v1.models.equipment import Worn, Slot, Currency
 from api_v1.models.general import WornTrait
+
+
+async def slot_list(session: AsyncSession):
+    stmt = select(Slot).order_by(Slot.id)
+    result: Result = await session.execute(stmt)
+    slots = result.scalars().all()
+    return list(slots)
+
+
+async def slot_create(
+        session: AsyncSession,
+        slot_in: SlotBase,
+):
+    slot = Slot(**slot_in.model_dump())
+    session.add(slot)
+    await session.commit()
+    await session.refresh(slot)
+    return slot
+
+
+async def slot_update(
+        session: AsyncSession,
+        slot_update: SlotBase,
+        slot: Slot
+):
+    for key, value in slot_update.model_dump(exclude_unset=True).items():
+        setattr(slot, key, value)
+        await session.commit()
+    return slot
+
+
+async def slot_delete(
+        session: AsyncSession,
+        slot: Slot
+) -> None:
+    await session.delete(slot)
+    await session.commit()
 
 
 async def worn_item_list(session: AsyncSession):
