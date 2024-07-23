@@ -52,6 +52,14 @@ async def armor_group_update(
     return armor_group
 
 
+async def armor_group_delete(
+        armor_group: ArmorGroup,
+        session: AsyncSession
+):
+    await session.delete(armor_group)
+    await session.commit()
+
+
 async def armor_list(session: AsyncSession):
     stmt = select(Armor).options(
         selectinload(Armor.armor_group),

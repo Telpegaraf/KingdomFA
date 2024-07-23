@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends, Path, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -39,7 +39,8 @@ async def get_armor_group_list(
 @armor_router.post(
     "/armor_group/create/",
     description="Create new Armor Group object",
-    response_model=schemas.ArmorGroup
+    response_model=schemas.ArmorGroup,
+    status_code=status.HTTP_201_CREATED
 )
 async def armor_group_create(
         armor_group_in: schemas.ArmorGroupBase,
@@ -63,6 +64,18 @@ async def armor_group_update(
         armor_group_update=armor_group_update,
         armor_group=armor_group
     )
+
+
+@armor_router.delete(
+    "/armor_group/delete/{object_id}",
+    description="Delete Armor Group object",
+    status_code=status.HTTP_204_NO_CONTENT
+)
+async def armor_group_delete(
+        armor_group: models = Depends(get_object_by_id_dependency(models.ArmorGroup)),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await crud.armor_group_delete(armor_group=armor_group, session=session)
 
 
 @armor_router.get(
