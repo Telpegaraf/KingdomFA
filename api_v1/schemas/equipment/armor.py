@@ -78,6 +78,24 @@ class ArmorCreate(BaseModel):
     category: ArmorCategory
 
 
+class ArmorUpdate(BaseModel):
+    name: Annotated[str, MaxLen(200)]
+    description: str
+    price: int
+    weight: PositiveFloat
+    ac_bonus: int
+    dexterity_modifier_cap: int
+    check_penalty: bool
+    speed_penalty: bool
+    strength: int
+    level: int = Field(..., ge=1, le=20)
+    currency_id: int
+    armor_group_id: int
+    armor_traits: list[int]
+    armor_specializations: list[int]
+    category: ArmorCategory
+
+
 class Armor(ArmorBase):
     model_config = ConfigDict(from_attributes=True)
 

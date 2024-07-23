@@ -7,7 +7,8 @@ from sqlalchemy.orm import selectinload
 from api_v1.schemas.equipment.armor import (
     ArmorGroupBase,
     ArmorBase,
-    ArmorCreate
+    ArmorCreate,
+    ArmorUpdate
 )
 
 from api_v1.models.equipment import (
@@ -34,7 +35,6 @@ async def armor_group_create(
         armor_group_in: ArmorGroupBase
 ):
     armor_group = ArmorGroup(**armor_group_in.model_dump())
-    print(armor_group)
     session.add(armor_group)
     await session.commit()
     await session.refresh(armor_group)
@@ -129,3 +129,60 @@ async def armor_create(session: AsyncSession, armor_in: ArmorCreate) -> Armor:
     await session.commit()
     await session.refresh(armor)
     return await armor_detail(session=session, armor_id=armor.id)
+
+
+async def armor_update(
+        session: AsyncSession,
+        armor_update: ArmorUpdate,
+        armor: Armor
+):
+    armor_group_result = await session.execute(
+        select(ArmorGroup).where(ArmorGroup.id == armor_update.armor_group_id)
+    )
+    armor_group = armor_group_result.scalar_one_or_none()
+    if armor_group is None:
+        raise HTTPException(status_code=404, detail="Armor Group not found")
+
+    currency_result = await session.execute(
+        select(Currency).where(Currency.id == armor_update.currency_id)
+    )
+    currency = currency_result.scalar_one_or_none()
+    if currency is None:
+        raise HTTPException(status_code=404, detail="currency not found")
+
+    armor_traits_result = await session.execute(
+        select(ArmorTrait).where(ArmorTrait.id.in_(armor_update.armor_traits))
+    )
+    existing_armor_traits = armor_traits_result.scalars().all()
+
+    armor_specializations_result = await session.execute(
+        select(ArmorSpecialization).where(ArmorSpecialization.id.in_(armor_update.armor_specializations))
+    )
+    existing_armor_specializations = armor_specializations_result.scalars().all()
+
+    armor.name = armor_update.name,
+    armor.description = armor_update.description,
+    armor.price = armor_update.price,
+    armor.weight = armor_update.weight,
+    armor.level = armor_update.level,
+    armor.armor_traits = existing_armor_traits,
+    armor.strength = armor_update.strength,
+    armor.check_penalty = armor_update.check_penalty,
+    armor.speed_penalty = armor_update.speed_penalty,
+    armor.ac_bonus = armor_update.ac_bonus,
+    armor.dexterity_modifier_cap = armor_update.dexterity_modifier_cap,
+    armor.category = armor_update.category,
+    armor.armor_specializations = existing_armor_specializations,
+    armor.armor_group = armor_group,
+    armor.currency = currency
+    await session.commit()
+    await session.refresh(armor)
+    return armor
+
+
+async def armor_delete(
+        session: AsyncSession,
+        armor: Armor
+):
+    await session.delete(armor)
+    await session.commit()
