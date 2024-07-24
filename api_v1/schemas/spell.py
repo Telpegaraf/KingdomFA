@@ -53,11 +53,11 @@ class SpellCreate(BaseModel):
     cost: Optional[Annotated[str, MaxLen(200)]]
     target: Annotated[str, MaxLen(200)]
     source: Annotated[str, MaxLen(200)]
-    spell_tradition_id: id
-    spell_cast_id: id
-    spell_school_id: id
-    spell_component_id: id
-    spell_trait_id: id
+    spell_tradition_id: int
+    spell_cast_id: int
+    spell_school_id: int
+    spell_component_id: int
+    spell_trait_id: int
 
 
 class SpellUpdate(BaseModel):
@@ -72,11 +72,11 @@ class SpellUpdate(BaseModel):
     cost: Optional[Annotated[str, MaxLen(200)]]
     target: Annotated[str, MaxLen(200)]
     source: Annotated[str, MaxLen(200)]
-    spell_tradition_id: id
-    spell_cast_id: id
-    spell_school_id: id
-    spell_component_id: id
-    spell_trait_id: id
+    spell_tradition_id: int
+    spell_cast_id: int
+    spell_school_id: int
+    spell_component_id: int
+    spell_trait_id: int
 
 
 class Spell(BaseModel):

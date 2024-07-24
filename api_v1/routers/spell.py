@@ -71,6 +71,6 @@ async def spell_update(
 )
 async def spell_delete(
         spell: Spell = Depends(get_spell),
-        session: AsyncSession = Depends(database.db_helper)
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
     return await crud.spell_delete(session=session, spell=spell)

@@ -84,7 +84,7 @@ async def object__with_description_create(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await crud.object_create(
-        model=model_mapping[model_name],
+        model=model_description_mapping[model_name],
         object_in=object_in,
         session=session
     )

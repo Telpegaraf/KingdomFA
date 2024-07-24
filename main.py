@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from api_v1.routers import religion, user, auth, general, character_class, user_test
+from api_v1.routers import religion, user, auth, general, character_class, user_test, spell
 from api_v1.routers.equipment import worn, armor, weapon
 from action.create_superuser import create_superuser
 
@@ -15,6 +15,7 @@ app.include_router(worn.worn_router)
 app.include_router(armor.armor_router)
 app.include_router(weapon.weapon_router)
 app.include_router(user_test.auth_router)
+app.include_router(spell.spell_router)
 
 
 @asynccontextmanager
