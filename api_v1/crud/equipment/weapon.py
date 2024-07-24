@@ -68,6 +68,7 @@ async def weapon_create(
     damage_type = damage_type_result.scalar_one_or_none()
     if damage_type is None:
         raise HTTPException(status_code=404, detail="Damage type is not found")
+    print(damage_type)
 
     second_damage_type_result = await session.execute(
         select(DamageType).where(DamageType.id == weapon_in.second_damage_type_id)
@@ -90,8 +91,8 @@ async def weapon_create(
         two_hands=weapon_in.two_hands,
         range=weapon_in.range,
         reload=weapon_in.reload,
-        damage_type=damage_type,
-        second_damage_type=second_damage_type,
+        damage_type_id=weapon_in.damage_type_id,
+        second_damage_type_id=weapon_in.second_damage_type_id,
         weapon_group=weapon_group,
         weapon_specialization=specialization,
         dice=weapon_in.dice,

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -38,7 +38,8 @@ async def weapon_list(
 @weapon_router.post(
     "/create/",
     description="Create a new Weapon object",
-    #response_model=schemas.Weapon
+    #response_model=schemas.Weapon,
+    status_code=status.HTTP_201_CREATED
 )
 async def weapon_create(
         weapon_in: schemas.WeaponCreate,
@@ -48,7 +49,7 @@ async def weapon_create(
 
 
 @weapon_router.patch(
-    "/update/",
+    "/update/{weapon_id}",
     description="Update the Weapon object, depending on ID",
     response_model=schemas.WeaponBase
 )
@@ -61,11 +62,12 @@ async def weapon_update(
 
 
 @weapon_router.delete(
-    "/delete/",
+    "/delete/{weapon_id}/",
     description="Delete the Weapon object, depending on ID",
+    status_code=status.HTTP_204_NO_CONTENT
 )
 async def weapon_delete(
-        weapon: Weapon = Depends(db_helper.scoped_session_dependency),
+        weapon: Weapon = Depends(get_weapon),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await crud.weapon_delete(session=session, weapon=weapon)

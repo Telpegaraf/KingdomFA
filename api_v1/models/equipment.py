@@ -210,7 +210,7 @@ class Weapon(Equipment):
         back_populates='weapons'
     )
     weapon_trait_details: Mapped[list["WeaponTraitAssociation"]] = relationship(
-        back_populates='weapon'
+        back_populates='weapon', cascade="all, delete-orphan"
     )
     character_weapon_masteries: Mapped[list["CharacterWeaponMastery"]] = relationship(back_populates='weapon')
 
