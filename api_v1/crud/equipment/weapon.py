@@ -115,7 +115,65 @@ async def weapon_update(
         weapon_update: WeaponUpdate,
         weapon: Weapon
 ):
-    pass
+    weapon_group_result = await session.execute(
+        select(WeaponGroup).where(WeaponGroup.id == weapon_update.weapon_group_id)
+    )
+    weapon_group = weapon_group_result.scalar_one_or_none()
+    if weapon_group is None:
+        raise HTTPException(status_code=404, detail="Weapon Group is not found")
+
+    currency_result = await session.execute(
+        select(Currency).where(Currency.id == weapon_update.currency_id)
+    )
+    currency = currency_result.scalar_one_or_none()
+    if currency is None:
+        raise HTTPException(status_code=404, detail="Currency is not found")
+
+    specialization_result = await session.execute(
+        select(WeaponSpecialization).where(WeaponSpecialization.id == weapon_update.weapon_specialization_id)
+    )
+    specialization = specialization_result.scalar_one_or_none()
+    if specialization is None:
+        raise HTTPException(status_code=404, detail="Specialization is not found")
+
+    damage_type_result = await session.execute(
+        select(DamageType).where(DamageType.id == weapon_update.damage_type_id)
+    )
+    damage_type = damage_type_result.scalar_one_or_none()
+    if damage_type is None:
+        raise HTTPException(status_code=404, detail="Damage type is not found")
+    print(damage_type)
+
+    second_damage_type_result = await session.execute(
+        select(DamageType).where(DamageType.id == weapon_update.second_damage_type_id)
+    )
+    second_damage_type = second_damage_type_result.scalar_one_or_none()
+    if second_damage_type is None:
+        raise HTTPException(status_code=404, detail="Damage type is not found")
+
+    weapon_traits_result = await session.execute(
+        select(WeaponTrait).where(WeaponTrait.id.in_(weapon_update.weapon_traits))
+    )
+    existing_weapon_traits = weapon_traits_result.scalars().all()
+
+    for key, value in weapon_update.model_dump(exclude_unset=True).items():
+        if hasattr(weapon, key) and key not in [
+            "weapon_traits", "weapon_specializations", "currency_id",
+            "weapon_group_id", "damage_type_id", "second_damage_type_id"
+        ]:
+            setattr(weapon, key, value)
+
+    weapon.weapon_group = weapon_group
+    weapon.weapon_specialization = specialization
+    weapon.currency = currency
+    weapon.damage_type = damage_type
+    weapon.second_damage_type = second_damage_type
+    weapon.weapon_traits.clear()
+    for value in existing_weapon_traits:
+        weapon.weapon_traits.append(value)
+    await session.commit()
+    await session.refresh(weapon)
+    return weapon
 
 
 async def weapon_delete(session: AsyncSession, weapon: Weapon):

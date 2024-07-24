@@ -92,6 +92,7 @@ class WeaponUpdate(BaseModel):
     level: int = Field(ge=0, le=20, default=1)
     weapon_group_id: Optional[int] = None
     weapon_specialization_id: Optional[int] = None
+    weapon_traits: Optional[list[int]] = None
     currency_id: int
     price: int
     weight: PositiveFloat
