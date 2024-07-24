@@ -17,7 +17,8 @@ async def weapon_detail(session: AsyncSession, weapon_id: int) -> Weapon | None:
             selectinload(Weapon.second_damage_type),
             selectinload(Weapon.weapon_group),
             selectinload(Weapon.weapon_specialization),
-            selectinload(Weapon.weapon_traits)
+            selectinload(Weapon.weapon_traits),
+            selectinload(Weapon.currency)
         )
     )
 
@@ -28,7 +29,8 @@ async def weapon_list(session: AsyncSession) -> list[Weapon]:
         selectinload(Weapon.second_damage_type),
         selectinload(Weapon.weapon_group),
         selectinload(Weapon.weapon_specialization),
-        selectinload(Weapon.weapon_traits)
+        selectinload(Weapon.weapon_traits),
+        selectinload(Weapon.currency)
     ).order_by(Weapon.id)
     result: Result = await session.execute(stmt)
     weapons = result.scalars().all()

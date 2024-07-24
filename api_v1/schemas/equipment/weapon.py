@@ -32,19 +32,20 @@ class WeaponRead(BaseModel):
     name: Annotated[str, MaxLen(200)]
     description: str
     damage_type: GeneralBase
-    second_damage_type: Optional[GeneralBase] = None
+    second_damage_type: GeneralBase
     dice: Dice
     dice_count: int
     bonus_damage: int
-    second_dice: Optional[Dice] = None
-    second_dice_count: Optional[int] = None
-    second_bonus_damage: Optional[int] = None
-    range: Optional[int] = None
-    reload: Optional[int] = None
-    two_hands: bool = False
-    level: int = Field(ge=0, le=20, default=1)
-    weapon_group: Optional[GeneralDescriptionBase] = None
-    weapon_specialization: Optional[GeneralDescriptionBase] = None
+    second_dice: Dice
+    second_dice_count: int
+    second_bonus_damage: int
+    range: int
+    reload: int
+    two_hands: bool
+    level: int
+    weapon_group: GeneralDescriptionBase
+    weapon_specialization: GeneralDescriptionBase
+    weapon_traits: list[GeneralDescriptionBase]
     currency: Currency
     price: int
     weight: PositiveFloat
