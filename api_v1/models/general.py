@@ -20,19 +20,11 @@ class GeneralBase(Base):
     __abstract__ = True
     name: Mapped[str] = mapped_column(String(500), unique=True, index=True)
 
-    @declared_attr
-    def __str__(cls):
-        def __str__(self):
-            return f"{self.__class__.__name__}(id={self.id}, name={self.name!r})"
+    def __str__(self):
+        return f"{self.__class__.__name__}(id={self.id}, name={self.name!r})"
 
-        return __str__
-
-    @declared_attr
-    def __repr__(cls):
-        def __repr__(self):
-            return self.name
-
-        return __repr__
+    def __repr__(self):
+        return self.name
 
 
 class GeneralDescriptionBase(Base):
