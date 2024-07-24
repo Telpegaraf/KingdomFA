@@ -47,3 +47,5 @@ class Spell(
     cost: Mapped[str] = mapped_column(String(200), nullable=True)
     target: Mapped[str] = mapped_column(String(200))
     source: Mapped[str] = mapped_column(String(200))
+
+    #TODO Trait and Component => M2m
