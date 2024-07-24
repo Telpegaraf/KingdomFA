@@ -107,7 +107,7 @@ async def weapon_create(
     session.add(weapon)
     await session.commit()
     await session.refresh(weapon)
-    return weapon
+    return await weapon_detail(session=session, weapon_id=weapon.id)
 
 
 async def weapon_update(

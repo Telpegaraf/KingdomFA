@@ -38,7 +38,7 @@ async def weapon_list(
 @weapon_router.post(
     "/create/",
     description="Create a new Weapon object",
-    #response_model=schemas.Weapon,
+    response_model=schemas.Weapon,
     status_code=status.HTTP_201_CREATED
 )
 async def weapon_create(
