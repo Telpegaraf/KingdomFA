@@ -15,14 +15,12 @@ http_bearer = HTTPBearer()
 spell_router = APIRouter(prefix="/spell", tags=["Spell"])
 
 
-spell_router.get(
+@spell_router.get(
     "/{spell_id}/",
     description="Return the Spell object, depending on ID",
     response_model=schemas.SpellRead
 )
-async def spell_detail(
-        spell: Spell = Depends(get_spell),
-) -> Spell:
+async def spell_detail(spell: Spell = Depends(get_spell)) -> Spell:
     return spell
 
 
@@ -38,21 +36,20 @@ async def spell_list(
 
 
 @spell_router.post(
-    "/create/{spell_id}/",
+    "/create/",
     description="Create a new Spell object",
     response_model=schemas.SpellRead,
     status_code=status.HTTP_201_CREATED
 )
 async def spell_create(
         spell_in: schemas.SpellCreate,
-        spell: Spell = Depends(get_spell),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> Spell:
-    return await crud.spell_create(session=session, spell=spell, spell_in=spell_in)
+    return await crud.spell_create(session=session, spell_in=spell_in)
 
 
 @spell_router.patch(
-    "update/{spell_id}/",
+    "/update/{spell_id}/",
     description="Update the Spell object, depending on ID",
     response_model=schemas.SpellRead
 )
@@ -65,7 +62,7 @@ async def spell_update(
 
 
 @spell_router.delete(
-    "delete/{spell_id}/",
+    "/delete/{spell_id}/",
     description="Delete the Spell object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

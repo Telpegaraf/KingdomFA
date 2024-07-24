@@ -37,7 +37,6 @@ async def spell_list(session: AsyncSession) -> list[Spell]:
 async def spell_create(
         session: AsyncSession,
         spell_in: SpellCreate,
-        spell: Spell
 ) -> Spell:
     spell_cast_result = await session.execute(
         select(SpellCast).where(SpellCast.id == spell_in.spell_cast_id)
@@ -58,21 +57,22 @@ async def spell_create(
     if spell_school is None:
         raise HTTPException(status_code=404, detail="Spell School is not found")
     spell_component_result = await session.execute(
-        select(SpellSchool).where(SpellSchool.id == spell_in.spell_school_id)
+        select(SpellComponent).where(SpellComponent.id == spell_in.spell_component_id)
     )
     spell_component = spell_component_result.scalar_one_or_none()
     spell_trait_result = await session.execute(
-        select(SpellSchool).where(SpellSchool.id == spell_in.spell_school_id)
+        select(SpellTrait).where(SpellTrait.id == spell_in.spell_trait_id)
     )
     spell_trait = spell_trait_result.scalar_one_or_none()
     spell = Spell(
         name=spell_in.name,
         description=spell_in.description,
         level=spell_in.level,
-        spell_range=spell_in.duration,
+        spell_range=spell_in.spell_range,
+        duration=spell_in.duration,
         sustain=spell_in.sustain,
         ritual=spell_in.ritual,
-        secondary_caster=spell_in.secondary_casters,
+        secondary_casters=spell_in.secondary_casters,
         cost=spell_in.cost,
         target=spell_in.target,
         source=spell_in.source,
@@ -84,7 +84,7 @@ async def spell_create(
     )
     session.add(spell)
     await session.commit()
-    await session.refresh()
+    await session.refresh(spell)
     return await spell_detail(session=session, spell_id=spell.id)
 
 
@@ -112,27 +112,23 @@ async def spell_update(
     if spell_school is None:
         raise HTTPException(status_code=404, detail="Spell School is not found")
     spell_component_result = await session.execute(
-        select(SpellSchool).where(SpellSchool.id == spell_update.spell_school_id)
+        select(SpellComponent).where(SpellComponent.id == spell_update.spell_component_id)
     )
     spell_component = spell_component_result.scalar_one_or_none()
     spell_trait_result = await session.execute(
-        select(SpellSchool).where(SpellSchool.id == spell_update.spell_school_id)
+        select(SpellTrait).where(SpellTrait.id == spell_update.spell_trait_id)
     )
     spell_trait = spell_trait_result.scalar_one_or_none()
-    spell.name = spell_update.name,
-    spell.description = spell_update.description,
-    spell.level = spell_update.level,
-    spell.spell_range = spell_update.duration,
-    spell.sustain = spell_update.sustain,
-    spell.ritual = spell_update.ritual,
-    spell.secondary_caster = spell_update.secondary_casters,
-    spell.cost = spell_update.cost,
-    spell.target = spell_update.target,
-    spell.source = spell_update.source,
-    spell.spell_cast = spell_cast,
-    spell.spell_tradition = spell_tradition,
-    spell.spell_component = spell_component,
-    spell.spell_school = spell_school,
+    for key, value in spell_update.model_dump(exclude_unset=True).items():
+        if hasattr(spell, key) and key not in [
+            "spell_cast_id", "spell_tradition_id", "spell_component_id",
+            "spell_school_id", "spell_trait_id",
+        ]:
+            setattr(spell, key, value)
+    spell.spell_cast = spell_cast
+    spell.spell_tradition = spell_tradition
+    spell.spell_component = spell_component
+    spell.spell_school = spell_school
     spell.spell_trait = spell_trait
     await session.commit()
     await session.refresh(spell)
