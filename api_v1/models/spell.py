@@ -26,7 +26,7 @@ class Spell(
     _spell_cast_back_populate = "spells"
     _spell_school_back_populate = "spells"
 
-    name: Mapped[str] = mapped_column(String(200))
+    name: Mapped[str] = mapped_column(String(200), unique=True)
     description: Mapped[str] = mapped_column(String(1000))
     level: Mapped[str] = mapped_column(SmallInteger, default=0)
     spell_range: Mapped[int] = mapped_column(SmallInteger, default=0)

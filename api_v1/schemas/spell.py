@@ -18,8 +18,8 @@ class SpellBase(BaseModel):
     spell_tradition: GeneralDescriptionBase
     spell_cast: GeneralBase
     spell_school: GeneralDescriptionBase
-    spell_component: Optional[GeneralDescriptionBase]
-    spell_trait: Optional[GeneralDescriptionBase]
+    spell_component: Optional[Annotated[str, MaxLen(200)]]
+    spell_traits: Optional[list[GeneralDescriptionBase]]
 
 
 class SpellRead(BaseModel):
@@ -37,8 +37,8 @@ class SpellRead(BaseModel):
     spell_tradition: GeneralDescriptionBase
     spell_cast: GeneralBase
     spell_school: GeneralDescriptionBase
-    spell_component: Optional[GeneralDescriptionBase]
-    spell_trait: Optional[GeneralDescriptionBase]
+    spell_component: Optional[Annotated[str, MaxLen(200)]]
+    spell_traits: Optional[list[GeneralDescriptionBase]]
 
 
 class SpellCreate(BaseModel):
@@ -56,8 +56,8 @@ class SpellCreate(BaseModel):
     spell_tradition_id: int
     spell_cast_id: int
     spell_school_id: int
-    spell_component_id: int
-    spell_trait_id: int
+    spell_component: Optional[Annotated[str, MaxLen(200)]]
+    spell_traits: Optional[list[int]]
 
 
 class SpellUpdate(BaseModel):
@@ -75,8 +75,8 @@ class SpellUpdate(BaseModel):
     spell_tradition_id: int
     spell_cast_id: int
     spell_school_id: int
-    spell_component_id: int
-    spell_trait_id: int
+    spell_component_id: Optional[Annotated[str, MaxLen(200)]]
+    spell_traits: Optional[list[int]]
 
 
 class Spell(BaseModel):

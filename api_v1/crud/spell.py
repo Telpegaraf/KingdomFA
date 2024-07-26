@@ -3,31 +3,29 @@ from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from api_v1.schemas.spell import SpellRead, SpellCreate, SpellUpdate
+from api_v1.schemas.spell import SpellCreate, SpellUpdate
 from api_v1.models.spell import Spell
-from api_v1.models.general import SpellCast, SpellTrait, SpellSchool, SpellComponent, SpellTradition
+from api_v1.models.general import SpellCast, SpellTrait, SpellSchool, SpellTradition
 
 
 async def spell_detail(session: AsyncSession, spell_id: int) -> Spell:
     return await session.scalar(
         select(Spell).
         where(Spell.id == spell_id).options(
-            selectinload(Spell.spell_trait),
+            selectinload(Spell.spell_traits),
             selectinload(Spell.spell_school),
             selectinload(Spell.spell_cast),
             selectinload(Spell.spell_tradition),
-            selectinload(Spell.spell_component)
         )
     )
 
 
 async def spell_list(session: AsyncSession) -> list[Spell]:
     stmt = select(Spell).options(
-            selectinload(Spell.spell_trait),
+            selectinload(Spell.spell_traits),
             selectinload(Spell.spell_school),
             selectinload(Spell.spell_cast),
             selectinload(Spell.spell_tradition),
-            selectinload(Spell.spell_component)
         ).order_by(Spell.id)
     result: Result = await session.execute(stmt)
     spells = result.scalars().all()
@@ -56,14 +54,10 @@ async def spell_create(
     spell_school = spell_school_result.scalar_one_or_none()
     if spell_school is None:
         raise HTTPException(status_code=404, detail="Spell School is not found")
-    spell_component_result = await session.execute(
-        select(SpellComponent).where(SpellComponent.id == spell_in.spell_component_id)
+    spell_traits_result = await session.execute(
+        select(SpellTrait).where(SpellTrait.id.in_(spell_in.spell_traits))
     )
-    spell_component = spell_component_result.scalar_one_or_none()
-    spell_trait_result = await session.execute(
-        select(SpellTrait).where(SpellTrait.id == spell_in.spell_trait_id)
-    )
-    spell_trait = spell_trait_result.scalar_one_or_none()
+    existing_spell_traits = spell_traits_result.scalars().all()
     spell = Spell(
         name=spell_in.name,
         description=spell_in.description,
@@ -76,11 +70,11 @@ async def spell_create(
         cost=spell_in.cost,
         target=spell_in.target,
         source=spell_in.source,
+        spell_component=spell_in.spell_component,
         spell_cast=spell_cast,
         spell_tradition=spell_tradition,
-        spell_component=spell_component,
         spell_school=spell_school,
-        spell_trait=spell_trait
+        spell_traits=existing_spell_traits
     )
     session.add(spell)
     await session.commit()
@@ -111,25 +105,22 @@ async def spell_update(
     spell_school = spell_school_result.scalar_one_or_none()
     if spell_school is None:
         raise HTTPException(status_code=404, detail="Spell School is not found")
-    spell_component_result = await session.execute(
-        select(SpellComponent).where(SpellComponent.id == spell_update.spell_component_id)
+    spell_traits_result = await session.execute(
+        select(SpellTrait).where(SpellTrait.id.in_(spell_update.spell_traits))
     )
-    spell_component = spell_component_result.scalar_one_or_none()
-    spell_trait_result = await session.execute(
-        select(SpellTrait).where(SpellTrait.id == spell_update.spell_trait_id)
-    )
-    spell_trait = spell_trait_result.scalar_one_or_none()
+    existing_spell_traits = spell_traits_result.scalars().all()
     for key, value in spell_update.model_dump(exclude_unset=True).items():
         if hasattr(spell, key) and key not in [
-            "spell_cast_id", "spell_tradition_id", "spell_component_id",
-            "spell_school_id", "spell_trait_id",
+            "spell_cast_id", "spell_tradition_id",
+            "spell_school_id", "spell_traits",
         ]:
             setattr(spell, key, value)
     spell.spell_cast = spell_cast
     spell.spell_tradition = spell_tradition
-    spell.spell_component = spell_component
     spell.spell_school = spell_school
-    spell.spell_trait = spell_trait
+    spell.spell_traits.clear()
+    for value in existing_spell_traits:
+        spell.spell_traits.append(value)
     await session.commit()
     await session.refresh(spell)
     return spell
