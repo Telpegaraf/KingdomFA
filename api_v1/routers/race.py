@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import database
 from api_v1.models.race import Race
 from api_v1.schemas import race as schemas
 from api_v1.crud import race as crud

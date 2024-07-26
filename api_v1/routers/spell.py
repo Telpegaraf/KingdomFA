@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import database
 from api_v1.models.spell import Spell
 from api_v1.schemas import spell as schemas
 from api_v1.crud import spell as crud
