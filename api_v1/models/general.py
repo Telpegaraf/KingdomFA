@@ -114,10 +114,6 @@ class SpellTrait(GeneralDescriptionBase):
     spells: Mapped[list["Spell"]] = relationship(back_populates='spell_trait')
 
 
-class SpellComponent(GeneralDescriptionBase):
-    spells: Mapped[list["Spell"]] = relationship(back_populates='spell_component')
-
-
 class ArmorTrait(GeneralDescriptionBase):
     armors: Mapped[list["Armor"]] = relationship(
         secondary='armor_trait_association',

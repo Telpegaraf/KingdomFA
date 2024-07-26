@@ -5,7 +5,6 @@ from api_v1.models.base_model import Base
 
 from api_v1.models.mixins.spell import (
     SpellTraditionMixin,
-    SpellComponentMixin,
     SpellCastMixin,
     SpellSchoolMixin,
     SpellTraitMixin
@@ -22,15 +21,12 @@ if TYPE_CHECKING:
 
 class Spell(
     SpellTraditionMixin,
-    SpellComponentMixin,
     SpellCastMixin,
     SpellSchoolMixin,
     SpellTraitMixin,
     Base
 ):
     _spell_tradition_back_populate = "spells"
-    _spell_component_back_populate = "spells"
-    _spell_component_id_nullable = True
     _spell_cast_back_populate = "spells"
     _spell_school_back_populate = "spells"
     _spell_trait_back_populate = "spells"
@@ -47,5 +43,6 @@ class Spell(
     cost: Mapped[str] = mapped_column(String(200), nullable=True)
     target: Mapped[str] = mapped_column(String(200))
     source: Mapped[str] = mapped_column(String(200))
+    spell_component: Mapped[str] = mapped_column(String(200), nullable=True)
 
     #TODO Trait and Component => M2m

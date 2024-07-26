@@ -35,28 +35,6 @@ class SpellTraditionMixin:
         )
 
 
-class SpellComponentMixin:
-    _spell_component_id_nullable: bool = False
-    _spell_component_id_unique: bool = False
-    _spell_component_back_populate: str | None = None
-
-    @declared_attr
-    def spell_component_id(cls) -> Mapped[int]:
-        return mapped_column(
-            ForeignKey(
-                "spell_components.id", ondelete="CASCADE"
-            ),
-            unique=cls._spell_component_id_unique,
-            nullable=cls._spell_component_id_nullable
-        )
-
-    @declared_attr
-    def spell_component(cls) -> Mapped["SpellComponent"]:
-        return relationship(
-            back_populates=cls._spell_component_back_populate
-        )
-
-
 class SpellSchoolMixin:
     _spell_school_id_nullable: bool = False
     _spell_school_id_unique: bool = False

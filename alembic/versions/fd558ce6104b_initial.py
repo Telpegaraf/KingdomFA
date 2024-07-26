@@ -1,20 +1,19 @@
 """initial
 
-Revision ID: 1ec35c2451e9
+Revision ID: fd558ce6104b
 Revises: 
-Create Date: 2024-07-02 16:20:16.918503
+Create Date: 2024-07-26 13:18:33.822177
 
 """
 
 from typing import Sequence, Union
 
-import fastapi_users_db_sqlalchemy
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "1ec35c2451e9"
+revision: str = "fd558ce6104b"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -48,6 +47,7 @@ def upgrade() -> None:
         sa.Column("broken_threshold", sa.SmallInteger(), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("name"),
     )
     op.create_table(
         "armor_specializations",
@@ -167,16 +167,6 @@ def upgrade() -> None:
     )
     op.create_index(op.f("ix_spell_casts_name"), "spell_casts", ["name"], unique=True)
     op.create_table(
-        "spell_components",
-        sa.Column("name", sa.String(length=500), nullable=False),
-        sa.Column("description", sa.String(length=500), nullable=False),
-        sa.Column("id", sa.Integer(), nullable=False),
-        sa.PrimaryKeyConstraint("id"),
-    )
-    op.create_index(
-        op.f("ix_spell_components_name"), "spell_components", ["name"], unique=True
-    )
-    op.create_table(
         "spell_schools",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
@@ -205,17 +195,6 @@ def upgrade() -> None:
     )
     op.create_index(op.f("ix_spell_traits_name"), "spell_traits", ["name"], unique=True)
     op.create_table(
-        "test_users",
-        sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("email", sa.String(length=320), nullable=False),
-        sa.Column("hashed_password", sa.String(length=1024), nullable=False),
-        sa.Column("is_active", sa.Boolean(), nullable=False),
-        sa.Column("is_superuser", sa.Boolean(), nullable=False),
-        sa.Column("is_verified", sa.Boolean(), nullable=False),
-        sa.PrimaryKeyConstraint("id"),
-    )
-    op.create_index(op.f("ix_test_users_email"), "test_users", ["email"], unique=True)
-    op.create_table(
         "titles",
         sa.Column("name", sa.String(length=500), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
@@ -235,6 +214,7 @@ def upgrade() -> None:
         sa.Column("password", sa.String(length=120), nullable=False),
         sa.Column("email", sa.String(length=100), nullable=True),
         sa.Column("is_active", sa.Boolean(), nullable=False),
+        sa.Column("is_superuser", sa.Boolean(), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("username"),
@@ -290,25 +270,6 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_worn_traits_name"), "worn_traits", ["name"], unique=True)
-    op.create_table(
-        "access_tokens",
-        sa.Column("id", sa.Integer(), nullable=True),
-        sa.Column("user_id", sa.Integer(), nullable=False),
-        sa.Column("token", sa.String(length=43), nullable=False),
-        sa.Column(
-            "created_at",
-            fastapi_users_db_sqlalchemy.generics.TIMESTAMPAware(timezone=True),
-            nullable=False,
-        ),
-        sa.ForeignKeyConstraint(["user_id"], ["test_users.id"], ondelete="CASCADE"),
-        sa.PrimaryKeyConstraint("token"),
-    )
-    op.create_index(
-        op.f("ix_access_tokens_created_at"),
-        "access_tokens",
-        ["created_at"],
-        unique=False,
-    )
     op.create_table(
         "armors",
         sa.Column("armor_group_id", sa.Integer(), nullable=False),
@@ -507,17 +468,14 @@ def upgrade() -> None:
         sa.Column("cost", sa.String(length=200), nullable=True),
         sa.Column("target", sa.String(length=200), nullable=False),
         sa.Column("source", sa.String(length=200), nullable=False),
+        sa.Column("spell_component", sa.String(length=200), nullable=True),
         sa.Column("spell_tradition_id", sa.Integer(), nullable=False),
-        sa.Column("spell_component_id", sa.Integer(), nullable=True),
         sa.Column("spell_cast_id", sa.Integer(), nullable=False),
         sa.Column("spell_school_id", sa.Integer(), nullable=False),
         sa.Column("spell_trait_id", sa.Integer(), nullable=True),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(
             ["spell_cast_id"], ["spell_casts.id"], ondelete="CASCADE"
-        ),
-        sa.ForeignKeyConstraint(
-            ["spell_component_id"], ["spell_components.id"], ondelete="CASCADE"
         ),
         sa.ForeignKeyConstraint(
             ["spell_school_id"], ["spell_schools.id"], ondelete="CASCADE"
@@ -1111,8 +1069,6 @@ def downgrade() -> None:
     op.drop_table("god_domain")
     op.drop_table("character_classes")
     op.drop_table("armors")
-    op.drop_index(op.f("ix_access_tokens_created_at"), table_name="access_tokens")
-    op.drop_table("access_tokens")
     op.drop_index(op.f("ix_worn_traits_name"), table_name="worn_traits")
     op.drop_table("worn_traits")
     op.drop_index(op.f("ix_weapon_traits_name"), table_name="weapon_traits")
@@ -1130,16 +1086,12 @@ def downgrade() -> None:
     op.drop_table("triggers")
     op.drop_index(op.f("ix_titles_name"), table_name="titles")
     op.drop_table("titles")
-    op.drop_index(op.f("ix_test_users_email"), table_name="test_users")
-    op.drop_table("test_users")
     op.drop_index(op.f("ix_spell_traits_name"), table_name="spell_traits")
     op.drop_table("spell_traits")
     op.drop_index(op.f("ix_spell_traditions_name"), table_name="spell_traditions")
     op.drop_table("spell_traditions")
     op.drop_index(op.f("ix_spell_schools_name"), table_name="spell_schools")
     op.drop_table("spell_schools")
-    op.drop_index(op.f("ix_spell_components_name"), table_name="spell_components")
-    op.drop_table("spell_components")
     op.drop_index(op.f("ix_spell_casts_name"), table_name="spell_casts")
     op.drop_table("spell_casts")
     op.drop_table("slots")
