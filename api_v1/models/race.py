@@ -8,7 +8,9 @@ if TYPE_CHECKING:
 
 
 class Race(Base):
+    # field
     name: Mapped[str] = mapped_column(String(50), unique=True)
+    # relations
     characters: Mapped[list["Character"]] = relationship(back_populates="race")
 
     def __repr__(self):
