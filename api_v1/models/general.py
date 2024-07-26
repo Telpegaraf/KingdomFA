@@ -1,5 +1,5 @@
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column, declared_attr, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 
 from api_v1.models import Base
@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from api_v1.models.associations.armor_trait_association import ArmorTraitAssociation
     from api_v1.models.associations.weapon_trait_association import WeaponTraitAssociation
     from api_v1.models.associations.armor_specialization_association import ArmorSpecializationAssociation
+    from api_v1.models.associations.spell_trait_association import SpellTraitAssociation
     from api_v1.models.equipment import Worn, Armor, Weapon
     from api_v1.models.spell import Spell
 
@@ -111,7 +112,11 @@ class SpellSchool(GeneralDescriptionBase):
 
 
 class SpellTrait(GeneralDescriptionBase):
-    spells: Mapped[list["Spell"]] = relationship(back_populates='spell_trait')
+    spells: Mapped[list["Spell"]] = relationship(
+        secondary='spell_trait_association',
+        back_populates='spell_traits'
+    )
+    spell_details: Mapped[list["SpellTraitAssociation"]] = relationship(back_populates='spell_trait')
 
 
 class ArmorTrait(GeneralDescriptionBase):

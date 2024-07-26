@@ -1,21 +1,18 @@
-from sqlalchemy import ForeignKey, String, SmallInteger, Boolean
+from sqlalchemy import String, SmallInteger, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 from api_v1.models.base_model import Base
 
+from api_v1.models.associations.spell_trait_association import SpellTraitAssociation
 from api_v1.models.mixins.spell import (
     SpellTraditionMixin,
     SpellCastMixin,
     SpellSchoolMixin,
-    SpellTraitMixin
 )
 
 if TYPE_CHECKING:
     from api_v1.models.general import (
-        SpellCast,
         SpellTrait,
-        SpellSchool,
-        SpellComponent
     )
 
 
@@ -23,14 +20,11 @@ class Spell(
     SpellTraditionMixin,
     SpellCastMixin,
     SpellSchoolMixin,
-    SpellTraitMixin,
     Base
 ):
     _spell_tradition_back_populate = "spells"
     _spell_cast_back_populate = "spells"
     _spell_school_back_populate = "spells"
-    _spell_trait_back_populate = "spells"
-    _spell_trait_id_nullable = True
 
     name: Mapped[str] = mapped_column(String(200))
     description: Mapped[str] = mapped_column(String(1000))
@@ -45,4 +39,10 @@ class Spell(
     source: Mapped[str] = mapped_column(String(200))
     spell_component: Mapped[str] = mapped_column(String(200), nullable=True)
 
-    #TODO Trait and Component => M2m
+    spell_traits: Mapped[list["SpellTrait"]] = relationship(
+        secondary='spell_trait_association',
+        back_populates='spells'
+    )
+    spell_trait_details: Mapped[list["SpellTraitAssociation"]] = relationship(
+        back_populates='spell', cascade="all, delete-orphan"
+    )

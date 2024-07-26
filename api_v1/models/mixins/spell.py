@@ -7,7 +7,6 @@ from sqlalchemy.orm import declared_attr, Mapped, mapped_column, relationship
 if TYPE_CHECKING:
     from api_v1.models.general import(
         SpellTradition,
-        SpellComponent,
         SpellSchool,
         SpellCast,
         SpellTrait

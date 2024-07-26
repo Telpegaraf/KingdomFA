@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: fd558ce6104b
+Revision ID: 42a7be2cbae1
 Revises: 
-Create Date: 2024-07-26 13:18:33.822177
+Create Date: 2024-07-26 13:26:55.107940
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "fd558ce6104b"
+revision: str = "42a7be2cbae1"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -472,7 +472,6 @@ def upgrade() -> None:
         sa.Column("spell_tradition_id", sa.Integer(), nullable=False),
         sa.Column("spell_cast_id", sa.Integer(), nullable=False),
         sa.Column("spell_school_id", sa.Integer(), nullable=False),
-        sa.Column("spell_trait_id", sa.Integer(), nullable=True),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(
             ["spell_cast_id"], ["spell_casts.id"], ondelete="CASCADE"
@@ -482,9 +481,6 @@ def upgrade() -> None:
         ),
         sa.ForeignKeyConstraint(
             ["spell_tradition_id"], ["spell_traditions.id"], ondelete="CASCADE"
-        ),
-        sa.ForeignKeyConstraint(
-            ["spell_trait_id"], ["spell_traits.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -670,6 +666,20 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
+    )
+    op.create_table(
+        "spell_trait_association",
+        sa.Column("spell_id", sa.Integer(), nullable=False),
+        sa.Column("spell_trait_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(["spell_id"], ["spells.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(
+            ["spell_trait_id"], ["spell_traits.id"], ondelete="CASCADE"
+        ),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint(
+            "spell_id", "spell_trait_id", name="idx_unique_spell_trait_association"
+        ),
     )
     op.create_table(
         "weapon_trait_association",
@@ -1058,6 +1068,7 @@ def downgrade() -> None:
     op.drop_table("backgrounds")
     op.drop_table("worn_item_trait")
     op.drop_table("weapon_trait_association")
+    op.drop_table("spell_trait_association")
     op.drop_table("feats")
     op.drop_table("characters")
     op.drop_table("armor_trait_association")
