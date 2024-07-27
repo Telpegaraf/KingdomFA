@@ -6,6 +6,7 @@ from sqlalchemy.orm import selectinload
 from api_v1.schemas.spell import SpellCreate, SpellUpdate
 from api_v1.models.spell import Spell
 from api_v1.models.general import SpellCast, SpellTrait, SpellSchool, SpellTradition
+from api_v1.utils.model_result import get_model_result, get_model_m2m_result
 
 
 async def spell_detail(session: AsyncSession, spell_id: int) -> Spell:
@@ -36,28 +37,12 @@ async def spell_create(
         session: AsyncSession,
         spell_in: SpellCreate,
 ) -> Spell:
-    spell_cast_result = await session.execute(
-        select(SpellCast).where(SpellCast.id == spell_in.spell_cast_id)
-    )
-    spell_cast = spell_cast_result.scalar_one_or_none()
-    if spell_cast is None:
-        raise HTTPException(status_code=404, detail="Spell Cast is not found")
-    spell_tradition_result = await session.execute(
-        select(SpellTradition).where(SpellTradition.id == spell_in.spell_tradition_id)
-    )
-    spell_tradition = spell_tradition_result.scalar_one_or_none()
-    if spell_tradition is None:
-        raise HTTPException(status_code=404, detail="Spell Tradition is not found")
-    spell_school_result = await session.execute(
-        select(SpellSchool).where(SpellSchool.id == spell_in.spell_school_id)
-    )
-    spell_school = spell_school_result.scalar_one_or_none()
-    if spell_school is None:
-        raise HTTPException(status_code=404, detail="Spell School is not found")
-    spell_traits_result = await session.execute(
-        select(SpellTrait).where(SpellTrait.id.in_(spell_in.spell_traits))
-    )
-    existing_spell_traits = spell_traits_result.scalars().all()
+    spell_cast = await get_model_result(model=SpellCast, object_id=spell_in.spell_cast_id, session=session)
+    spell_tradition = await get_model_result(model=SpellTradition,
+                                             object_id=spell_in.spell_tradition_id, session=session)
+    spell_school = await get_model_result(model=SpellSchool, object_id=spell_in.spell_school_id, session=session)
+    existing_spell_traits = await get_model_m2m_result(model=SpellTrait,
+                                                       object_list=spell_in.spell_traits, session=session)
     spell = Spell(
         name=spell_in.name,
         description=spell_in.description,
@@ -87,28 +72,12 @@ async def spell_update(
         spell_update: SpellUpdate,
         spell: Spell
 ) -> Spell:
-    spell_cast_result = await session.execute(
-        select(SpellCast).where(SpellCast.id == spell_update.spell_cast_id)
-    )
-    spell_cast = spell_cast_result.scalar_one_or_none()
-    if spell_cast is None:
-        raise HTTPException(status_code=404, detail="Spell Cast is not found")
-    spell_tradition_result = await session.execute(
-        select(SpellTradition).where(SpellTradition.id == spell_update.spell_tradition_id)
-    )
-    spell_tradition = spell_tradition_result.scalar_one_or_none()
-    if spell_tradition is None:
-        raise HTTPException(status_code=404, detail="Spell Tradition is not found")
-    spell_school_result = await session.execute(
-        select(SpellSchool).where(SpellSchool.id == spell_update.spell_school_id)
-    )
-    spell_school = spell_school_result.scalar_one_or_none()
-    if spell_school is None:
-        raise HTTPException(status_code=404, detail="Spell School is not found")
-    spell_traits_result = await session.execute(
-        select(SpellTrait).where(SpellTrait.id.in_(spell_update.spell_traits))
-    )
-    existing_spell_traits = spell_traits_result.scalars().all()
+    spell_cast = await get_model_result(model=SpellCast, object_id=spell_update.spell_cast_id, session=session)
+    spell_tradition = await get_model_result(model=SpellTradition,
+                                             object_id=spell_update.spell_tradition_id, session=session)
+    spell_school = await get_model_result(model=SpellSchool, object_id=spell_update.spell_school_id, session=session)
+    existing_spell_traits = await get_model_m2m_result(model=SpellTrait,
+                                                       object_list=spell_update.spell_traits, session=session)
     for key, value in spell_update.model_dump(exclude_unset=True).items():
         if hasattr(spell, key) and key not in [
             "spell_cast_id", "spell_tradition_id",
