@@ -35,7 +35,7 @@ class CharacterRead(BaseModel):
     race: Race
     character_class: CharacterClass
     god: God
-    domain: Domain
+    domain: Optional[Domain]
 
 
 class CharacterCreate(BaseModel):
