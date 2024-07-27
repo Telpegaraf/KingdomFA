@@ -35,7 +35,7 @@ class CharacterRead(BaseModel):
     race: Race
     character_class: CharacterClass
     god: God
-    domain: Optional[Domain]
+    domain: Domain
 
 
 class CharacterCreate(BaseModel):
@@ -46,7 +46,7 @@ class CharacterCreate(BaseModel):
     size: Optional[int]
     level: Optional[int] = 1
     description: Optional[str]
-    user_id: [int]
+    user_id: int
     race_id: int
     character_class_id: int
     god_id: int
@@ -61,7 +61,7 @@ class CharacterUpdate(BaseModel):
     size: Optional[int]
     level: Optional[int] = 1
     description: Optional[str]
-    user_id: [int]
+    user_id: int
     race_id: int
     character_class_id: int
     god_id: int

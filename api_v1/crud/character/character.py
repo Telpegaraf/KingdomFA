@@ -17,7 +17,7 @@ async def character_detail(session: AsyncSession, character_id: int) -> Characte
         where(Character.id == character_id).options(
             selectinload(Character.race),
             selectinload(Character.character_class),
-            selectinload(Character.god),
+            selectinload(Character.god).selectinload(God.domains),
             selectinload(Character.domain),
             selectinload(Character.user),
         )
@@ -28,7 +28,7 @@ async def character_list(session: AsyncSession) -> list[Character]:
     stmt = select(Character).options(
         selectinload(Character.race),
         selectinload(Character.character_class),
-        selectinload(Character.god),
+        selectinload(Character.god).selectinload(God.domains),
         selectinload(Character.domain),
         selectinload(Character.user),
     ).order_by(Character.id)
@@ -42,7 +42,7 @@ async def character_create(
         character_in: CharacterCreate,
 ) -> Character:
     user_result = await session.execute(
-        select(User).where(User.id == character_in.user)
+        select(User).where(User.id == character_in.user_id)
     )
     user = user_result.scalar_one_or_none()
     if user is None:
@@ -97,7 +97,7 @@ async def character_update(
         character: Character
 ) -> Character:
     user_result = await session.execute(
-        select(User).where(User.id == character_update.user)
+        select(User).where(User.id == character_update.user_id)
     )
     user = user_result.scalar_one_or_none()
     if user is None:

@@ -11,7 +11,7 @@ from database import db_helper
 
 http_bearer = HTTPBearer()
 
-character_router = APIRouter(prefix="/character", tags=["character"])
+character_router = APIRouter(prefix="/character", tags=["Character"])
 
 
 @character_router.get(
