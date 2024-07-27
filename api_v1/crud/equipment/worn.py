@@ -11,6 +11,7 @@ from api_v1.schemas.equipment.worn import (
 )
 from api_v1.models.equipment import Worn, Slot, Currency
 from api_v1.models.general import WornTrait
+from api_v1.utils.model_result import get_model_result, get_model_m2m_result
 
 
 async def slot_list(session: AsyncSession):
@@ -74,24 +75,9 @@ async def worn_detail(session: AsyncSession, worn_id: int) -> Worn | None:
 
 
 async def worn_create(session: AsyncSession, worn_in: WornCreate) -> Worn:
-    slot_result = await session.execute(
-        select(Slot).where(Slot.id == worn_in.slot_id)
-    )
-    slot = slot_result.scalar_one_or_none()
-    if slot is None:
-        raise HTTPException(status_code=404, detail="Slot not found")
-
-    currency_result = await session.execute(
-        select(Currency).where(Currency.id == worn_in.currency_id)
-    )
-    currency = currency_result.scalar_one_or_none()
-    if currency is None:
-        raise HTTPException(status_code=404, detail="currency not found")
-
-    worn_traits_result = await session.execute(
-        select(WornTrait).where(WornTrait.id.in_(worn_in.worn_traits))
-    )
-    existing_worn_traits = worn_traits_result.scalars().all()
+    slot = await get_model_result(model=Slot, object_id=worn_in.slot_id, session=session)
+    currency = await get_model_result(model=Currency, object_id=worn_in.currency_id, session=session)
+    worn_traits = await get_model_m2m_result(model=WornTrait, object_list=worn_in.worn_traits, session=session)
 
     worn = Worn(
         name=worn_in.name,
@@ -101,7 +87,7 @@ async def worn_create(session: AsyncSession, worn_in: WornCreate) -> Worn:
         level=worn_in.level,
         activate=worn_in.activate,
         effect=worn_in.effect,
-        worn_traits=existing_worn_traits,
+        worn_traits=worn_traits,
         slot=slot,
         currency=currency
     )
@@ -116,30 +102,18 @@ async def worn_update(
         worn: Worn,
         session: AsyncSession,
 ) -> Worn:
-    slot_result = await session.execute(
-        select(Slot).where(Slot.id == worn_update.slot_id)
-    )
-    slot = slot_result.scalar_one_or_none()
-    if slot is None:
-        raise HTTPException(status_code=404, detail="Slot not found")
-
-    currency_result = await session.execute(
-        select(Currency).where(Currency.id == worn_update.currency_id)
-    )
-    currency = currency_result.scalar_one_or_none()
-    if currency is None:
-        raise HTTPException(status_code=404, detail="currency not found")
-    worn_traits_result = await session.execute(
-        select(WornTrait).where(WornTrait.id.in_(worn_update.worn_traits))
-    )
-    existing_worn_traits = worn_traits_result.scalars().all()
+    slot = await get_model_result(model=Slot, object_id=worn_update.slot_id, session=session)
+    currency = await get_model_result(model=Currency, object_id=worn_update.currency_id, session=session)
+    worn_traits = await get_model_m2m_result(model=WornTrait, object_list=worn_update.worn_traits, session=session)
 
     for key, value in worn_update.model_dump(exclude_unset=True).items():
         if hasattr(worn, key) and key not in ["slot_id", "currency_id", "worn_traits"]:
             setattr(worn, key, value)
 
+    worn.slot = slot
+    worn.currency = currency
     worn.worn_traits.clear()
-    for value in existing_worn_traits:
+    for value in worn_traits:
         worn.worn_traits.append(value)
 
     await session.commit()

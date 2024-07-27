@@ -4,9 +4,9 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from api_v1.utils.model_result import get_model_m2m_result, get_model_result
 from api_v1.schemas.equipment.armor import (
     ArmorGroupBase,
-    ArmorBase,
     ArmorCreate,
     ArmorUpdate
 )
@@ -84,30 +84,11 @@ async def armor_detail(session: AsyncSession, armor_id: int) -> Armor | None:
 
 
 async def armor_create(session: AsyncSession, armor_in: ArmorCreate) -> Armor:
-    armor_group_result = await session.execute(
-        select(ArmorGroup).where(ArmorGroup.id == armor_in.armor_group_id)
-    )
-    armor_group = armor_group_result.scalar_one_or_none()
-    if armor_group is None:
-        raise HTTPException(status_code=404, detail="Armor Group not found")
-
-    currency_result = await session.execute(
-        select(Currency).where(Currency.id == armor_in.currency_id)
-    )
-    currency = currency_result.scalar_one_or_none()
-    if currency is None:
-        raise HTTPException(status_code=404, detail="currency not found")
-
-    armor_traits_result = await session.execute(
-        select(ArmorTrait).where(ArmorTrait.id.in_(armor_in.armor_traits))
-    )
-    existing_armor_traits = armor_traits_result.scalars().all()
-
-    armor_specializations_result = await session.execute(
-        select(ArmorSpecialization).where(ArmorSpecialization.id.in_(armor_in.armor_specializations))
-    )
-    existing_armor_specializations = armor_specializations_result.scalars().all()
-
+    armor_group = await get_model_result(model=Armor, object_id=armor_in.armor_group_id, session=session)
+    currency = await get_model_result(model=Currency, object_id=armor_in.currency_id, session=session)
+    existing_armor_traits = await get_model_m2m_result(model=ArmorTrait, object_list=armor_in.armor_traits, session=session)
+    existing_armor_specializations = await get_model_m2m_result(model=ArmorSpecialization,
+                                                          object_list=armor_in.armor_specializations, session=session)
     armor = Armor(
         name=armor_in.name,
         description=armor_in.description,
@@ -136,30 +117,14 @@ async def armor_update(
         armor_update: ArmorUpdate,
         armor: Armor
 ):
-    armor_group_result = await session.execute(
-        select(ArmorGroup).where(ArmorGroup.id == armor_update.armor_group_id)
+    armor_group = await get_model_result(model=Armor, object_id=armor_update.armor_group_id, session=session)
+    currency = await get_model_result(model=Currency, object_id=armor_update.currency_id, session=session)
+    existing_armor_traits = await get_model_m2m_result(
+        model=ArmorTrait, object_list=armor_update.armor_traits, session=session
     )
-    armor_group = armor_group_result.scalar_one_or_none()
-    if armor_group is None:
-        raise HTTPException(status_code=404, detail="Armor Group not found")
-
-    currency_result = await session.execute(
-        select(Currency).where(Currency.id == armor_update.currency_id)
+    existing_armor_specializations = await get_model_m2m_result(
+        model=ArmorSpecialization, object_list=armor_update.armor_specializations, session=session
     )
-    currency = currency_result.scalar_one_or_none()
-    if currency is None:
-        raise HTTPException(status_code=404, detail="currency not found")
-
-    armor_traits_result = await session.execute(
-        select(ArmorTrait).where(ArmorTrait.id.in_(armor_update.armor_traits))
-    )
-    existing_armor_traits = armor_traits_result.scalars().all()
-
-    armor_specializations_result = await session.execute(
-        select(ArmorSpecialization).where(ArmorSpecialization.id.in_(armor_update.armor_specializations))
-    )
-    existing_armor_specializations = armor_specializations_result.scalars().all()
-
     for key, value in armor_update.model_dump(exclude_unset=True).items():
         if hasattr(armor, key) and key not in [
             "armor_traits", "armor_specializations", "currency_id", "armor_group_id"
