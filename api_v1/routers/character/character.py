@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api_v1.models.character import Character
 from api_v1.schemas.character import character as schemas
 from api_v1.crud.character import character as crud
-from api_v1.dependencies.character import get_character
+from api_v1.dependencies.character.character import get_character
 from database import db_helper
 
 
