@@ -75,6 +75,7 @@ class Character(
 
 class CharacterStat(CharacterMixin, Base):
     _character_back_populate = "character_stats"
+    _character_id_unique = True
 
     strength: Mapped[int] = mapped_column(SmallInteger, default=10)
     dexterity: Mapped[int] = mapped_column(SmallInteger, default=10)

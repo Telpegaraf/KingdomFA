@@ -1,7 +1,6 @@
 from pydantic import BaseModel, ConfigDict
-from annotated_types import Annotated
 from api_v1.models.enum import MasteryLevels
-from api_v1.schemas.character.character import Character
+from api_v1.schemas.character.character import Character, CharacterName
 
 
 class CharacterStatsBase(BaseModel):
@@ -21,14 +20,14 @@ class CharacterStatsBase(BaseModel):
     fortitude_mastery: MasteryLevels = MasteryLevels.ABSENT
     reflex_armor_mastery: MasteryLevels = MasteryLevels.ABSENT
     will_armor_mastery: MasteryLevels = MasteryLevels.ABSENT
-    character: Character
+    character: CharacterName
 
 
 class CharacterStatsRead(CharacterStatsBase):
     pass
 
 
-class CharacterStatsCreate(CharacterStatsBase):
+class CharacterStatsCreate(BaseModel):
     strength: int = 10
     dexterity: int = 10
     constitution: int = 10
@@ -55,4 +54,4 @@ class CharacterStatsUpdate(CharacterStatsCreate):
 class CharacterStats(CharacterStatsBase):
     model_config = ConfigDict(from_attributes=True)
 
-    int: id
+    id: int

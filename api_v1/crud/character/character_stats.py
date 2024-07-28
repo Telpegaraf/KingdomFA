@@ -3,11 +3,7 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from api_v1.schemas.character.character_stats import CharacterStatsCreate, CharacterStatsUpdate
-from api_v1.models.character import CharacterStat
-from api_v1.models.user import User
-from api_v1.models.religion import God, Domain
-from api_v1.models.race import Race
-from api_v1.models.character_class import CharacterClass
+from api_v1.models.character import CharacterStat, Character
 from api_v1.utils.model_result import get_model_result
 
 
@@ -33,7 +29,7 @@ async def character_stats_create(
         session: AsyncSession,
         character_stats_in: CharacterStatsCreate,
 ) -> CharacterStat:
-    character = await get_model_result(model=User, object_id=character_stats_in.character_id, session=session)
+    character = await get_model_result(model=Character, object_id=character_stats_in.character_id, session=session)
     character_stat = CharacterStat(
         strength = character_stats_in.strength,
         dexterity = character_stats_in.dexterity,
@@ -59,12 +55,12 @@ async def character_stats_create(
     return await character_stats_detail(session=session, character_stat_id=character_stat.id)
 
 
-async def character_update(
+async def character__stats_update(
         session: AsyncSession,
         character_stats_update: CharacterStatsUpdate,
         character_stat: CharacterStat
 ) -> CharacterStat:
-    character = await get_model_result(model=User, object_id=character_stats_update.character_id, session=session)
+    character = await get_model_result(model=Character, object_id=character_stats_update.character_id, session=session)
     for key, value in character_stats_update.model_dump(exclude_unset=True).items():
         if hasattr(character_stat, key) and key not in [
             "character_id"

@@ -68,6 +68,13 @@ class CharacterUpdate(BaseModel):
     domain_id: Optional[int]
 
 
+class CharacterName(BaseModel):
+    first_name: Annotated[str, MaxLen(100)]
+    last_name: Annotated[str, MaxLen(100)]
+    alias: Annotated[str, MaxLen(100)]
+    id: int
+
+
 class Character(CharacterBase):
     model_config = ConfigDict(from_attributes=True)
 

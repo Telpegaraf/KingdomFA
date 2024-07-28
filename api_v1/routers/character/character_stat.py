@@ -15,7 +15,7 @@ character_stats_router = APIRouter(prefix="/character_stats", tags=["Character S
 
 
 @character_stats_router.get(
-    "/{character_stats_id}/",
+    "/{character_stat_id}/",
     description="Return the Character Stat object, depending on ID",
     response_model=schemas.CharacterStatsRead
 )
@@ -48,7 +48,7 @@ async def character_stats_create(
 
 
 @character_stats_router.patch(
-    "/update/{character_stats_id}/",
+    "/update/{character_stat_id}/",
     description="Update the Character Stat object, depending on ID",
     response_model=schemas.CharacterStatsRead
 )
@@ -57,12 +57,12 @@ async def character_update(
         character_stat: CharacterStat = Depends(get_character_stats),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> CharacterStat:
-    return await crud.character_update(session=session, character_stat=character_stat,
-                                       character_stats_update=character_stats_update)
+    return await crud.character__stats_update(session=session, character_stat=character_stat,
+                                              character_stats_update=character_stats_update)
 
 
 @character_stats_router.delete(
-    "/delete/{character_stats_id}/",
+    "/delete/{character_stat_id}/",
     description="Delete the Character Stat object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )
