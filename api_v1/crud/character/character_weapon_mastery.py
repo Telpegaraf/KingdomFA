@@ -19,7 +19,7 @@ async def character_weapon_mastery_detail(
         select(CharacterWeaponMastery).
         where(CharacterWeaponMastery.id == character_weapon_mastery_id).options(
             selectinload(CharacterWeaponMastery.character),
-            selectinload(CharacterWeaponMastery.weapon)
+            selectinload(CharacterWeaponMastery.weapon_group)
         )
     )
 
@@ -27,7 +27,7 @@ async def character_weapon_mastery_detail(
 async def character_weapon_mastery_list(session: AsyncSession) -> list[CharacterWeaponMastery]:
     stmt = select(CharacterWeaponMastery).options(
         selectinload(CharacterWeaponMastery.character),
-        selectinload(CharacterWeaponMastery.weapon)
+        selectinload(CharacterWeaponMastery.weapon_group)
     ).order_by(CharacterWeaponMastery.id)
     result: Result = await session.execute(stmt)
     characters = result.scalars().all()
@@ -43,14 +43,14 @@ async def character_weapon_mastery_create(
         object_id=character_weapon_mastery_in.character_id,
         session=session
     )
-    weapon = await get_model_result(
+    weapon_group = await get_model_result(
         model=WeaponGroup,
-        object_id=character_weapon_mastery_in.weapon_id,
+        object_id=character_weapon_mastery_in.weapon_group_id,
         session=session
     )
     character_weapon_mastery = CharacterWeaponMastery(
         mastery_level=character_weapon_mastery_in.mastery_level,
-        weapon=weapon,
+        weapon_group=weapon_group,
         character=character
     )
     session.add(character_weapon_mastery)
@@ -62,7 +62,7 @@ async def character_weapon_mastery_create(
     )
 
 
-async def character_stats_update(
+async def character_weapon_mastery_update(
         session: AsyncSession,
         character_weapon_mastery_update: CharacterWeaponMasteryUpdate,
         character_weapon_mastery: CharacterWeaponMastery
@@ -72,18 +72,18 @@ async def character_stats_update(
         object_id=character_weapon_mastery_update.character_id,
         session=session
     )
-    weapon = await get_model_result(
+    weapon_group = await get_model_result(
         model=WeaponGroup,
-        object_id=character_weapon_mastery_update.weapon_id,
+        object_id=character_weapon_mastery_update.weapon_group_id,
         session=session
     )
     for key, value in character_weapon_mastery_update.model_dump(exclude_unset=True).items():
         if hasattr(character_weapon_mastery, key) and key not in [
-            "character_id", "weapon_id"
+            "character_id", "weapon_group_id"
         ]:
             setattr(character_weapon_mastery, key, value)
     character_weapon_mastery.character = character
-    character_weapon_mastery.weapon = weapon
+    character_weapon_mastery.weapon_group = weapon_group
     await session.commit()
     await session.refresh(character_weapon_mastery)
     return character_weapon_mastery

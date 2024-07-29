@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from api_v1.models import Base
 if TYPE_CHECKING:
     from api_v1.models.feat import Feat
-    from api_v1.models.character import CharacterSkillMastery
+    from api_v1.models.character import CharacterSkillMastery, CharacterWeaponMastery
     from api_v1.models.character_class import CharacterClass
     from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
     from api_v1.models.associations.feat_traits_association import FeatTraitAssociation
@@ -149,6 +149,7 @@ class WeaponTrait(GeneralDescriptionBase):
 
 class WeaponGroup(GeneralDescriptionBase):
     weapons: Mapped[list["Weapon"]] = relationship(back_populates='weapon_group')
+    character_weapon_masteries: Mapped[list["CharacterWeaponMastery"]] = relationship(back_populates="weapon_group")
 
 
 class WeaponSpecialization(GeneralDescriptionBase):

@@ -57,13 +57,16 @@ async def character_weapon_mastery_create(
     description="Update the Character Weapon Mastery object, depending on ID",
     response_model=schemas.CharacterWeaponMasteryRead
 )
-async def character_update(
+async def character_weapon_mastery_update(
         character_weapon_mastery_update: schemas.CharacterWeaponMasteryUpdate,
         character_weapon_mastery: CharacterWeaponMastery = Depends(get_character_weapon_mastery),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> CharacterWeaponMastery:
-    return await crud.character_stats_update(session=session, character_weapon_mastery=character_weapon_mastery,
-                                             character_weapon_mastery_update=character_weapon_mastery_update)
+    return await crud.character_weapon_mastery_update(
+        session=session,
+        character_weapon_mastery=character_weapon_mastery,
+        character_weapon_mastery_update=character_weapon_mastery_update
+    )
 
 
 @character_weapon_mastery_router.delete(

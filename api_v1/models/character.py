@@ -1,4 +1,4 @@
-from sqlalchemy import String, Text, SmallInteger, Enum, UniqueConstraint
+from sqlalchemy import String, Text, SmallInteger, Enum, UniqueConstraint, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 
@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     CharacterWeapon,
     EquippedItems
     )
+    from api_v1.models.general import WeaponGroup
 
 
 class Character(
@@ -156,7 +157,6 @@ class CharacterSkillMastery(CharacterMixin, SkillMixin, Base):
     _character_back_populate = 'character_skill_masteries'
     _character_id_unique = True
     _skill_back_populate = 'character_skill_masteries'
-    _skill_id_unique = True
 
     mastery_level: Mapped[Enum] = mapped_column(Enum(MasteryLevels), default=MasteryLevels.ABSENT)
 
@@ -168,20 +168,27 @@ class CharacterSkillMastery(CharacterMixin, SkillMixin, Base):
         return self.character.__str__()
 
 
-class CharacterWeaponMastery(CharacterMixin, WeaponMixin, Base):
+class CharacterWeaponMastery(CharacterMixin, Base):
     __tablename__ = 'character_weapon_masteries'
     __table_args__ = (
         UniqueConstraint(
             'character_id',
-            'weapon_id',
+            'weapon_group_id',
             name='idx_unique_character_weapon_masteries'
         ),
     )
 
     _character_back_populate = 'character_weapon_masteries'
     _character_id_unique = True
-    _weapon_back_populate = 'character_weapon_masteries'
-    _weapon_id_unique = True
+
+    weapon_group_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "weapon_groups.id", ondelete="CASCADE"
+        )
+    )
+    weapon_group: Mapped["WeaponGroup"] = relationship(
+        back_populates="character_weapon_masteries"
+    )
 
     mastery_level: Mapped[Enum] = mapped_column(Enum(MasteryLevels), default=MasteryLevels.ABSENT)
 

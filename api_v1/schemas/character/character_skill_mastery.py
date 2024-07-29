@@ -6,7 +6,7 @@ from api_v1.models.enum import MasteryLevels
 
 class CharacterSkillMasteryBase(BaseModel):
     mastery_level: MasteryLevels = MasteryLevels.ABSENT
-    weapon: GeneralDescription
+    skill: GeneralDescription
     character: CharacterName
 
 

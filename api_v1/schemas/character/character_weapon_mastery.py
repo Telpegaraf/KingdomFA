@@ -6,7 +6,7 @@ from api_v1.models.enum import MasteryLevels
 
 class CharacterWeaponMasteryBase(BaseModel):
     mastery_level: MasteryLevels = MasteryLevels.ABSENT
-    weapon: GeneralDescriptionBase
+    weapon_group: GeneralDescriptionBase
     character: CharacterName
 
 
@@ -16,7 +16,7 @@ class CharacterWeaponMasteryRead(CharacterWeaponMasteryBase):
 
 class CharacterWeaponMasteryCreate(BaseModel):
     mastery_level: MasteryLevels = MasteryLevels.ABSENT
-    weapon_id: int
+    weapon_group_id: int
     character_id: int
 
 
