@@ -30,17 +30,9 @@ async def secondary_stat_create(
         secondary_stat_in: SecondaryStatCreate,
 ) -> SecondaryStat:
     character = await get_model_result(model=Character, object_id=secondary_stat_in.character_id, session=session)
+    secondary_stat_data = secondary_stat_in.dict(exclude={"character_id"})
     secondary_stat = SecondaryStat(
-        perception=secondary_stat_in.perception,
-        armor_class=secondary_stat_in.armor_class,
-        attack_class=secondary_stat_in.attack_class,
-        damage_bonus=secondary_stat_in.damage_bonus,
-        max_health=secondary_stat_in.max_health,
-        health=secondary_stat_in.health,
-        initiative=secondary_stat_in.initiative,
-        fortitude_saving=secondary_stat_in.fortitude_saving,
-        reflex_saving=secondary_stat_in.reflex_saving,
-        will_saving=secondary_stat_in.will_saving,
+        **secondary_stat_data,
         character=character
     )
     session.add(secondary_stat)
