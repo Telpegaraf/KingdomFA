@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from api_v1.models.enum import MasteryLevels
-from api_v1.schemas.character.character import Character, CharacterName
+from api_v1.schemas.character.character import CharacterName
 
 
 class CharacterStatsBase(BaseModel):
