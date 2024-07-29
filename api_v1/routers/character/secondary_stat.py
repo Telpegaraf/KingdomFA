@@ -19,7 +19,7 @@ secondary_stat_router = APIRouter(prefix="/secondary_stat", tags=["Secondary Sta
     description="Return the Secondary Stat object, depending on ID",
     response_model=schemas.SecondaryStatRead
 )
-async def character_points_detail(character: SecondaryStat = Depends(get_secondary_stat)) -> SecondaryStat:
+async def secondary_stat_detail(character: SecondaryStat = Depends(get_secondary_stat)) -> SecondaryStat:
     return character
 
 
@@ -40,7 +40,7 @@ async def secondary_stat_list(
     response_model=schemas.SecondaryStatRead,
     status_code=status.HTTP_201_CREATED
 )
-async def character_points_create(
+async def secondary_stat_create(
         secondary_stat_in: schemas.SecondaryStatCreate,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> SecondaryStat:
@@ -52,7 +52,7 @@ async def character_points_create(
     description="Update the Secondary Stat object, depending on ID",
     response_model=schemas.SecondaryStatRead
 )
-async def character_update(
+async def secondary_stat_update(
         secondary_stat_update: schemas.SecondaryStatUpdate,
         secondary_stat: SecondaryStat = Depends(get_secondary_stat),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
