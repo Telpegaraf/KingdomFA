@@ -46,7 +46,7 @@ async def character_point_create(
     return await character_point_detail(session=session, character_point_id=character_point.id)
 
 
-async def character__stats_update(
+async def character_stats_update(
         session: AsyncSession,
         character_point_update: CharacterPointUpdate,
         character_point: CharacterPoint

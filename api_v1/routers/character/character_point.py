@@ -57,7 +57,7 @@ async def character_update(
         character_point: CharacterPoint = Depends(get_character_point),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> CharacterPoint:
-    return await crud.character__stats_update(session=session, character_point=character_point,
+    return await crud.character_stats_update(session=session, character_point=character_point,
                                               character_point_update=character_point_update)
 
 
