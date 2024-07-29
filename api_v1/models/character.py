@@ -103,6 +103,7 @@ class CharacterStat(CharacterMixin, Base):
 
 class CharacterPoint(CharacterMixin, Base):
     _character_back_populate = "character_points"
+    _character_id_unique = True
 
     strength: Mapped[int] = mapped_column(SmallInteger, default=0)
     dexterity: Mapped[int] = mapped_column(SmallInteger, default=0)
@@ -121,6 +122,7 @@ class CharacterPoint(CharacterMixin, Base):
 
 class SecondaryStat(CharacterMixin, Base):
     _character_back_populate = "secondary_stats"
+    _character_id_unique = True
 
     perception: Mapped[int] = mapped_column(SmallInteger, default=0)
     armor_class: Mapped[int] = mapped_column(SmallInteger, default=10)
@@ -152,7 +154,9 @@ class CharacterSkillMastery(CharacterMixin, SkillMixin, Base):
     )
 
     _character_back_populate = 'character_skill_masteries'
+    _character_id_unique = True
     _skill_back_populate = 'character_skill_masteries'
+    _skill_id_unique = True
 
     mastery_level: Mapped[Enum] = mapped_column(Enum(MasteryLevels), default=MasteryLevels.ABSENT)
 
@@ -175,7 +179,9 @@ class CharacterWeaponMastery(CharacterMixin, WeaponMixin, Base):
     )
 
     _character_back_populate = 'character_weapon_masteries'
+    _character_id_unique = True
     _weapon_back_populate = 'character_weapon_masteries'
+    _weapon_id_unique = True
 
     mastery_level: Mapped[Enum] = mapped_column(Enum(MasteryLevels), default=MasteryLevels.ABSENT)
 
