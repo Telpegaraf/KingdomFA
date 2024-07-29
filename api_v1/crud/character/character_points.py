@@ -37,7 +37,7 @@ async def character_point_create(
         intelligence=character_point_in.intelligence,
         wisdom=character_point_in.wisdom,
         charisma=character_point_in.charisma,
-        акуу=character_point_in.free,
+        free=character_point_in.free,
         character=character
     )
     session.add(character_point)

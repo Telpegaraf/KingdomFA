@@ -14,7 +14,7 @@ http_bearer = HTTPBearer()
 character_point_router = APIRouter(prefix="/character_point", tags=["Character Point"])
 
 
-@character_points_router.get(
+@character_point_router.get(
     "/{character_point_id}/",
     description="Return the Character Point object, depending on ID",
     response_model=schemas.CharacterPointRead
@@ -23,7 +23,7 @@ async def character_points_detail(character: CharacterPoint = Depends(get_charac
     return character
 
 
-@character_points_router.get(
+@character_point_router.get(
     "/",
     description="Return all Character Point objects",
     response_model=list[schemas.CharacterPoint]
@@ -34,7 +34,7 @@ async def character_points_list(
     return await crud.character_point_list(session=session)
 
 
-@character_points_router.post(
+@character_point_router.post(
     "/create/",
     description="Create a new Character Point object",
     response_model=schemas.CharacterPointRead,
@@ -47,7 +47,7 @@ async def character_points_create(
     return await crud.character_point_create(session=session, character_point_in=character_point_in)
 
 
-@character_points_router.patch(
+@character_point_router.patch(
     "/update/{character_point_id}/",
     description="Update the Character Point object, depending on ID",
     response_model=schemas.CharacterPointRead
@@ -61,7 +61,7 @@ async def character_update(
                                               character_point_update=character_point_update)
 
 
-@character_points_router.delete(
+@character_point_router.delete(
     "/delete/{character_point_id}/",
     description="Delete the Character Point object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
