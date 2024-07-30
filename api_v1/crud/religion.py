@@ -6,9 +6,10 @@ from sqlalchemy.orm import selectinload
 from api_v1.schemas.religion import (
     DomainBase,
     DomainUpdate,
-    GodBase
+    GodCreateUpdate
 )
 from api_v1.models.religion import Domain, God
+from api_v1.utils.model_result import get_model_m2m_result
 
 
 async def domain_list(session: AsyncSession):
@@ -46,36 +47,13 @@ async def domain_delete(domain: Domain, session: AsyncSession) -> None:
     await session.commit()
 
 
-async def god_create(god_in: GodBase, session: AsyncSession) -> God:
-    domain_names = [domain.name for domain in god_in.domains]
-    existing_domains = await session.execute(
-        select(Domain).where(Domain.name.in_(domain_names))
-    )
-    existing_domains = existing_domains.scalars().all()
-    existing_domain_dict = {domain.name: domain for domain in existing_domains}
-    domains = []
-    for domain_in in god_in.domains:
-        if domain_in.name in existing_domain_dict:
-            domains.append(existing_domain_dict[domain_in.name])
-        else:
-            new_domain = Domain(name=domain_in.name)
-            session.add(new_domain)
-            await session.flush()
-            domains.append(new_domain)
+async def god_create(god_in: GodCreateUpdate, session: AsyncSession) -> God:
+    domains = await get_model_m2m_result(model=Domain, object_list=god_in.domains, session=session)
+
+    god_data = god_in.dict(exclude={"domains"})
 
     god = God(
-        name=god_in.name,
-        alias=god_in.alias,
-        edict=god_in.edict,
-        anathema=god_in.anathema,
-        areas_of_interest=god_in.areas_of_interest,
-        temples=god_in.temples,
-        worship=god_in.worship,
-        sacred_animal=god_in.sacred_animal,
-        sacred_color=god_in.sacred_color,
-        chosen_weapon=god_in.chosen_weapon,
-        taro=god_in.taro,
-        alignment=god_in.alignment,
+        **god_data,
         domains=domains
     )
 
@@ -103,29 +81,17 @@ async def god_list(session: AsyncSession):
 
 
 async def god_update(
-        god_update: GodBase,
+        god_update: GodCreateUpdate,
         god: God,
         session: AsyncSession
 ) -> God:
     for key, value in god_update.model_dump(exclude_unset=True).items():
         if hasattr(god, key) and key != "domains":
             setattr(god, key, value)
-    new_domains = god_update.domains
+    domains = await get_model_m2m_result(model=Domain, object_list=god_update.domains, session=session)
     god.domains.clear()
-
-    for domain_data in new_domains:
-        domain = await session.execute(
-            select(Domain).where(Domain.name == domain_data.name)
-        )
-        existing_domain = domain.scalar_one_or_none()
-        if existing_domain:
-            god.domains.append(existing_domain)
-        else:
-            new_domain = Domain(name=domain_data.name)
-            session.add(new_domain)
-            await session.flush()
-            god.domains.append(new_domain)
-
+    for value in domains:
+        god.domains.append(value)
     await session.commit()
     await session.refresh(god)
     return god

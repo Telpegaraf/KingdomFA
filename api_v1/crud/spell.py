@@ -43,19 +43,10 @@ async def spell_create(
     spell_school = await get_model_result(model=SpellSchool, object_id=spell_in.spell_school_id, session=session)
     existing_spell_traits = await get_model_m2m_result(model=SpellTrait,
                                                        object_list=spell_in.spell_traits, session=session)
+    spell_data = spell_in.dict(exclude={"spell_cast_id", "spell_tradition_id", "spell_school_id", "spell_traits"})
+
     spell = Spell(
-        name=spell_in.name,
-        description=spell_in.description,
-        level=spell_in.level,
-        spell_range=spell_in.spell_range,
-        duration=spell_in.duration,
-        sustain=spell_in.sustain,
-        ritual=spell_in.ritual,
-        secondary_casters=spell_in.secondary_casters,
-        cost=spell_in.cost,
-        target=spell_in.target,
-        source=spell_in.source,
-        spell_component=spell_in.spell_component,
+        **spell_data,
         spell_cast=spell_cast,
         spell_tradition=spell_tradition,
         spell_school=spell_school,

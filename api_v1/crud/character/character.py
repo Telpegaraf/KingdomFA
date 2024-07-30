@@ -48,14 +48,11 @@ async def character_create(
     god = await get_model_result(model=God, object_id=character_in.god_id, session=session)
     domain = await get_model_result(model=Domain, object_id=character_in.domain_id, session=session)\
         if character_in.domain_id else None
+
+    character_data = character_in.dict(exclude={"user_id", "race_id", "character_class_id", "god_id", "domain_id"})
+
     character = Character(
-        first_name=character_in.first_name,
-        last_name=character_in.last_name,
-        alias=character_in.alias,
-        size=character_in.size,
-        age=character_in.age,
-        level=character_in.age,
-        description=character_in.description,
+        **character_data,
         race=race,
         character_class=character_class,
         god=god,

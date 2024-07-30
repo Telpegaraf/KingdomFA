@@ -30,23 +30,9 @@ async def character_stats_create(
         character_stats_in: CharacterStatsCreate,
 ) -> CharacterStat:
     character = await get_model_result(model=Character, object_id=character_stats_in.character_id, session=session)
+    character_stat_data = character_stats_in.dict(exclude={"character_id"})
     character_stat = CharacterStat(
-        strength=character_stats_in.strength,
-        dexterity=character_stats_in.dexterity,
-        constitution=character_stats_in.constitution,
-        intelligence=character_stats_in.intelligence,
-        wisdom=character_stats_in.wisdom,
-        charisma=character_stats_in.charisma,
-        max_speed=character_stats_in.max_speed,
-        speed=character_stats_in.speed,
-        perception_mastery=character_stats_in.perception_mastery,
-        unarmed_mastery=character_stats_in.unarmed_mastery,
-        light_armor_mastery=character_stats_in.light_armor_mastery,
-        medium_armor_mastery=character_stats_in.medium_armor_mastery,
-        heavy_armor_mastery=character_stats_in.heavy_armor_mastery,
-        fortitude_mastery=character_stats_in.fortitude_mastery,
-        reflex_armor_mastery=character_stats_in.reflex_armor_mastery,
-        will_armor_mastery=character_stats_in.will_armor_mastery,
+        **character_stat_data,
         character=character
     )
     session.add(character_stat)

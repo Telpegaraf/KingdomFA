@@ -30,14 +30,9 @@ async def character_point_create(
         character_point_in: CharacterPointCreate,
 ) -> CharacterPoint:
     character = await get_model_result(model=Character, object_id=character_point_in.character_id, session=session)
+    character_point_data = character_point_in.dict(exclude={"character_id"})
     character_point = CharacterPoint(
-        strength=character_point_in.strength,
-        dexterity=character_point_in.dexterity,
-        constitution=character_point_in.constitution,
-        intelligence=character_point_in.intelligence,
-        wisdom=character_point_in.wisdom,
-        charisma=character_point_in.charisma,
-        free=character_point_in.free,
+        **character_point_data,
         character=character
     )
     session.add(character_point)
