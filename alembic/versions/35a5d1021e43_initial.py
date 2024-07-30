@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: 42a7be2cbae1
+Revision ID: 35a5d1021e43
 Revises: 
-Create Date: 2024-07-26 13:26:55.107940
+Create Date: 2024-07-30 14:12:05.654272
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "42a7be2cbae1"
+revision: str = "35a5d1021e43"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -214,7 +214,7 @@ def upgrade() -> None:
         sa.Column("password", sa.String(length=120), nullable=False),
         sa.Column("email", sa.String(length=100), nullable=True),
         sa.Column("is_active", sa.Boolean(), nullable=False),
-        sa.Column("is_superuser", sa.Boolean(), nullable=False),
+        sa.Column("is_superuser", sa.Boolean(), server_default="f", nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("username"),
@@ -483,6 +483,7 @@ def upgrade() -> None:
             ["spell_tradition_id"], ["spell_traditions.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("name"),
     )
     op.create_table(
         "weapons",
@@ -771,6 +772,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["character_id"], ["characters.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("character_id"),
     )
     op.create_table(
         "character_skill_masteries",
@@ -793,6 +795,7 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["character_id"], ["characters.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["skill_id"], ["skills.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("character_id"),
         sa.UniqueConstraint(
             "character_id", "skill_id", name="idx_unique_character_skill_masteries"
         ),
@@ -915,9 +918,11 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["character_id"], ["characters.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("character_id"),
     )
     op.create_table(
         "character_weapon_masteries",
+        sa.Column("weapon_group_id", sa.Integer(), nullable=False),
         sa.Column(
             "mastery_level",
             postgresql.ENUM(
@@ -932,13 +937,17 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.Column("character_id", sa.Integer(), nullable=False),
-        sa.Column("weapon_id", sa.Integer(), nullable=False),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["character_id"], ["characters.id"], ondelete="CASCADE"),
-        sa.ForeignKeyConstraint(["weapon_id"], ["weapons.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(
+            ["weapon_group_id"], ["weapon_groups.id"], ondelete="CASCADE"
+        ),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("character_id"),
         sa.UniqueConstraint(
-            "character_id", "weapon_id", name="idx_unique_character_weapon_masteries"
+            "character_id",
+            "weapon_group_id",
+            name="idx_unique_character_weapon_masteries",
         ),
     )
     op.create_table(
@@ -1010,6 +1019,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["character_id"], ["characters.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("character_id"),
     )
     op.create_table(
         "equipped_items",
