@@ -26,7 +26,7 @@ async def user_list(session: AsyncSession) -> list[User]:
 
 async def user_create(
         session: AsyncSession,
-        user_in: UserBase
+        user_in: UserBase,
 ) -> User:
     user_password = hash_password(user_in.password)
     user = User(

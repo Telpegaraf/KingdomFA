@@ -6,7 +6,7 @@ from api_v1.crud import user as crud
 from api_v1.dependencies.get_object import get_object_by_id_dependency
 from api_v1.models import user as models
 from api_v1.schemas import user as schemas
-from auth.utils import get_current_token_payload
+from auth.utils import get_current_token_payload, get_is_super_user
 from database import db_helper
 
 http_bearer = HTTPBearer()
@@ -22,7 +22,7 @@ user_router = APIRouter(prefix="/user", tags=["Users"])
 )
 async def user_detail(
         payload: dict = Depends(get_current_token_payload),
-        user: models.User = Depends(get_object_by_id_dependency(models.User))
+        user: models.User = Depends(get_object_by_id_dependency(models.User)),
 ):
     return user
 
@@ -34,8 +34,8 @@ async def user_detail(
     dependencies=[Depends(http_bearer)]
 )
 async def user_list(
-        payload: dict = Depends(get_current_token_payload),
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+        current_user: models.User = Depends(get_is_super_user),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
     result = await crud.user_list(session=session)
     return result

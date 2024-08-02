@@ -31,6 +31,8 @@ def create_access_token(user: schemas.UserValidate) -> str:
         "sub": user.username,
         "username": user.username,
         "email": user.email,
+        "id": user.id,
+        "is_superuser": user.is_superuser
     }
     return create_jwt(
         token_type=ACCESS_TOKEN_TYPE,

@@ -9,6 +9,9 @@ from api_v1.models.religion import God, Domain
 from api_v1.models.race import Race
 from api_v1.models.character_class import CharacterClass
 from api_v1.utils.model_result import get_model_result
+import logging
+
+logger = logging.getLogger()
 
 
 async def character_detail(session: AsyncSession, character_id: int) -> Character:
@@ -40,7 +43,10 @@ async def character_list(session: AsyncSession) -> list[Character]:
 async def character_create(
         session: AsyncSession,
         character_in: CharacterCreate,
+        payload: dict
 ) -> Character:
+    print(payload)
+    logger.warning(payload)
     user = await get_model_result(model=User, object_id=character_in.user_id, session=session)
     race = await get_model_result(model=Race, object_id=character_in.race_id, session=session)
     character_class = await get_model_result(model=CharacterClass, object_id=character_in.character_class_id,

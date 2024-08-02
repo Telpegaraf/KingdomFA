@@ -5,7 +5,7 @@ from api_v1.routers import religion, user, auth, general, character_class, user_
 from api_v1.routers.equipment import worn, armor, weapon
 from api_v1.routers.character import character, character_stat, character_point, secondary_stat,\
     character_weapon_mastery, character_skill_mastery
-from action.create_superuser import create_superuser
+from action.create_super_user import create_superuser
 
 app = FastAPI()
 app.include_router(auth.auth_router)

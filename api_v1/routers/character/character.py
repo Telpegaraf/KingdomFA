@@ -3,15 +3,17 @@ from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api_v1.models.character import Character
+from api_v1.models.user import User
 from api_v1.schemas.character import character as schemas
 from api_v1.crud.character import character as crud
 from api_v1.dependencies.character.character import get_character
+from auth.utils import get_current_token_payload
 from database import db_helper
 
 
 http_bearer = HTTPBearer()
 
-character_router = APIRouter(prefix="/character", tags=["Character"])
+character_router = APIRouter(prefix="/character", tags=["Character"], dependencies=[Depends(http_bearer)])
 
 
 @character_router.get(
@@ -42,9 +44,10 @@ async def character_list(
 )
 async def character_create(
         character_in: schemas.CharacterCreate,
+        payload: dict = Depends(get_current_token_payload),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> Character:
-    return await crud.character_create(session=session, character_in=character_in)
+    return await crud.character_create(session=session, character_in=character_in, payload=payload)
 
 
 @character_router.patch(
