@@ -3,11 +3,20 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from api_v1.schemas.character.character import CharacterCreate, CharacterUpdate
-from api_v1.models.character import Character
+from api_v1.models.character import (
+    Character,
+    CharacterStat,
+    CharacterPoint,
+    SecondaryStat,
+    CharacterWeaponMastery,
+    CharacterSkillMastery
+)
 from api_v1.models.user import User
 from api_v1.models.religion import God, Domain
 from api_v1.models.race import Race
 from api_v1.models.character_class import CharacterClass
+from api_v1.models.general import Skill, WeaponGroup
+from api_v1.crud.general import object_list
 from api_v1.utils.model_result import get_model_result
 import logging
 
@@ -43,10 +52,7 @@ async def character_list(session: AsyncSession) -> list[Character]:
 async def character_create(
         session: AsyncSession,
         character_in: CharacterCreate,
-        payload: dict
 ) -> Character:
-    print(payload)
-    logger.warning(payload)
     user = await get_model_result(model=User, object_id=character_in.user_id, session=session)
     race = await get_model_result(model=Race, object_id=character_in.race_id, session=session)
     character_class = await get_model_result(model=CharacterClass, object_id=character_in.character_class_id,
@@ -68,6 +74,7 @@ async def character_create(
     session.add(character)
     await session.commit()
     await session.refresh(character)
+    await create_objects_for_character(character, session)
     return await character_detail(session=session, character_id=character.id)
 
 
@@ -103,4 +110,20 @@ async def character_delete(
         character: Character
 ) -> None:
     await session.delete(character)
+    await session.commit()
+
+
+async def create_objects_for_character(
+        character: Character,
+        session: AsyncSession
+) -> None:
+    session.add(CharacterPoint(character=character))
+    session.add(CharacterStat(character=character))
+    session.add(SecondaryStat(character=character))
+    weapon_group_list = await object_list(Skill, session)
+    for weapon_group in weapon_group_list:
+        session.add(CharacterWeaponMastery(character=character, weapon_group=weapon_group))
+    skill_list = await object_list(WeaponGroup, session)
+    for skill in skill_list:
+        session.add(CharacterSkillMastery(character=character, skill=skill))
     await session.commit()

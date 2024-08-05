@@ -90,7 +90,7 @@ def get_current_token_payload(
     return payload
 
 
-async def get_is_super_user(
+def get_is_super_user(
     token: str = Depends(oauth2_scheme)
 ) -> dict:
     payload = get_current_token_payload(token)
@@ -103,9 +103,14 @@ async def get_is_super_user(
     return payload
 
 
-async def get_current_user(
+def get_current_user(
         token: str = Depends(oauth2_scheme)
 ) -> int:
     payload = get_current_token_payload(token)
     current_user = payload.get("id")
-    pass
+    return current_user
+
+
+
+
+

@@ -9,7 +9,6 @@ from api_v1.models.mixins.character_class import CharacterClassMixin
 from api_v1.models.mixins.god import GodMixin, DomainMixin
 from api_v1.models.mixins.character import CharacterMixin
 from api_v1.models.mixins.skill import SkillMixin
-from api_v1.models.mixins.equipment import WeaponMixin
 from api_v1.models.enum import MasteryLevels
 if TYPE_CHECKING:
     from api_v1.models.inventory import (

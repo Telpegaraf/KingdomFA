@@ -47,7 +47,7 @@ async def character_create(
         payload: dict = Depends(get_current_token_payload),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> Character:
-    return await crud.character_create(session=session, character_in=character_in, payload=payload)
+    return await crud.character_create(session=session, character_in=character_in)
 
 
 @character_router.patch(
