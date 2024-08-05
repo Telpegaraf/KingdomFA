@@ -64,7 +64,7 @@ async def character_currency_update(
         character_currency: CharacterCurrency
 ):
     currency = await get_model_result(model=Currency, object_id=character_currency_update.currency_id, session=session)
-    setattr(character_currency, character_currency.quantity, character_currency_update.quantity)
+    setattr(character_currency, 'quantity', character_currency_update.quantity)
     character_currency.currency = currency
     await session.commit()
     await session.refresh(character_currency)
@@ -82,7 +82,7 @@ async def character_currency_delete(
 async def character_item_list(session: AsyncSession):
     stmt = select(CharacterItem).options(
         selectinload(CharacterItem.character),
-        selectinload(CharacterItem.item)
+        selectinload(CharacterItem.item).joinedload(Item.currency)
     ).order_by(CharacterItem.id)
     result: Result = await session.execute(stmt)
     items = result.scalars().all()
@@ -94,7 +94,7 @@ async def character_item_detail(session: AsyncSession, character_item_id: int) -
         select(CharacterItem)
         .where(CharacterItem.id == character_item_id)
         .options(selectinload(CharacterItem.character),
-                 selectinload(CharacterItem.item))
+                 selectinload(CharacterItem.item).joinedload(Item.currency))
     )
 
 
@@ -121,7 +121,7 @@ async def character_item_update(
         character_item: CharacterItem
 ):
     item = await get_model_result(model=Item, object_id=character_item_update.item_id, session=session)
-    setattr(character_item, character_item.quantity, character_item_update.quantity)
+    setattr(character_item, 'quantity', character_item_update.quantity)
     character_item.item = item
     await session.commit()
     await session.refresh(character_item)
@@ -139,7 +139,10 @@ async def character_item_delete(
 async def character_armor_list(session: AsyncSession):
     stmt = select(CharacterArmor).options(
         selectinload(CharacterArmor.character),
-        selectinload(CharacterArmor.armor)
+        selectinload(CharacterArmor.armor).selectinload(Armor.currency),
+        selectinload(CharacterArmor.armor).selectinload(Armor.armor_specializations),
+        selectinload(CharacterArmor.armor).selectinload(Armor.armor_traits),
+        selectinload(CharacterArmor.armor).selectinload(Armor.armor_group)
     ).order_by(CharacterArmor.id)
     result: Result = await session.execute(stmt)
     armors = result.scalars().all()
@@ -150,8 +153,13 @@ async def character_armor_detail(session: AsyncSession, character_armor_id: int)
     return await session.scalar(
         select(CharacterArmor)
         .where(CharacterArmor.id == character_armor_id)
-        .options(selectinload(CharacterArmor.character),
-                 selectinload(CharacterArmor.armor))
+        .options(
+            selectinload(CharacterArmor.character),
+            selectinload(CharacterArmor.armor).selectinload(Armor.currency),
+            selectinload(CharacterArmor.armor).selectinload(Armor.armor_specializations),
+            selectinload(CharacterArmor.armor).selectinload(Armor.armor_traits),
+            selectinload(CharacterArmor.armor).selectinload(Armor.armor_group)
+        )
     )
 
 
@@ -161,7 +169,7 @@ async def character_armor_create(
 ) -> CharacterArmor:
     character = await get_model_result(model=Character, object_id=character_armor_in.character_id, session=session)
     armor = await get_model_result(model=Armor, object_id=character_armor_in.armor_id, session=session)
-    character_armor = CharacterItem(
+    character_armor = CharacterArmor(
         armor=armor,
         character=character,
         quantity=character_armor_in.quantity
@@ -178,7 +186,7 @@ async def character_armor_update(
         character_armor: CharacterArmor
 ):
     armor = await get_model_result(model=Armor, object_id=character_armor_update.armor_id, session=session)
-    setattr(character_armor, character_armor.quantity, character_armor_update.quantity)
+    setattr(character_armor, 'quantity', character_armor_update.quantity)
     character_armor.armor = armor
     await session.commit()
     await session.refresh(character_armor)
@@ -196,7 +204,12 @@ async def character_armor_delete(
 async def character_weapon_list(session: AsyncSession):
     stmt = select(CharacterWeapon).options(
         selectinload(CharacterWeapon.character),
-        selectinload(CharacterWeapon.weapon)
+        selectinload(CharacterWeapon.weapon).selectinload(Weapon.weapon_group),
+        selectinload(CharacterWeapon.weapon).selectinload(Weapon.weapon_specialization),
+        selectinload(CharacterWeapon.weapon).selectinload(Weapon.weapon_traits),
+        selectinload(CharacterWeapon.weapon).selectinload(Weapon.currency),
+        selectinload(CharacterWeapon.weapon).selectinload(Weapon.damage_type),
+        selectinload(CharacterWeapon.weapon).selectinload(Weapon.second_damage_type)
     ).order_by(CharacterWeapon.id)
     result: Result = await session.execute(stmt)
     weapons = result.scalars().all()
@@ -208,7 +221,12 @@ async def character_weapon_detail(session: AsyncSession, character_weapon_id: in
         select(CharacterWeapon)
         .where(CharacterWeapon.id == character_weapon_id)
         .options(selectinload(CharacterWeapon.character),
-                 selectinload(CharacterWeapon.weapon))
+                 selectinload(CharacterWeapon.weapon).selectinload(Weapon.weapon_group),
+                 selectinload(CharacterWeapon.weapon).selectinload(Weapon.weapon_specialization),
+                 selectinload(CharacterWeapon.weapon).selectinload(Weapon.weapon_traits),
+                 selectinload(CharacterWeapon.weapon).selectinload(Weapon.currency),
+                 selectinload(CharacterWeapon.weapon).selectinload(Weapon.damage_type),
+                 selectinload(CharacterWeapon.weapon).selectinload(Weapon.second_damage_type))
     )
 
 
@@ -218,7 +236,7 @@ async def character_weapon_create(
 ) -> CharacterWeapon:
     character = await get_model_result(model=Character, object_id=character_weapon_in.character_id, session=session)
     weapon = await get_model_result(model=Weapon, object_id=character_weapon_in.weapon_id, session=session)
-    character_weapon = CharacterItem(
+    character_weapon = CharacterWeapon(
         weapon=weapon,
         character=character,
         quantity=character_weapon_in.quantity
@@ -235,7 +253,7 @@ async def character_weapon_update(
         character_weapon: CharacterWeapon
 ):
     weapon = await get_model_result(model=Weapon, object_id=character_weapon_update.weapon_id, session=session)
-    setattr(character_weapon, character_weapon.quantity, character_weapon_update.quantity)
+    setattr(character_weapon, 'quantity', character_weapon_update.quantity)
     character_weapon.weapon = weapon
     await session.commit()
     await session.refresh(character_weapon)
@@ -253,7 +271,9 @@ async def character_weapon_delete(
 async def character_worn_list(session: AsyncSession):
     stmt = select(CharacterWorn).options(
         selectinload(CharacterWorn.character),
-        selectinload(CharacterWorn.worn)
+        selectinload(CharacterWorn.worn).selectinload(Worn.currency),
+        selectinload(CharacterWorn.worn).selectinload(Worn.slot),
+        selectinload(CharacterWorn.worn).selectinload(Worn.worn_traits)
     ).order_by(CharacterWorn.id)
     result: Result = await session.execute(stmt)
     worn_list = result.scalars().all()
@@ -265,7 +285,9 @@ async def character_worn_detail(session: AsyncSession, character_worn_id: int) -
         select(CharacterWorn)
         .where(CharacterWorn.id == character_worn_id)
         .options(selectinload(CharacterWorn.character),
-                 selectinload(CharacterWorn.worn))
+                 selectinload(CharacterWorn.worn).selectinload(Worn.currency),
+                 selectinload(CharacterWorn.worn).selectinload(Worn.slot),
+                 selectinload(CharacterWorn.worn).selectinload(Worn.worn_traits))
     )
 
 
@@ -289,10 +311,10 @@ async def character_worn_create(
 async def character_worn_update(
         session: AsyncSession,
         character_worn_update: CharacterWornCreateUpdate,
-        character_worn: CharacterWeapon
+        character_worn: CharacterWorn
 ):
     worn = await get_model_result(model=Worn, object_id=character_worn_update.worn_id, session=session)
-    setattr(character_worn, character_worn.quantity, character_worn_update.quantity)
+    setattr(character_worn, 'quantity', character_worn_update.quantity)
     character_worn.worn = worn
     await session.commit()
     await session.refresh(character_worn)

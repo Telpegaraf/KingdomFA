@@ -1,5 +1,5 @@
-from pydantic import BaseModel, ConfigDict
-from api_v1.schemas.character.character import Character
+from pydantic import BaseModel, ConfigDict, Field
+from api_v1.schemas.character.character import CharacterName
 from api_v1.schemas.equipment.currency import Currency
 from api_v1.schemas.equipment.weapon import Weapon
 from api_v1.schemas.equipment.armor import Armor
@@ -8,7 +8,7 @@ from api_v1.schemas.equipment.item import Item
 
 
 class CharacterCurrencyBase(BaseModel):
-    character: Character
+    character: CharacterName
     currency: Currency
     quantity: int
 
@@ -19,8 +19,8 @@ class CharacterCurrencyRead(CharacterCurrencyBase):
 
 class CharacterCurrencyCreateUpdate(BaseModel):
     character_id: int
-    currency: int
-    quantity: int
+    currency_id: int
+    quantity: int = Field(..., ge=1)
 
 
 class CharacterCurrency(CharacterCurrencyBase):
@@ -28,7 +28,7 @@ class CharacterCurrency(CharacterCurrencyBase):
 
 
 class CharacterWeaponBase(BaseModel):
-    character: Character
+    character: CharacterName
     weapon: Weapon
     quantity: int
 
@@ -40,15 +40,17 @@ class CharacterWeaponRead(CharacterWeaponBase):
 class CharacterWeaponCreateUpdate(BaseModel):
     character_id: int
     weapon_id: int
-    quantity: int
+    quantity: int = Field(..., ge=1)
 
 
 class CharacterWeapon(CharacterWeaponBase):
     model_config = ConfigDict(from_attributes=True)
 
+    id: int
+
 
 class CharacterArmorBase(BaseModel):
-    character: Character
+    character: CharacterName
     armor: Armor
     quantity: int
 
@@ -60,7 +62,7 @@ class CharacterArmorRead(CharacterArmorBase):
 class CharacterArmorCreateUpdate(BaseModel):
     character_id: int
     armor_id: int
-    quantity: int
+    quantity: int = Field(..., ge=1)
 
 
 class CharacterArmor(CharacterArmorBase):
@@ -68,7 +70,7 @@ class CharacterArmor(CharacterArmorBase):
 
 
 class CharacterWornBase(BaseModel):
-    character: Character
+    character: CharacterName
     worn: Worn
     quantity: int
 
@@ -80,7 +82,7 @@ class CharacterWornRead(CharacterWornBase):
 class CharacterWornCreateUpdate(BaseModel):
     character_id: int
     worn_id: int
-    quantity: int
+    quantity: int = Field(..., ge=1)
 
 
 class CharacterWorn(CharacterWornBase):
@@ -88,21 +90,21 @@ class CharacterWorn(CharacterWornBase):
 
 
 class CharacterItemBase(BaseModel):
-    character: Character
+    character: CharacterName
     item: Item
     quantity: int
 
 
-class CharacterItemRead(CharacterCurrencyBase):
+class CharacterItemRead(CharacterItemBase):
     pass
 
 
 class CharacterItemCreateUpdate(BaseModel):
     character_id: int
     item_id: int
-    quantity: int
+    quantity: int = Field(..., ge=1)
 
 
-class CharacterItem(CharacterCurrencyBase):
+class CharacterItem(CharacterItemBase):
     model_config = ConfigDict(from_attributes=True)
 

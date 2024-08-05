@@ -59,5 +59,5 @@ async def get_character_worn(
 ) -> CharacterWorn | None:
     return await character_worn_detail(
         session=session,
-        character_item_id=character_worn_id
+        character_worn_id=character_worn_id
     )

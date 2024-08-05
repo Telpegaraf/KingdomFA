@@ -3,14 +3,14 @@ from typing import Annotated
 from annotated_types import MaxLen
 
 
-class Currency(BaseModel):
+class CurrencyBase(BaseModel):
     name: Annotated[str, MaxLen(200)]
     price: int
     description: str
     weight: PositiveFloat
 
 
-class CurrencyBase(Currency):
+class Currency(CurrencyBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
