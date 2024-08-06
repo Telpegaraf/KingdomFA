@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.models.inventory import CharacterCurrency, CharacterWorn, CharacterArmor, CharacterWeapon, CharacterItem
+from core.models.inventory import CharacterCurrency, CharacterWorn, CharacterArmor, CharacterWeapon, CharacterItem
 from api_v1.schemas.character import inventory as schemas
 from api_v1.crud.character import inventory as crud
 from api_v1.dependencies.character.inventory import (

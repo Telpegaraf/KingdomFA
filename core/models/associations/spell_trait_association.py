@@ -1,11 +1,11 @@
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
-from api_v1.models.base_model import Base
+from core.models.base_model import Base
 
 if TYPE_CHECKING:
-    from api_v1.models.spell import Spell
-    from api_v1.models.general import SpellTrait
+    from core.models.spell import Spell
+    from core.models.general import SpellTrait
 
 
 class SpellTraitAssociation(Base):

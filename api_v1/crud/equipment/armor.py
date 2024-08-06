@@ -11,13 +11,13 @@ from api_v1.schemas.equipment.armor import (
     ArmorUpdate
 )
 
-from api_v1.models.equipment import (
+from core.models.equipment import (
     Armor,
     ArmorGroup,
     Currency
 )
 
-from api_v1.models.general import (
+from core.models.general import (
     ArmorTrait,
     ArmorSpecialization
 )

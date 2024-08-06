@@ -2,15 +2,15 @@ from sqlalchemy import String, SmallInteger, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 
-from api_v1.models.base_model import Base
-from api_v1.models.enum import MasteryLevels, HealthByLevel
-from api_v1.models.mixins.spell import SpellTraditionMixin
-from api_v1.models.mixins.feat import FeatMixin
-from api_v1.models.mixins.character_class import CharacterClassMixin
+from core.models.base_model import Base
+from core.models.enum import MasteryLevels, HealthByLevel
+from core.models.mixins.spell import SpellTraditionMixin
+from core.models.mixins.feat import FeatMixin
+from core.models.mixins.character_class import CharacterClassMixin
 
 if TYPE_CHECKING:
-    from api_v1.models.feat import Feat
-    from api_v1.models.character import Character
+    from core.models.feat import Feat
+    from core.models.character import Character
 
 
 class CharacterClass(SpellTraditionMixin, Base):

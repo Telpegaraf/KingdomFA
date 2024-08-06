@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.models.user import User
+from core.models.user import User
 from api_v1.schemas.user import (
     UserBase,
     UserUpdatePassword,

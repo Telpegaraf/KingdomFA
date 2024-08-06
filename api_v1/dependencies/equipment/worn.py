@@ -4,7 +4,7 @@ from typing import Annotated
 
 import database
 from api_v1.crud.equipment.worn import worn_detail
-from api_v1.models.equipment import Worn
+from core.models.equipment import Worn
 
 
 async def get_worn(

@@ -1,9 +1,9 @@
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship, mapped_column, Mapped
-from api_v1.models.base_model import Base
+from core.models.base_model import Base
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from api_v1.models.inventory import EquippedItems, CharacterWorn
+    from core.models.inventory import EquippedItems, CharacterWorn
 
 
 class WornEquippedAssociation(Base):

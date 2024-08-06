@@ -1,11 +1,11 @@
 from sqlalchemy import UniqueConstraint, SmallInteger, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
-from api_v1.models.base_model import Base
-from api_v1.models.mixins.equipment import WeaponMixin, CurrencyMixin, ItemMixin, ArmorMixin, WornMixin
-from api_v1.models.mixins.character import CharacterMixin
+from core.models.base_model import Base
+from core.models.mixins.equipment import WeaponMixin, CurrencyMixin, ItemMixin, ArmorMixin, WornMixin
+from core.models.mixins.character import CharacterMixin
 if TYPE_CHECKING:
-    from api_v1.models.associations.worn_equipped_association import WornEquippedAssociation
+    from core.models.associations.worn_equipped_association import WornEquippedAssociation
 
 
 class CharacterCurrency(CharacterMixin, CurrencyMixin, Base):

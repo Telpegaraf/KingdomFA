@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import database
 from api_v1.crud.race import race_detail
-from api_v1.models.race import Race
+from core.models.race import Race
 
 
 async def get_race(

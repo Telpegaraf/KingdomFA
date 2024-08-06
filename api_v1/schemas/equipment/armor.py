@@ -2,8 +2,8 @@ from pydantic import BaseModel, PositiveFloat, ConfigDict, Field
 from typing import Annotated
 from annotated_types import MaxLen
 from api_v1.schemas.equipment.currency import Currency
-from api_v1.schemas.general import General, GeneralDescription
-from api_v1.models.equipment import ArmorCategory
+from api_v1.schemas.general import GeneralDescription
+from core.models.equipment import ArmorCategory
 
 
 # _____________________________

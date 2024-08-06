@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.models.character import CharacterPoint
+from core.models.character import CharacterPoint
 from api_v1.schemas.character import character_points as schemas
 from api_v1.crud.character import character_points as crud
 from api_v1.dependencies.character.character_point import get_character_point

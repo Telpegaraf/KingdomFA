@@ -1,17 +1,17 @@
 from sqlalchemy import String, SmallInteger, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
-from api_v1.models.base_model import Base
+from core.models.base_model import Base
 
-from api_v1.models.associations.spell_trait_association import SpellTraitAssociation
-from api_v1.models.mixins.spell import (
+from core.models.associations.spell_trait_association import SpellTraitAssociation
+from core.models.mixins.spell import (
     SpellTraditionMixin,
     SpellCastMixin,
     SpellSchoolMixin,
 )
 
 if TYPE_CHECKING:
-    from api_v1.models.general import (
+    from core.models.general import (
         SpellTrait,
     )
 

@@ -3,10 +3,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from api_v1.models.general import ArmorSpecialization
-    from api_v1.models.equipment import Armor
+    from core.models.general import ArmorSpecialization
+    from core.models.equipment import Armor
 
-from api_v1.models.base_model import Base
+from core.models.base_model import Base
 
 
 class ArmorSpecializationAssociation(Base):

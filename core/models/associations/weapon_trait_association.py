@@ -1,11 +1,11 @@
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
-from api_v1.models.base_model import Base
+from core.models.base_model import Base
 
 if TYPE_CHECKING:
-    from api_v1.models.equipment import Weapon
-    from api_v1.models.general import WeaponTrait
+    from core.models.equipment import Weapon
+    from core.models.general import WeaponTrait
 
 
 class WeaponTraitAssociation(Base):

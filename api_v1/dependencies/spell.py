@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import database
 from api_v1.crud.spell import spell_detail
-from api_v1.models.spell import Spell
+from core.models.spell import Spell
 
 
 async def get_spell(

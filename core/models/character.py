@@ -2,16 +2,16 @@ from sqlalchemy import String, Text, SmallInteger, Enum, UniqueConstraint, Forei
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 
-from api_v1.models.base_model import Base
-from api_v1.models.mixins.race import RaceRelationMixin
-from api_v1.models.mixins.user import UserRelationMixin
-from api_v1.models.mixins.character_class import CharacterClassMixin
-from api_v1.models.mixins.god import GodMixin, DomainMixin
-from api_v1.models.mixins.character import CharacterMixin
-from api_v1.models.mixins.skill import SkillMixin
-from api_v1.models.enum import MasteryLevels
+from core.models.base_model import Base
+from core.models.mixins.race import RaceRelationMixin
+from core.models.mixins.user import UserRelationMixin
+from core.models.mixins.character_class import CharacterClassMixin
+from core.models.mixins.god import GodMixin, DomainMixin
+from core.models.mixins.character import CharacterMixin
+from core.models.mixins.skill import SkillMixin
+from core.models.enum import MasteryLevels
 if TYPE_CHECKING:
-    from api_v1.models.inventory import (
+    from core.models.inventory import (
     CharacterItem,
     CharacterCurrency,
     CharacterWorn,
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     CharacterWeapon,
     EquippedItems
     )
-    from api_v1.models.general import WeaponGroup
+    from core.models.general import WeaponGroup
 
 
 class Character(

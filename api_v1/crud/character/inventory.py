@@ -11,15 +11,15 @@ from api_v1.schemas.character.inventory import (
     CharacterWeaponCreateUpdate,
     CharacterWornCreateUpdate
 )
-from api_v1.models.inventory import (
+from core.models.inventory import (
     CharacterWorn,
     CharacterArmor,
     CharacterItem,
     CharacterWeapon,
     CharacterCurrency
 )
-from api_v1.models.equipment import Currency, Item, Armor, Weapon, Worn
-from api_v1.models.character import Character
+from core.models.equipment import Currency, Item, Armor, Weapon, Worn
+from core.models.character import Character
 
 
 async def character_currency_list(session: AsyncSession):

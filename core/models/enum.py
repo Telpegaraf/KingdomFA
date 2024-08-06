@@ -1,6 +1,6 @@
 from enum import Enum
-from api_v1.models import general as models
-from api_v1.models import equipment
+from core.models import general as models
+from core.models import equipment
 
 
 class MasteryLevels(str, Enum):

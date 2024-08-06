@@ -2,11 +2,11 @@ from sqlalchemy import String
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from typing import TYPE_CHECKING
 
-from api_v1.models.base_model import Base
+from core.models.base_model import Base
 
 if TYPE_CHECKING:
-    from api_v1.models.associations.god_domain_association import GodDomainAssociation
-    from api_v1.models.character import Character
+    from core.models.associations.god_domain_association import GodDomainAssociation
+    from core.models.character import Character
 
 
 class Domain(Base):

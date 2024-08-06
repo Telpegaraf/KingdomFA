@@ -6,8 +6,8 @@ from api_v1.schemas.character.character_weapon_mastery import(
     CharacterWeaponMasteryCreate,
     CharacterWeaponMasteryUpdate
 )
-from api_v1.models.character import CharacterWeaponMastery, Character
-from api_v1.models.general import WeaponGroup
+from core.models.character import CharacterWeaponMastery, Character
+from core.models.general import WeaponGroup
 from api_v1.utils.model_result import get_model_result
 
 

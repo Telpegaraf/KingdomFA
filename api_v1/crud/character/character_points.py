@@ -3,7 +3,7 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from api_v1.schemas.character.character_points import CharacterPointCreate, CharacterPointUpdate
-from api_v1.models.character import CharacterPoint, Character
+from core.models.character import CharacterPoint, Character
 from api_v1.utils.model_result import get_model_result
 
 
