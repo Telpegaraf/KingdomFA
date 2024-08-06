@@ -28,6 +28,8 @@ class Settings(BaseSettings):
     SUPER_USER_EMAIL: str
     SUPER_USER_PASSWORD: str
 
+    LOG_LEVEL: str
+
     model_config = SettingsConfigDict(env_file='.env')
 
     @property
@@ -63,6 +65,10 @@ class Settings(BaseSettings):
             "super_user_email": self.SUPER_USER_EMAIL,
             "super_user_password": self.SUPER_USER_PASSWORD
         }
+
+    @property
+    def log_level(self):
+        return f"{self.LOG_LEVEL}"
 
 
 settings = Settings()

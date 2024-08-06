@@ -3,16 +3,13 @@ from fastapi import FastAPI
 from routers import include_routers
 import logging
 
+from config_logs import configure_logging
 from action.create_super_user import create_superuser
 
 app = FastAPI()
 include_routers(app)
-logging.basicConfig(
-    level=logging.DEBUG,
-    filename='kingdom.log',
-    datefmt="%Y-%m-%d %H:%M:%S",
-    format="[%(asctime)s.%(msecs)03d] %(module)10s:%(lineno)-3d %(levelname)-7s - %(message)s",
-)
+
+configure_logging()
 logger = logging.getLogger(__name__)
 
 
