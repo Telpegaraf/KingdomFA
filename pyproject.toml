@@ -25,5 +25,5 @@ fastapi-users = {extras = ["sqlalchemy"], version = "^13.0.0"}
 
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core==1.8.3"]
 build-backend = "poetry.core.masonry.api"

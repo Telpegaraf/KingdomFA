@@ -1,5 +1,4 @@
-from fastapi import Depends
-from sqlalchemy.ext.asyncio import AsyncSession
+import logging
 from sqlalchemy import select
 from api_v1.models.user import User
 from core.config import settings
@@ -31,7 +30,7 @@ async def create_superuser():
             session.add(superuser)
             await session.commit()
             await session.refresh(superuser)
-            print(f"Superuser {superuser.username} created successfully.")
+            logging.warning(f"Superuser {superuser.username} created successfully.")
 
 
 if __name__ == "__main__":
