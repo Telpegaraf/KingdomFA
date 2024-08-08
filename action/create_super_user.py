@@ -11,6 +11,7 @@ async def create_superuser():
     user_name = settings.super_user.get("super_user_email")
     user_password = settings.super_user.get("super_user_password")
     user_password = hash_password(user_password)
+    print(11111111111)
 
     async with database.db_helper.session_factory() as session:
         async with session.begin():
@@ -18,6 +19,7 @@ async def create_superuser():
                 select(User).where(User.username == user_name)
             )
             if existing_user.scalar_one_or_none():
+                logging.warning("Superuser already exist")
                 return
 
             superuser = User(
