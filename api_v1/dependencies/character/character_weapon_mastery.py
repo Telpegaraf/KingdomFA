@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import database
 from api_v1.crud.character.character_weapon_mastery import character_weapon_mastery_detail
-from api_v1.models.character import CharacterWeaponMastery
+from core.models.character import CharacterWeaponMastery
 
 
 async def get_character_weapon_mastery(

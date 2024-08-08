@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import database
 from api_v1.crud.character.secondary_stat import secondary_stat_detail
-from api_v1.models.character import SecondaryStat
+from core.models.character import SecondaryStat
 
 
 async def get_secondary_stat(

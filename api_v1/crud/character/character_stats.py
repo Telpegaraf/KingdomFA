@@ -3,7 +3,7 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from api_v1.schemas.character.character_stats import CharacterStatsCreate, CharacterStatsUpdate
-from api_v1.models.character import CharacterStat, Character
+from core.models.character import CharacterStat, Character
 from api_v1.utils.model_result import get_model_result
 
 

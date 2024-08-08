@@ -4,8 +4,8 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from api_v1.schemas.spell import SpellCreate, SpellUpdate
-from api_v1.models.spell import Spell
-from api_v1.models.general import SpellCast, SpellTrait, SpellSchool, SpellTradition
+from core.models.spell import Spell
+from core.models.general import SpellCast, SpellTrait, SpellSchool, SpellTradition
 from api_v1.utils.model_result import get_model_result, get_model_m2m_result
 
 

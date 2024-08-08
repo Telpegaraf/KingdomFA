@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Annotated
 
 import database
-from api_v1.models.equipment import Armor
+from core.models.equipment import Armor
 from api_v1.crud.equipment.armor import armor_detail
 
 

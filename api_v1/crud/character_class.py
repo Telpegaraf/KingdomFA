@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, Result
 from api_v1.schemas import character_class as schema
-from api_v1.models import character_class as models
+from core.models import character_class as models
 
 
 async def character_class_create(

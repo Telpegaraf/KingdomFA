@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api_v1.crud import religion as crud
 from api_v1.dependencies.get_object import get_object_by_id_dependency
-from api_v1.models.religion import Domain, God
+from core.models.religion import Domain, God
 from api_v1.schemas import religion as schemas
 from auth.utils import get_current_token_payload
 from database import db_helper

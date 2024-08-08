@@ -23,14 +23,15 @@ class Feat(CharacterClassMixin, Base):
     backgrounds: Mapped[list["Background"]] = relationship(back_populates="feat")
     features: Mapped[list["Feature"]] = relationship(back_populates="feat")
 
-
     feat_traits: Mapped[list["FeatTrait"]] = relationship(
         secondary="feat_trait",
-        back_populates="feats"
+        back_populates="feats",
+        overlaps="feat_trait_details"
     )
     feat_details: Mapped[list["FeatTraitAssociation"]] = relationship(
         back_populates="feat",
-        passive_deletes=True
+        passive_deletes=True,
+        overlaps="feat_trait"
     )
 
     action_id: Mapped[int] = mapped_column(ForeignKey("actions.id"))

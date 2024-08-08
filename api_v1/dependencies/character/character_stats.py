@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import database
 from api_v1.crud.character.character_stats import character_stats_detail
-from api_v1.models.character import CharacterStat
+from core.models.character import CharacterStat
 
 
 async def get_character_stats(

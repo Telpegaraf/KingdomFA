@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from api_v1.schemas import character_class as schemas
-from api_v1.models import character_class as models
+from core.models import character_class as models
 from api_v1.crud import character_class as crud
 from api_v1.dependencies.get_object import get_object_by_id_dependency
 from auth.utils import get_current_token_payload

@@ -9,8 +9,8 @@ from api_v1.schemas.equipment.worn import (
     WornUpdate,
     SlotBase
 )
-from api_v1.models.equipment import Worn, Slot, Currency
-from api_v1.models.general import WornTrait
+from core.models.equipment import Worn, Slot, Currency
+from core.models.general import WornTrait
 from api_v1.utils.model_result import get_model_result, get_model_m2m_result
 
 

@@ -7,7 +7,7 @@ from api_v1.schemas import general as schemas
 from api_v1.crud import general as crud
 from auth.utils import get_current_token_payload
 from database import db_helper
-from api_v1.models.enum import (
+from core.models.enum import (
     ModelName,
     ModelDescription,
     ModelNameDescription,

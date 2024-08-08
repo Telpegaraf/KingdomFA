@@ -2,19 +2,19 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 
-from api_v1.models import Base
+from core.models.base_model import Base
 if TYPE_CHECKING:
-    from api_v1.models.feat import Feat
-    from api_v1.models.character import CharacterSkillMastery, CharacterWeaponMastery
-    from api_v1.models.character_class import CharacterClass
-    from api_v1.models.associations.worn_item_trait_association import WornItemTraitAssociation
-    from api_v1.models.associations.feat_traits_association import FeatTraitAssociation
-    from api_v1.models.associations.armor_trait_association import ArmorTraitAssociation
-    from api_v1.models.associations.weapon_trait_association import WeaponTraitAssociation
-    from api_v1.models.associations.armor_specialization_association import ArmorSpecializationAssociation
-    from api_v1.models.associations.spell_trait_association import SpellTraitAssociation
-    from api_v1.models.equipment import Worn, Armor, Weapon
-    from api_v1.models.spell import Spell
+    from core.models.feat import Feat
+    from core.models.character import CharacterSkillMastery, CharacterWeaponMastery
+    from core.models.character_class import CharacterClass
+    from core.models.associations.worn_item_trait_association import WornItemTraitAssociation
+    from core.models.associations.feat_traits_association import FeatTraitAssociation
+    from core.models.associations.armor_trait_association import ArmorTraitAssociation
+    from core.models.associations.weapon_trait_association import WeaponTraitAssociation
+    from core.models.associations.armor_specialization_association import ArmorSpecializationAssociation
+    from core.models.associations.spell_trait_association import SpellTraitAssociation
+    from core.models.equipment import Worn, Armor, Weapon
+    from core.models.spell import Spell
 
 
 class GeneralBase(Base):
@@ -88,11 +88,13 @@ class FeatTrait(GeneralDescriptionBase):
 
     feats: Mapped[list["Feat"]] = relationship(
         secondary='feat_trait',
-        back_populates="feat_traits"
+        back_populates="feat_traits",
+        overlaps="feat_details"
     )
     feat_trait_details: Mapped[list["FeatTraitAssociation"]] = relationship(
         back_populates="feat_trait",
-        passive_deletes=True
+        passive_deletes=True,
+        overlaps="feats"
     )
 
 

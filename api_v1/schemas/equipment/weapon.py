@@ -1,7 +1,7 @@
 from annotated_types import MaxLen
 from pydantic import BaseModel, Field, PositiveFloat, ConfigDict
 from typing import Annotated, Optional
-from api_v1.models.equipment import Dice
+from core.models.equipment import Dice
 from api_v1.schemas.equipment.currency import Currency
 from api_v1.schemas.general import GeneralDescriptionBase, GeneralBase
 

@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import database
 from api_v1.crud.character.character_points import character_point_detail
-from api_v1.models.character import CharacterPoint
+from core.models.character import CharacterPoint
 
 
 async def get_character_point(

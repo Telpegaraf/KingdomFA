@@ -1,10 +1,10 @@
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
-from api_v1.models.base_model import Base
+from core.models.base_model import Base
 if TYPE_CHECKING:
-    from api_v1.models.general import FeatTrait
-    from api_v1.models.feat import Feat
+    from core.models.general import FeatTrait
+    from core.models.feat import Feat
 
 
 class FeatTraitAssociation(Base):
@@ -22,7 +22,9 @@ class FeatTraitAssociation(Base):
 
     feat: Mapped["Feat"] = relationship(
         back_populates='feat_details',
+        overlaps="feat_traits"
     )
     feat_trait: Mapped["FeatTrait"] = relationship(
-        back_populates='feat_trait_details'
+        back_populates='feat_trait_details',
+        overlaps="feats"
     )

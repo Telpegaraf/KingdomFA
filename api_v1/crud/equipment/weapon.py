@@ -3,8 +3,8 @@ from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from api_v1.models.equipment import Weapon, Currency
-from api_v1.models.general import DamageType, WeaponGroup, WeaponSpecialization, WeaponTrait
+from core.models.equipment import Weapon, Currency
+from core.models.general import DamageType, WeaponGroup, WeaponSpecialization, WeaponTrait
 from api_v1.schemas.equipment.weapon import WeaponCreate, WeaponUpdate
 from api_v1.utils.model_result import get_model_m2m_result, get_model_result
 

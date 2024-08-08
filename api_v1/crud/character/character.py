@@ -3,7 +3,7 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from api_v1.schemas.character.character import CharacterCreate, CharacterUpdate
-from api_v1.models.character import (
+from core.models.character import (
     Character,
     CharacterStat,
     CharacterPoint,
@@ -11,11 +11,11 @@ from api_v1.models.character import (
     CharacterWeaponMastery,
     CharacterSkillMastery
 )
-from api_v1.models.user import User
-from api_v1.models.religion import God, Domain
-from api_v1.models.race import Race
-from api_v1.models.character_class import CharacterClass
-from api_v1.models.general import Skill, WeaponGroup
+from core.models.user import User
+from core.models.religion import God, Domain
+from core.models.race import Race
+from core.models.character_class import CharacterClass
+from core.models.general import Skill, WeaponGroup
 from api_v1.crud.general import object_list
 from api_v1.utils.model_result import get_model_result
 import logging

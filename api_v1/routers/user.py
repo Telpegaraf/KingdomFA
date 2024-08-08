@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api_v1.crud import user as crud
 from api_v1.dependencies.get_object import get_object_by_id_dependency
-from api_v1.models import user as models
+from core.models import user as models
 from api_v1.schemas import user as schemas
 from auth.utils import get_current_token_payload, get_is_super_user
 from database import db_helper

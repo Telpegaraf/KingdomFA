@@ -6,8 +6,8 @@ from sqlalchemy import Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
 from api_v1.types.user_id import UserIdType
-from api_v1.models.base_model import Base, MainBase
-from api_v1.models.mixins.id_int_pk import IdIntPkMixin
+from core.models.base_model import Base, MainBase
+from core.models.mixins.id_int_pk import IdIntPkMixin
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession

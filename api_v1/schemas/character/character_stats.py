@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from api_v1.models.enum import MasteryLevels
+from core.models.enum import MasteryLevels
 from api_v1.schemas.character.character import CharacterName
 
 

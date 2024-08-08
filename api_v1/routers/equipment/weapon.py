@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import db_helper
 from api_v1.schemas.equipment import weapon as schemas
-from api_v1.models.equipment import Weapon
+from core.models.equipment import Weapon
 from api_v1.crud.equipment import weapon as crud
 from api_v1.dependencies.equipment.weapon import get_weapon
 

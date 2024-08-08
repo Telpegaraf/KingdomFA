@@ -10,7 +10,7 @@ from api_v1.crud.character.inventory import (
     character_weapon_detail,
     character_worn_detail
 )
-from api_v1.models.inventory import CharacterCurrency, CharacterItem, CharacterArmor, CharacterWeapon, CharacterWorn
+from core.models.inventory import CharacterCurrency, CharacterItem, CharacterArmor, CharacterWeapon, CharacterWorn
 
 
 async def get_character_currency(

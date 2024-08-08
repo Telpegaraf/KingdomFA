@@ -3,8 +3,8 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from api_v1.schemas.character.character_skill_mastery import CharacterSkillMasteryCreate, CharacterSkillMasteryUpdate
-from api_v1.models.character import CharacterSkillMastery, Character
-from api_v1.models.general import Skill
+from core.models.character import CharacterSkillMastery, Character
+from core.models.general import Skill
 from api_v1.utils.model_result import get_model_result
 
 

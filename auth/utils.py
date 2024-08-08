@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import jwt
 from core.config import settings
 from sqlalchemy.ext.asyncio import AsyncSession
-from api_v1.models.user import User
+from core.models.user import User
 from database import db_helper
 
 oauth2_scheme = OAuth2PasswordBearer(

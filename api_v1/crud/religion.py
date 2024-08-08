@@ -8,7 +8,7 @@ from api_v1.schemas.religion import (
     DomainUpdate,
     GodCreateUpdate
 )
-from api_v1.models.religion import Domain, God
+from core.models.religion import Domain, God
 from api_v1.utils.model_result import get_model_m2m_result
 
 

@@ -1,17 +1,16 @@
-import logging
 from sqlalchemy import select
-from api_v1.models.user import User
+from core.models.user import User
 from core.config import settings
 import database
 from auth.utils import hash_password
 import asyncio
+import logging
 
 
 async def create_superuser():
     user_name = settings.super_user.get("super_user_email")
     user_password = settings.super_user.get("super_user_password")
     user_password = hash_password(user_password)
-    print(11111111111)
 
     async with database.db_helper.session_factory() as session:
         async with session.begin():

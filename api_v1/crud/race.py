@@ -3,7 +3,7 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Type
 from api_v1.schemas.race import RaceBase
-from api_v1.models.race import Race
+from core.models.race import Race
 
 
 async def race_list(

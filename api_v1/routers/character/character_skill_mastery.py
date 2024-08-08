@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.models.character import CharacterSkillMastery
+from core.models.character import CharacterSkillMastery
 from api_v1.schemas.character import character_skill_mastery as schemas
 from api_v1.crud.character import character_skill_mastery as crud
 from api_v1.dependencies.character.character_skill_mastery import get_character_skill_mastery
