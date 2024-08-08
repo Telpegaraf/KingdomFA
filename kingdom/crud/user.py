@@ -1,7 +1,12 @@
+import logging
+
+import sqlalchemy.exc
 from fastapi import HTTPException, status, Depends
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
+from asyncpg.exceptions import UniqueViolationError
 
 from kingdom.models.user import User
 from kingdom.schemas.user import (
@@ -35,8 +40,14 @@ async def user_create(
         email=user_in.email,
     )
     session.add(user)
-    await session.commit()
-    await session.refresh(user)
+    try:
+        await session.commit()
+        await session.refresh(user)
+    except sqlalchemy.exc.IntegrityError as e:
+        print(e)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This user already exists")
     return user
 
 
