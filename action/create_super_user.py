@@ -18,6 +18,7 @@ async def create_superuser():
                 select(User).where(User.username == user_name)
             )
             if existing_user.scalar_one_or_none():
+                logging.warning("Superuser already exist")
                 return
 
             superuser = User(
