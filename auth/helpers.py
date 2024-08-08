@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from auth import utils as auth_utils
 from core.config import settings
-from api_v1.schemas import user as schemas
+from kingdom.schemas import user as schemas
 
 
 TOKEN_TYPE_FIELD = "type"

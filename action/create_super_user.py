@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from core.models.user import User
+from kingdom.models.user import User
 from core.config import settings
 import database
 from auth.utils import hash_password

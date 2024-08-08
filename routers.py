@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from api_v1.routers import religion, user, auth, general, character_class, user_test, spell, race
-from api_v1.routers.equipment import worn, armor, weapon
-from api_v1.routers.character import(
+from kingdom.routers import religion, user, auth, general, character_class, user_test, spell, race
+from kingdom.routers.equipment import worn, armor, weapon
+from kingdom.routers.character import(
     character,
     character_stat,
     character_point,

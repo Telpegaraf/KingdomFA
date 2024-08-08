@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 from fastapi.security import OAuth2PasswordBearer
 
-from core.models.user import User
+from kingdom.models.user import User
 
 import database
 from auth import utils
