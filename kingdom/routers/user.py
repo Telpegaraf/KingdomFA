@@ -45,7 +45,7 @@ async def user_list(
     "/create/",
     response_model=schemas.UserBase,
     description="Create a new User",
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
 )
 async def user_create(
         user_in: schemas.UserBase,
@@ -56,7 +56,7 @@ async def user_create(
 
 
 @user_router.patch(
-    "/change_password/{object_id}/",
+    "/{object_id}/",
     description="Change password for User, depending on ID, if old password is correct",
     dependencies=[Depends(http_bearer)]
 )
@@ -74,7 +74,7 @@ async def user_change_password(
 
 
 @user_router.delete(
-    "/user_delete/{object_id}/",
+    "/{object_id}/",
     description="Delete User, depending on ID",
     dependencies=[Depends(http_bearer)],
     status_code=status.HTTP_204_NO_CONTENT
