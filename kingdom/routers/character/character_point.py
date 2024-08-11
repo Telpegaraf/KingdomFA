@@ -35,7 +35,7 @@ async def character_points_list(
 
 
 @character_point_router.post(
-    "/create/",
+    "/",
     description="Create a new Character Point object",
     response_model=schemas.CharacterPointRead,
     status_code=status.HTTP_201_CREATED
@@ -48,7 +48,7 @@ async def character_points_create(
 
 
 @character_point_router.patch(
-    "/update/{character_point_id}/",
+    "/{character_point_id}/",
     description="Update the Character Point object, depending on ID",
     response_model=schemas.CharacterPointRead
 )
@@ -62,7 +62,7 @@ async def character_update(
 
 
 @character_point_router.delete(
-    "/delete/{character_point_id}/",
+    "/{character_point_id}/",
     description="Delete the Character Point object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

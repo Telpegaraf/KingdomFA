@@ -35,7 +35,7 @@ async def character_stats_list(
 
 
 @character_stats_router.post(
-    "/create/",
+    "/",
     description="Create a new Character Stat object",
     response_model=schemas.CharacterStatsRead,
     status_code=status.HTTP_201_CREATED
@@ -48,7 +48,7 @@ async def character_stats_create(
 
 
 @character_stats_router.patch(
-    "/update/{character_stat_id}/",
+    "/{character_stat_id}/",
     description="Update the Character Stat object, depending on ID",
     response_model=schemas.CharacterStatsRead
 )
@@ -62,7 +62,7 @@ async def character_update(
 
 
 @character_stats_router.delete(
-    "/delete/{character_stat_id}/",
+    "/{character_stat_id}/",
     description="Delete the Character Stat object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

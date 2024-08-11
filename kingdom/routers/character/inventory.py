@@ -42,7 +42,7 @@ async def character_currency_list(
 
 
 @inventory_router.post(
-    "/character_currency/create/",
+    "/character_currency/",
     description="Create a new Character Currency object",
     response_model=schemas.CharacterCurrencyRead,
     status_code=status.HTTP_201_CREATED
@@ -55,7 +55,7 @@ async def character_currency_create(
 
 
 @inventory_router.patch(
-    "/character_currency/update/{character_currency_id}/",
+    "/character_currency/{character_currency_id}/",
     description="Update the Character Currency object, depending on ID",
     response_model=schemas.CharacterCurrencyCreateUpdate
 )
@@ -69,7 +69,7 @@ async def character_currency_update(
 
 
 @inventory_router.delete(
-    "/character_currency/delete/{character_currency_id}/",
+    "/character_currency/{character_currency_id}/",
     description="Delete the Character Point object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )
@@ -102,7 +102,7 @@ async def character_item_list(
 
 
 @inventory_router.post(
-    "/character_item/create/",
+    "/character_item/",
     description="Create a new Character Item object",
     response_model=schemas.CharacterItemRead,
     status_code=status.HTTP_201_CREATED
@@ -115,7 +115,7 @@ async def character_item_create(
 
 
 @inventory_router.patch(
-    "/character_item/update/{character_item_id}/",
+    "/character_item/{character_item_id}/",
     description="Update the Character Item object, depending on ID",
     response_model=schemas.CharacterItemCreateUpdate
 )
@@ -129,7 +129,7 @@ async def character_item_update(
 
 
 @inventory_router.delete(
-    "/character_item/delete/{character_item_id}/",
+    "/character_item/{character_item_id}/",
     description="Delete the Character Item object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )
@@ -162,7 +162,7 @@ async def character_armor_list(
 
 
 @inventory_router.post(
-    "/character_armor/create/",
+    "/character_armor/",
     description="Create a new Character Armor object",
     response_model=schemas.CharacterArmorRead,
     status_code=status.HTTP_201_CREATED
@@ -175,7 +175,7 @@ async def character_armor_create(
 
 
 @inventory_router.patch(
-    "/character_armor/update/{character_armor_id}/",
+    "/character_armor/{character_armor_id}/",
     description="Update the Character Armor object, depending on ID",
     response_model=schemas.CharacterArmorCreateUpdate
 )
@@ -189,7 +189,7 @@ async def character_armor_update(
 
 
 @inventory_router.delete(
-    "/character_armor/delete/{character_armor_id}/",
+    "/character_armor/{character_armor_id}/",
     description="Delete the Character Armor object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )
@@ -224,7 +224,7 @@ async def character_weapon_list(
 
 
 @inventory_router.post(
-    "/character_weapon/create/",
+    "/character_weapon/",
     description="Create a new Character Weapon object",
     response_model=schemas.CharacterWeaponRead,
     status_code=status.HTTP_201_CREATED
@@ -237,7 +237,7 @@ async def character_weapon_create(
 
 
 @inventory_router.patch(
-    "/character_weapon/update/{character_weapon_id}/",
+    "/character_weapon/{character_weapon_id}/",
     description="Update the Character Weapon object, depending on ID",
     response_model=schemas.CharacterWeaponCreateUpdate
 )
@@ -251,7 +251,7 @@ async def character_weapon_update(
 
 
 @inventory_router.delete(
-    "/character_weapon/delete/{character_weapon_id}/",
+    "/character_weapon/{character_weapon_id}/",
     description="Delete the Character Weapon object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )
@@ -286,7 +286,7 @@ async def character_worn_list(
 
 
 @inventory_router.post(
-    "/character_worn/create/",
+    "/character_worn/",
     description="Create a new Character Worn object",
     response_model=schemas.CharacterWornRead,
     status_code=status.HTTP_201_CREATED
@@ -299,7 +299,7 @@ async def character_worn_create(
 
 
 @inventory_router.patch(
-    "/character_worn/update/{character_worn_id}/",
+    "/character_worn/{character_worn_id}/",
     description="Update the Character Worn object, depending on ID",
     response_model=schemas.CharacterWornCreateUpdate
 )
@@ -313,7 +313,7 @@ async def character_worn_update(
 
 
 @inventory_router.delete(
-    "/character_worn/delete/{character_worn_id}/",
+    "/character_worn/{character_worn_id}/",
     description="Delete the Character Worn object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

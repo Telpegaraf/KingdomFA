@@ -16,7 +16,7 @@ armor_router = APIRouter(prefix="/armor", tags=["Armor"])
 
 
 @armor_router.get(
-    "/armor_group/{object_id}",
+    "/armor_group/{object_id}/",
     description="Return the armor group object, depending on id",
     response_model=schemas.ArmorGroupBase
 )
@@ -38,7 +38,7 @@ async def get_armor_group_list(
 
 
 @armor_router.post(
-    "/armor_group/create/",
+    "/armor_group/",
     description="Create new Armor Group object",
     response_model=schemas.ArmorGroup,
     status_code=status.HTTP_201_CREATED
@@ -51,7 +51,7 @@ async def armor_group_create(
 
 
 @armor_router.patch(
-    "/armor_group/update/{object_id}/",
+    "/armor_group/{object_id}/",
     description="Change Armor Group object",
     response_model=schemas.ArmorGroupBase
 )
@@ -68,7 +68,7 @@ async def armor_group_update(
 
 
 @armor_router.delete(
-    "/armor_group/delete/{object_id}",
+    "/armor_group/{object_id}/",
     description="Delete Armor Group object",
     status_code=status.HTTP_204_NO_CONTENT
 )
@@ -102,7 +102,7 @@ async def get_armor_list(
 
 
 @armor_router.post(
-    "/create/",
+    "/",
     description="Create a new armor object",
     response_model=schemas.Armor
 )
@@ -114,7 +114,7 @@ async def armor_create(
 
 
 @armor_router.patch(
-    "/update/{armor_id}/",
+    "/{armor_id}/",
     description="Update armor object, depending on ID",
     response_model=schemas.ArmorRead
 )
@@ -131,7 +131,7 @@ async def armor_update(
 
 
 @armor_router.delete(
-    "/{armor_id}/delete/",
+    "/{armor_id}/",
     description="Delete Armor object, depending on ID"
 )
 async def armor_delete(

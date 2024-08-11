@@ -37,7 +37,7 @@ async def character_skill_mastery_list(
 
 
 @character_skill_mastery_router.post(
-    "/create/",
+    "/",
     description="Create a new Character Skill Mastery object",
     response_model=schemas.CharacterSkillMasteryRead,
     status_code=status.HTTP_201_CREATED
@@ -53,7 +53,7 @@ async def character_skill_mastery_create(
 
 
 @character_skill_mastery_router.patch(
-    "/update/{character_skill_mastery_id}/",
+    "/{character_skill_mastery_id}/",
     description="Update the Character Skill Mastery object, depending on ID",
     response_model=schemas.CharacterSkillMasteryRead
 )
@@ -67,7 +67,7 @@ async def character_update(
 
 
 @character_skill_mastery_router.delete(
-    "/delete/{character_skill_mastery_id}/",
+    "/{character_skill_mastery_id}/",
     description="Delete the Character Skill Mastery object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

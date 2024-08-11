@@ -42,7 +42,7 @@ async def user_list(
 
 
 @user_router.post(
-    "/create/",
+    "/",
     response_model=schemas.UserBase,
     description="Create a new User",
     status_code=status.HTTP_201_CREATED,

@@ -38,7 +38,7 @@ async def slot_list(
 
 
 @worn_router.post(
-    "/slot/create/",
+    "/slot/",
     description="Create a new Slot object",
     response_model=schemas.Slot
 )
@@ -50,7 +50,7 @@ async def slot_create(
 
 
 @worn_router.patch(
-    "/slot/update/{object_id}/",
+    "/slot/{object_id}/",
     description="Update the Slot object, depending on ID",
     response_model=schemas.SlotBase
 )
@@ -63,7 +63,7 @@ async def slot_update(
 
 
 @worn_router.delete(
-    "/slot/delete/{object_id}/",
+    "/slot/{object_id}/",
     description="Delete the Slot objecs, depending on ID"
 )
 async def delete(
@@ -96,7 +96,7 @@ async def get_worn_list(
 
 
 @worn_router.post(
-    "/create/",
+    "/",
     description="Create a new worn object",
     response_model=schemas.Worn
 )
@@ -108,7 +108,7 @@ async def worn_create(
 
 
 @worn_router.patch(
-    "/update/{worn_id}/",
+    "/{worn_id}/",
     description="Update worn object, depending on ID",
     response_model=schemas.WornRead
 )
@@ -125,7 +125,7 @@ async def worn_update(
 
 
 @worn_router.delete(
-    "/{worn_id}/delete/",
+    "/{worn_id}/",
     description="Delete worn object, depending on ID"
 )
 async def worn_delete(

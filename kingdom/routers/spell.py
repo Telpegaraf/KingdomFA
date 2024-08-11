@@ -35,7 +35,7 @@ async def spell_list(
 
 
 @spell_router.post(
-    "/create/",
+    "/",
     description="Create a new Spell object",
     response_model=schemas.SpellRead,
     status_code=status.HTTP_201_CREATED
@@ -48,7 +48,7 @@ async def spell_create(
 
 
 @spell_router.patch(
-    "/update/{spell_id}/",
+    "/{spell_id}/",
     description="Update the Spell object, depending on ID",
     response_model=schemas.SpellRead
 )
@@ -61,7 +61,7 @@ async def spell_update(
 
 
 @spell_router.delete(
-    "/delete/{spell_id}/",
+    "/{spell_id}/",
     description="Delete the Spell object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

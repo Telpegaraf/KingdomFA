@@ -36,7 +36,7 @@ async def weapon_list(
 
 
 @weapon_router.post(
-    "/create/",
+    "/",
     description="Create a new Weapon object",
     response_model=schemas.Weapon,
     status_code=status.HTTP_201_CREATED
@@ -49,7 +49,7 @@ async def weapon_create(
 
 
 @weapon_router.patch(
-    "/update/{weapon_id}",
+    "/{weapon_id}/",
     description="Update the Weapon object, depending on ID",
     response_model=schemas.WeaponBase
 )
@@ -62,7 +62,7 @@ async def weapon_update(
 
 
 @weapon_router.delete(
-    "/delete/{weapon_id}/",
+    "/{weapon_id}/",
     description="Delete the Weapon object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

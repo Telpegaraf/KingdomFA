@@ -37,7 +37,7 @@ async def character_weapon_mastery_list(
 
 
 @character_weapon_mastery_router.post(
-    "/create/",
+    "/",
     description="Create a new Character Weapon Mastery object",
     response_model=schemas.CharacterWeaponMastery,
     status_code=status.HTTP_201_CREATED
@@ -53,7 +53,7 @@ async def character_weapon_mastery_create(
 
 
 @character_weapon_mastery_router.patch(
-    "/update/{character_weapon_mastery_id}/",
+    "/{character_weapon_mastery_id}/",
     description="Update the Character Weapon Mastery object, depending on ID",
     response_model=schemas.CharacterWeaponMasteryRead
 )
@@ -70,7 +70,7 @@ async def character_weapon_mastery_update(
 
 
 @character_weapon_mastery_router.delete(
-    "/delete/{character_weapon_mastery_id}/",
+    "/{character_weapon_mastery_id}/",
     description="Delete the Character Weapon Mastery object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

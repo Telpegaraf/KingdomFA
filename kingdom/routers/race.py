@@ -35,7 +35,7 @@ async def race_list(
 
 
 @race_router.post(
-    "/create/",
+    "/",
     description="Create a new race object",
     response_model=schemas.RaceBase,
     status_code=status.HTTP_201_CREATED
@@ -48,7 +48,7 @@ async def race_create(
 
 
 @race_router.patch(
-    "/update/{race_id}/",
+    "/{race_id}/",
     description="Update the race object, depending on ID",
     response_model=schemas.RaceBase
 )
@@ -61,7 +61,7 @@ async def race_update(
 
 
 @race_router.delete(
-    "/delete/{race_id}/",
+    "/{race_id}/",
     description="Delete the race object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

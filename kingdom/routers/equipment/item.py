@@ -37,7 +37,7 @@ async def get_item_list(
 
 
 @item_router.post(
-    "/create/",
+    "/",
     description="Create a new Item object",
     response_model=schemas.Item
 )
@@ -49,7 +49,7 @@ async def item_create(
 
 
 @item_router.patch(
-    "/update/{item_id}/",
+    "/{item_id}/",
     description="Update Item object, depending on ID",
     response_model=schemas.ItemRead
 )
@@ -66,7 +66,7 @@ async def item_update(
 
 
 @item_router.delete(
-    "/{item_id}/delete/",
+    "/{item_id}/",
     description="Delete Item object, depending on ID"
 )
 async def item_delete(

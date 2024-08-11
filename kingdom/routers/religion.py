@@ -39,7 +39,7 @@ async def domain_list(
 
 
 @religion_router.post(
-    "/domain/create/",
+    "/domain/",
     description="Create a new Domain object",
     response_model=schemas.Domain,
     status_code=status.HTTP_201_CREATED
@@ -53,7 +53,7 @@ async def domain_create(
 
 
 @religion_router.patch(
-    "/domain/update/{object_id}/",
+    "/domain/{object_id}/",
     response_model=schemas.Domain,
     description="Update a Domain object, depending on ID"
 )
@@ -70,7 +70,7 @@ async def domain_update(
 
 
 @religion_router.delete(
-    "/domain/delete/{object_id}/",
+    "/domain/{object_id}/",
     description="Delete a Domain object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT,
 )
@@ -98,16 +98,16 @@ async def god_list(
     return result
 
 
-@religion_router.post("/god/create/", status_code=status.HTTP_201_CREATED)
+@religion_router.post("/god/", status_code=status.HTTP_201_CREATED)
 async def god_create(
-        god_in: schemas.GodBase,
+        god_in: schemas.GodCreateUpdate,
         payload: dict = Depends(get_current_token_payload),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
     result = await crud.god_create(god_in=god_in, session=session)
     return result
 
 
-@religion_router.patch("/god/update/{object_id}/")
+@religion_router.patch("/god/{object_id}/")
 async def update(
         god_update: schemas.GodCreateUpdate,
         payload: dict = Depends(get_current_token_payload),
@@ -121,7 +121,7 @@ async def update(
     )
 
 
-@religion_router.delete("/god/delete/{object_id}", status_code=status.HTTP_204_NO_CONTENT)
+@religion_router.delete("/god/{object_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete(
         payload: dict = Depends(get_current_token_payload),
         god: God = Depends(get_object_by_id_dependency(God)),

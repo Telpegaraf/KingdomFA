@@ -35,7 +35,7 @@ async def secondary_stat_list(
 
 
 @secondary_stat_router.post(
-    "/create/",
+    "/",
     description="Create a new Secondary Stat object",
     response_model=schemas.SecondaryStatRead,
     status_code=status.HTTP_201_CREATED
@@ -48,7 +48,7 @@ async def secondary_stat_create(
 
 
 @secondary_stat_router.patch(
-    "/update/{secondary_stat_id}/",
+    "/{secondary_stat_id}/",
     description="Update the Secondary Stat object, depending on ID",
     response_model=schemas.SecondaryStatRead
 )
@@ -62,7 +62,7 @@ async def secondary_stat_update(
 
 
 @secondary_stat_router.delete(
-    "/delete/{secondary_stat_id}/",
+    "/{secondary_stat_id}/",
     description="Delete the Secondary Stat object, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT
 )

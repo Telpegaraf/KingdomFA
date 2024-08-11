@@ -23,7 +23,7 @@ general_router = APIRouter(prefix="/general", tags=["General"], dependencies=[De
 
 
 @general_router.get(
-    "/{model_name}}{object_id}/",
+    "/{model_name}/{object_id}/",
     description="Returns information about an object, depending on the specified model and object."
                 " Returns ID, name and description if this field is present in the model",
 )

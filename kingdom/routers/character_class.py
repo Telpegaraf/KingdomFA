@@ -45,7 +45,7 @@ async def character_class_list(
 
 
 @character_class_router.post(
-    "/create/",
+    "/",
     description="Create a new character class.",
     status_code=status.HTTP_201_CREATED,
     response_model=schemas.CharacterClassBase
@@ -62,7 +62,7 @@ async def character_class_create(
 
 
 @character_class_router.patch(
-    "/update/{object_id}/",
+    "/{object_id}/",
     description=f"Update information about character class, depending on ID.",
     response_model=schemas.CharacterClass
 )
@@ -80,7 +80,7 @@ async def character_class_update(
 
 
 @character_class_router.delete(
-    "/delete/{object_id}/",
+    "/{object_id}/",
     description="Delete a character class, depending on ID",
     status_code=status.HTTP_204_NO_CONTENT,
 )
