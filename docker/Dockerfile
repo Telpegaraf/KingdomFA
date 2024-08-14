@@ -1,5 +1,5 @@
 # Stage 1: Build Stage
-FROM python:3.11-slim as build
+FROM python:3.11-slim AS build
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Stage 2: Runtime Stage
-FROM python:3.11-slim as runtime
+FROM python:3.11-slim AS runtime
 
 ARG DEPLOY_ENV
 

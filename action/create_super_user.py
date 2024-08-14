@@ -30,7 +30,6 @@ async def create_superuser():
             )
             session.add(superuser)
             await session.commit()
-            await session.refresh(superuser)
             logging.warning(f"Superuser {superuser.username} created successfully.")
 
 
