@@ -30,6 +30,8 @@ class Settings(BaseSettings):
 
     LOG_LEVEL: str
 
+    SECRET_KEY: str
+
     model_config = SettingsConfigDict(env_file='.env')
 
     @property
@@ -69,6 +71,11 @@ class Settings(BaseSettings):
     @property
     def log_level(self):
         return f"{self.LOG_LEVEL}"
+
+
+    @property
+    def get_secret_key(self):
+        return f"{self.SECRET_KEY}"
 
 
 settings = Settings()
