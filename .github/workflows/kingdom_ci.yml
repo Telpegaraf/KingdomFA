@@ -42,8 +42,8 @@ jobs:
           DB_PORT: 5432
       - name: Build Docker image
         run: |
-          COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker compose -f docker/docker-compose.yml --project-name kingdom up -d --build
+          COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker compose -f docker/docker-compose_git.yml --project-name kingdom up -d --build
 
       - name: Stop and remove Docker container
         run: |
-          COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker compose -f docker/docker-compose.yml --project-name kingdom down -v
+          COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker compose -f docker/docker-compose_git.yml --project-name kingdom down -v
