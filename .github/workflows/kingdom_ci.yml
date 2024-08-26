@@ -39,7 +39,7 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           DB_HOST: ${{ secrets.POSTGRES_HOST }}
-          DB_PORT: ${{ secrets.POSTGRES_PORT }}
+          DB_PORT: 5433
       - name: Build Docker image
         run: |
           COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker compose -f docker/docker-compose.yml --project-name kingdom up -d --build
