@@ -21,8 +21,7 @@ class AdminAuth(AuthenticationBackend):
             if user.is_superuser:
                 request.session.update({"token": user.username})
                 return True
-        else:
-            False
+        return False
 
     async def logout(self, request: Request) -> bool:
         request.session.clear()
