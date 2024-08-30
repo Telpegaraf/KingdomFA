@@ -1,4 +1,3 @@
-from sqladmin import ModelView
 from sqlalchemy import select
 from sqladmin.authentication import AuthenticationBackend
 from starlette.requests import Request
@@ -30,11 +29,3 @@ class AdminAuth(AuthenticationBackend):
     async def authenticate(self, request: Request) -> bool:
         token = request.session.get("token")
         return token is not None
-
-
-class UserAdmin(ModelView, model=User):
-    column_list = [User.id, User.username]
-    column_searchable_list = [User.username]
-    name = "User"
-    name_plural = "Users"
-    icon = "fa-solid fa-user"
