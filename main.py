@@ -20,3 +20,5 @@ app = FastAPI(lifespan=lifespan)
 include_routers(app)
 
 create_admin(app)
+
+#Тестовый комментарий
