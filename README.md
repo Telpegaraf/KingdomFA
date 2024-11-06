@@ -11,6 +11,7 @@ Kingdom — это учебный проект, представляющий с�
 To-Do
 
 Расширение документации, новых моделей и связей между ними, включая автообновление параметров при изменении характеристик или предметов персонажа
+_______________________________________________________________________________________________________________
 Kingdom is a pet project that serves as a backend API for managing Character's Sheet by Pathfinder 2E. It includes models like characters, spells, races, and feats, and is built with Go and the Gin web framework. The project includes admin-restricted routes for loading and managing data in CSV format. The project includes email-sending with Rabbit MQ.
 
 Backend: Python (FastApi) Database: Sql Alchemy ORM for database interactions Documentation: Swagger for API documentation Authorization: JWT-based middleware for authentication and role-based access control
